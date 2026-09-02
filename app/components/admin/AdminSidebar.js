@@ -1187,21 +1187,82 @@ import {
   FiChevronRight,
   FiMenu,
   FiX,
+  FiFileText,
+  FiActivity,
+  FiUsers,
 } from "react-icons/fi";
 
+// const menuItems = [
+//   {
+//     title: "Dashboard",
+//     icon: FiHome,
+//     path: "/admin/",
+//   },
+
+//   {
+//     title: "Doctors",
+//     icon: FiUserPlus,
+//     path: "/admin/doctors",
+//   },
+
+//   {
+//     title: "Master",
+//     icon: FiLayers,
+//     children: [
+//       {
+//         title: "Departments",
+//         icon: FiGrid,
+//         path: "/admin/departments",
+//       },
+//       {
+//         title: "Doctors Master",
+//         icon: FiUserPlus,
+//         path: "/admin/doctors-master",
+//       },
+//     ],
+//   },
+
+//   {
+//     title: "Settings",
+//     icon: FiSettings,
+//     path: "/admin/settings",
+//   },
+// ];
+
+
 const menuItems = [
+  // =========================
+  // DASHBOARD
+  // =========================
   {
     title: "Dashboard",
     icon: FiHome,
-    path: "/admin/dashboard",
+    path: "/admin/",
   },
 
+  // =========================
+  // BLOG
+  // =========================
   {
-    title: "Doctors",
-    icon: FiUserPlus,
-    path: "/admin/doctors",
+    title: "Blog",
+    icon: FiFileText,
+    children: [
+      {
+        title: "Blog Category",
+        icon: FiGrid,
+        path: "/admin/blog-category",
+      },
+      {
+        title: "Blog Post",
+        icon: FiFileText,
+        path: "/admin/blog-post",
+      },
+    ],
   },
 
+  // =========================
+  // MASTER
+  // =========================
   {
     title: "Master",
     icon: FiLayers,
@@ -1212,20 +1273,42 @@ const menuItems = [
         path: "/admin/departments",
       },
       {
-        title: "Doctors Master",
+        title: "Specialization",
+        icon: FiActivity,
+        path: "/admin/specialization",
+      },
+      {
+        title: "Doctors",
         icon: FiUserPlus,
-        path: "/admin/doctors-master",
+        path: "/admin/doctors",
       },
     ],
   },
 
+  // =========================
+  // DOCTOR MASTER
+  // =========================
+  {
+    title: "Doctor Master",
+    icon: FiUsers,
+    children: [
+      {
+        title: "Doctors",
+        icon: FiUserPlus,
+        path: "/admin/doctor-master/doctors",
+      },
+    ],
+  },
+
+  // =========================
+  // SETTINGS
+  // =========================
   {
     title: "Settings",
     icon: FiSettings,
     path: "/admin/settings",
   },
 ];
-
 const AdminSidebar = () => {
   const router = useRouter();
   const pathname = usePathname();

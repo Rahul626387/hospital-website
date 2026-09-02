@@ -24,3 +24,39 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* =========================================
+   GLOBAL ULTRA THIN SCROLLBAR
+========================================= */
+
+* {
+  scrollbar-width: thin !important;
+  scrollbar-color: #cbd5e1 transparent !important;
+}
+
+*::-webkit-scrollbar {
+  width: 1px !important;
+  height: 1px !important;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #cbd5e1 !important;
+  border-radius: 999px !important;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8 !important;
+}
+
+*::-webkit-scrollbar-button {
+  display: none !important;
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent !important;
+}
+
