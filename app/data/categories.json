@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "name": "Health Tips",
+    "slug": "health-tips",
+    "description": "General health and wellness tips",
+    "status": "active",
+    "postCount": 12
+  },
+  {
+    "id": 2,
+    "name": "Heart Care",
+    "slug": "heart-care",
+    "description": "Heart health and cardiovascular care",
+    "status": "active",
+    "postCount": 8
+  },
+  {
+    "id": 3,
+    "name": "Diabetes",
+    "slug": "diabetes",
+    "description": "Diabetes care and management",
+    "status": "active",
+    "postCount": 6
+  },
+  {
+    "id": 4,
+    "name": "Women Health",
+    "slug": "women-health",
+    "description": "Women's health and wellness",
+    "status": "active",
+    "postCount": 10
+  },
+  {
+    "id": 5,
+    "name": "Child Care",
+    "slug": "child-care",
+    "description": "Child health and pediatric care",
+    "status": "active",
+    "postCount": 7
+  },
+  {
+    "id": 6,
+    "name": "Mental Health",
+    "slug": "mental-health",
+    "description": "Mental health awareness and care",
+    "status": "active",
+    "postCount": 5
+  },
+  {
+    "id": 7,
+    "name": "Nutrition",
+    "slug": "nutrition",
+    "description": "Healthy diet and nutrition tips",
+    "status": "active",
+    "postCount": 9
+  },
+  {
+    "id": 8,
+    "name": "Fitness",
+    "slug": "fitness",
+    "description": "Fitness, exercise and lifestyle",
+    "status": "active",
+    "postCount": 4
+  },
+  {
+    "id": 9,
+    "name": "Hospital News",
+    "slug": "hospital-news",
+    "description": "Latest hospital updates and news",
+    "status": "active",
+    "postCount": 11
+  },
+  {
+    "id": 10,
+    "name": "Medical Awareness",
+    "slug": "medical-awareness",
+    "description": "Medical awareness and education",
+    "status": "active",
+    "postCount": 15
+  }
+]

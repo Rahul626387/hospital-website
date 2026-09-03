@@ -28,6 +28,7 @@ import { usePathname } from "next/navigation";
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import Breadcrumb from "./../components/admin/Breadcrumb";
 
 export default function ConditionalLayout({ children }) {
   const pathname = usePathname();

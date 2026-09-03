@@ -61,11 +61,21 @@
 
 import "./globals.css";
 import ConditionalLayout from "./src/ConditionalLayout";
+import Preloader from './components/Preloader'
+
+import { Inter } from "next/font/google";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body suppressHydrationWarning>
+        {/* <body className={`${inter.variable} font-sans`}> */}
+        {/* <Preloader/> */}
         <ConditionalLayout>
           {children}
         </ConditionalLayout>

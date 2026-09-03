@@ -73,8 +73,8 @@ const AdminNavbar = ({ onMenuClick }) => {
           sticky
           top-2
           z-50
-          mx-2
-          rounded-2xl
+          mx-1
+          rounded-xl
           bg-gradient-to-r
           from-[#087f8c]
           to-[#075985]

@@ -55,7 +55,8 @@
 import React from "react";
 import AdminNavbar from "../components/admin/AdminNavbar";
 import AdminSidebar from "../components/admin/AdminSidebar";
-
+import { motion } from "framer-motion";
+import Breadcrumb from "../components/admin/Breadcrumb";
 const AdminLayout = ({ children }) => {
   return (
     <div className="min-h-screen bg-[#f5f6f8] flex">
@@ -70,10 +71,10 @@ const AdminLayout = ({ children }) => {
         <AdminNavbar />
 
         {/* Page Content */}
-        <div className="p-4 sm:p-6">
+        <div className="p-4 sm:p-3">
+           <Breadcrumb/>
           {children}
         </div>
-
       </main>
 
     </div>
