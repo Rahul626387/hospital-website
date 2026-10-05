@@ -13,125 +13,51 @@ import {
   Award,
   ChevronRight,
   SlidersHorizontal,
+  ArrowUpRight,
 } from "lucide-react";
+import PageHero from "../components/Pagehero";
+import useSWR from 'swr'
+import ApiService from '../src/services/Apiservices'
 
-const doctors = [
-  {
-    id: 1,
-    name: "Dr. Anjali Sharma",
-    specialty: "Cardiology",
-    qualification: "MBBS, MD, DM Cardiology",
-    experience: "12+ Years Experience",
-    image:
-      "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=800&q=85",
-    available: true,
-  },
-  {
-    id: 2,
-    name: "Dr. Rahul Verma",
-    specialty: "Orthopedics",
-    qualification: "MBBS, MS Orthopedics",
-    experience: "15+ Years Experience",
-    image:
-      "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=800&q=85",
-    available: true,
-  },
-  {
-    id: 3,
-    name: "Dr. Priya Singh",
-    specialty: "Neurology",
-    qualification: "MBBS, MD, DM Neurology",
-    experience: "10+ Years Experience",
-    image:
-      "https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&w=800&q=85",
-    available: false,
-  },
-  {
-    id: 4,
-    name: "Dr. Amit Patel",
-    specialty: "General Medicine",
-    qualification: "MBBS, MD Medicine",
-    experience: "14+ Years Experience",
-    image:
-      "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=800&q=85",
-    available: true,
-  },
-  {
-    id: 5,
-    name: "Dr. Neha Gupta",
-    specialty: "Gynecology",
-    qualification: "MBBS, MS Obstetrics & Gynecology",
-    experience: "11+ Years Experience",
-    image:
-      "https://images.unsplash.com/photo-1605684954998-685c79d6a018?auto=format&fit=crop&w=800&q=85",
-    available: true,
-  },
-  {
-    id: 6,
-    name: "Dr. Arjun Mehta",
-    specialty: "Pediatrics",
-    qualification: "MBBS, MD Pediatrics",
-    experience: "9+ Years Experience",
-    image:
-      "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&w=800&q=85",
-    available: true,
-  },
-  {
-    id: 7,
-    name: "Dr. Kavita Joshi",
-    specialty: "Dermatology",
-    qualification: "MBBS, MD Dermatology",
-    experience: "8+ Years Experience",
-    image:
-      "https://images.unsplash.com/photo-1551601651-2a8555f1a136?auto=format&fit=crop&w=800&q=85",
-    available: false,
-  },
-  {
-    id: 8,
-    name: "Dr. Vikram Singh",
-    specialty: "ENT",
-    qualification: "MBBS, MS ENT",
-    experience: "13+ Years Experience",
-    image:
-      "https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&fit=crop&w=800&q=85",
-    available: true,
-  },
-];
 
-const specialties = [
-  "All Doctors",
-  "Cardiology",
-  "Orthopedics",
-  "Neurology",
-  "General Medicine",
-  "Gynecology",
-  "Pediatrics",
-  "Dermatology",
-  "ENT",
-];
+
 
 export default function DoctorsPage() {
   const [search, setSearch] = useState("");
   const [activeSpecialty, setActiveSpecialty] = useState("All Doctors");
 
+
+// fatch apis 
+
+  const {data,error,isLoading} = useSWR('specialties',ApiService.get)
+
+  const {data:doctor,doctorerror,doctorisLoading} = useSWR('doctors',ApiService.get)
+  
+  const specialties = data?.data
+  const doctors = doctor?.data
+  // console.log(specialties)
+
   const filteredDoctors = useMemo(() => {
-    return doctors.filter((doctor) => {
-      const matchesSearch =
-        doctor.name.toLowerCase().includes(search.toLowerCase()) ||
-        doctor.specialty.toLowerCase().includes(search.toLowerCase());
+  return (doctors || []).filter((doctor) => {
+    const searchText = search.toLowerCase().trim();
 
-      const matchesSpecialty =
-        activeSpecialty === "All Doctors" ||
-        doctor.specialty === activeSpecialty;
+    const matchesSearch =
+      doctor?.name?.toLowerCase().includes(searchText) ||
+      doctor?.specialty_name?.toLowerCase().includes(searchText) ||
+      doctor?.department_name?.toLowerCase().includes(searchText);
 
-      return matchesSearch && matchesSpecialty;
-    });
-  }, [search, activeSpecialty]);
+    const matchesSpecialty =
+      activeSpecialty === "All Doctors" ||
+      doctor?.specialty_name === activeSpecialty;
+
+    return matchesSearch && matchesSpecialty;
+  });
+}, [doctors, search, activeSpecialty]);
 
   return (
     <main className="min-h-screen overflow-hidden bg-[#F8FAFC]">
       {/* HERO */}
-      <section className="relative overflow-hidden bg-[#063B5C]">
+      {/* <section className="relative overflow-hidden bg-[#063B5C]">
         <div className="absolute inset-0">
           <div className="absolute -left-20 top-0 h-72 w-72 rounded-full bg-[#0A7A78]/30 blur-3xl" />
           <div className="absolute -right-20 bottom-0 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl" />
@@ -173,7 +99,16 @@ export default function DoctorsPage() {
             </p>
           </motion.div>
         </div>
-      </section>
+      </section> */}
+      <PageHero
+        // backgroundImage="https://images.pexels.com/photos/6129507/pexels-photo-6129507.jpeg"
+         backgroundImage="assets/images/doctorteam01.png"
+        badge="Our Medical Team"
+        title="Meet Our Expert"
+        highlight="Doctors."
+        description="Experienced specialists dedicated to providing thoughtful, reliable and patient-centered healthcare."
+        breadcrumb="Doctors"
+      />
 
       {/* SEARCH & FILTER */}
       <section className="relative z-10 mx-auto -mt-8 max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -202,8 +137,8 @@ export default function DoctorsPage() {
             </div>
           </div>
 
-          <div className="mt-5 flex gap-2 overflow-x-auto pb-1">
-            {specialties.map((specialty) => (
+          {/* <div className="mt-5 flex gap-2 overflow-x-auto pb-1">
+            {specialties?.map((specialty) => (
               <button
                 key={specialty}
                 onClick={() => setActiveSpecialty(specialty)}
@@ -213,10 +148,38 @@ export default function DoctorsPage() {
                     : "bg-slate-100 text-slate-600 hover:bg-teal-50 hover:text-[#0A7A78]"
                 }`}
               >
-                {specialty}
+                {specialty.name}
               </button>
             ))}
-          </div>
+          </div> */}
+          <div className="mt-5 flex gap-2 overflow-x-auto pb-1">
+  {/* All Doctors */}
+  <button
+    onClick={() => setActiveSpecialty("All Doctors")}
+    className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold transition-all ${
+      activeSpecialty === "All Doctors"
+        ? "bg-[#0A7A78] text-white shadow-md shadow-teal-900/10"
+        : "bg-slate-100 text-slate-600 hover:bg-teal-50 hover:text-[#0A7A78]"
+    }`}
+  >
+    All Doctors
+  </button>
+
+  {/* API Specialties */}
+  {specialties?.map((specialty) => (
+    <button
+      key={specialty.id}
+      onClick={() => setActiveSpecialty(specialty.name)}
+      className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold transition-all ${
+        activeSpecialty === specialty.name
+          ? "bg-[#0A7A78] text-white shadow-md shadow-teal-900/10"
+          : "bg-slate-100 text-slate-600 hover:bg-teal-50 hover:text-[#0A7A78]"
+      }`}
+    >
+      {specialty.name}
+    </button>
+  ))}
+</div>
         </motion.div>
       </section>
 
@@ -240,73 +203,566 @@ export default function DoctorsPage() {
         </div>
 
         {filteredDoctors.length > 0 ? (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {filteredDoctors.map((doctor, index) => (
-              <motion.article
-                key={doctor.id}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.45, delay: index * 0.06 }}
-                whileHover={{ y: -8 }}
-                className="group overflow-hidden rounded-[1.5rem] border border-slate-100 bg-white shadow-sm transition-shadow hover:shadow-xl hover:shadow-slate-200/70"
+//           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+//             {filteredDoctors.map((doctor, index) => (
+//               <motion.article
+//                 key={doctor.id}
+//                 initial={{ opacity: 0, y: 30 }}
+//                 animate={{ opacity: 1, y: 0 }}
+//                 transition={{ duration: 0.45, delay: index * 0.06 }}
+//                 whileHover={{ y: -8 }}
+//                 className="group overflow-hidden rounded-[1.5rem] border border-slate-100 bg-white shadow-sm transition-shadow hover:shadow-xl hover:shadow-slate-200/70"
+//               >
+//                 {/* IMAGE */}
+//                 <div className="relative aspect-[4/4.2] overflow-hidden bg-slate-100">
+//                   <Image
+//                     src={doctor.image_url}
+//                     alt={doctor.name}
+//                     fill
+//                     className="object-cover transition duration-500 group-hover:scale-105"
+//                   />
+
+//                   <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-slate-900/50 to-transparent" />
+
+//                   <span
+//                     className={`absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold backdrop-blur-md ${
+//                       doctor.available
+//                         ? "bg-white/90 text-[#0A7A78]"
+//                         : "bg-slate-900/70 text-white"
+//                     }`}
+//                   >
+//                     <span
+//                       className={`h-1.5 w-1.5 rounded-full ${
+//                         doctor.available ? "bg-[#0A7A78]" : "bg-slate-300"
+//                       }`}
+//                     />
+//                     {doctor.available ? "Available" : "Unavailable"}
+//                   </span>
+//                 </div>
+
+//                 {/* CONTENT */}
+                
+//                 <div className="p-4 bg-amber-300 m-2 absolute">
+//   {/* Specialty */}
+//   <p className="text-[11px] font-bold uppercase tracking-wide text-[#0A7A78]">
+//     {doctor.specialty_name}
+//   </p>
+
+//   {/* Name */}
+//   <h3 className="mt-1 text-lg font-bold leading-tight text-[#063B5C]">
+//     {doctor.name}
+//   </h3>
+
+//   {/* Qualification */}
+//   <p className="mt-1 line-clamp-1 text-xs text-slate-500">
+//     {doctor.qualification}
+//   </p>
+
+//   {/* Experience + Profile */}
+//   <div className="mt-3 flex items-center justify-between">
+//     <div className="flex items-center gap-1.5 text-xs font-medium text-slate-500">
+//       <Award className="h-3.5 w-3.5 text-[#0A7A78]" />
+//       <span>{doctor.experience_years}+ Years</span>
+//     </div>
+
+//     <Link
+//       href={`/doctors/${doctor.id}`}
+//       className="
+//         group/link
+//         flex items-center gap-1.5
+//         rounded-lg
+//         bg-[#0A7A78]
+//         px-3 py-2
+//         text-xs font-bold
+//         text-white
+//         transition-all
+//         hover:bg-[#063B5C]
+//       "
+//     >
+//       View Profile
+//       <ArrowRight
+//         className="
+//           h-3.5 w-3.5
+//           transition-transform
+//           group-hover/link:translate-x-1
+//         "
+//       />
+//     </Link>
+//   </div>
+// </div>
+//               </motion.article>
+//             ))}
+//           </div>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {filteredDoctors.map((doctor, index) => (
+            //     <motion.article
+            //       key={doctor.id}
+            //       initial={{
+            //         opacity: 0,
+            //         y: 25,
+            //       }}
+            //       animate={{
+            //         opacity: 1,
+            //         y: 0,
+            //       }}
+            //       transition={{
+            //         duration: 0.45,
+            //         delay: index * 0.06,
+            //       }}
+            //       whileHover={{
+            //         y: -8,
+            //       }}
+            //       className="
+            //         group
+            //         relative
+            //         overflow-hidden
+            //         rounded-[1.5rem]
+            //         bg-slate-100
+            //         shadow-sm
+            //         transition-shadow
+            //         duration-500
+            //         hover:shadow-2xl
+            //       "
+            //     >
+            //       {/* IMAGE */}
+            //       <div className="relative aspect-[4/5] overflow-hidden">
+
+            //         {/* <Image
+            //           src={doctor.image_url}
+            //           alt={doctor.name}
+            //           fill
+            //           className="
+            //             object-cover
+            //             transition-all
+            //             duration-700
+            //             ease-out
+
+            //             group-hover:scale-105
+            //             group-hover:blur-[2px]
+            //           "
+            //         /> */}
+            //         <Image
+            //           src={doctor.image_url}
+            //           alt={doctor.name}
+            //           fill
+            //           className="
+            //             object-cover
+            //             transition-all
+            //             duration-1000
+            //             ease-out
+            //             group-hover:scale-105
+            //             group-hover:blur-[2px]
+            //           " 
+            //         />
+
+            //         {/* DARK + BLUR OVERLAY */}
+            //         <div
+            //           className="
+            //             absolute
+            //             inset-0
+            //             bg-black/0
+            //             backdrop-blur-0
+
+            //             transition-all
+            //             duration-500
+
+            //             group-hover:bg-black/20
+            //             group-hover:backdrop-blur-[2px]
+            //           "
+            //         />
+
+            //         {/* Bottom Gradient */}
+            //         <div
+            //           className="
+            //             absolute
+            //             inset-x-0
+            //             bottom-0
+            //             h-40
+            //             bg-gradient-to-t
+            //             from-black/50
+            //             via-black/10
+            //             to-transparent
+            //           "
+            //         />
+
+            //         {/* Availability */}
+            //         <span
+            //           className={`
+            //             absolute
+            //             left-4
+            //             top-4
+            //             z-20
+            //             flex
+            //             items-center
+            //             gap-2
+            //             rounded-full
+            //             px-3
+            //             py-1.5
+            //             text-xs
+            //             font-bold
+            //             backdrop-blur-md
+            //             transition-all
+            //             duration-300
+
+            //             ${
+            //               doctor.available
+            //                 ? "bg-white/90 text-[#0A7A78]"
+            //                 : "bg-slate-900/70 text-white"
+            //             }
+            //           `}
+            //         >
+            //           <span
+            //             className={`
+            //               h-1.5
+            //               w-1.5
+            //               rounded-full
+
+            //               ${
+            //                 doctor.available
+            //                   ? "bg-emerald-500"
+            //                   : "bg-slate-300"
+            //               }
+            //             `}
+            //           />
+
+            //           {doctor.available
+            //             ? "Available"
+            //             : "Unavailable"}
+            //         </span>
+
+            //         {/* =========================
+            //             HOVER CONTENT
+            //         ========================== */}
+
+            //         {/* <div
+            //           className="
+            //             absolute
+            //             inset-x-0
+            //             bottom-3
+            //             z-30
+            //             px-3
+
+            //             translate-y-[115%]
+
+            //             transition-transform
+            //             duration-500
+            //             ease-[cubic-bezier(0.22,1,0.36,1)]
+
+            //             group-hover:translate-y-0
+            //           "
+            //         > */}
+                    
+            //         <div
+            //   className="
+            //     absolute
+            //     inset-x-0
+            //     bottom-3
+            //     z-30
+            //     px-3
+            //     translate-y-[115%]
+            //     transition-transform
+            //     duration-1000
+            //     ease-[cubic-bezier(0.16,1,0.3,1)]
+            //     group-hover:translate-y-0
+            //   "
+            // >
+            //           <div
+            //             className="
+            //               rounded-2xl
+            //               bg-white/95
+            //               p-4
+            //               shadow-2xl
+            //               backdrop-blur-md
+            //             "
+            //           >
+            //             {/* Specialty */}
+            //             <p
+            //               className="
+            //                 text-[10px]
+            //                 font-bold
+            //                 uppercase
+            //                 tracking-wider
+            //                 text-[#0A7A78]
+            //               "
+            //             >
+            //               {doctor.specialty_name}
+            //             </p>
+
+            //             {/* Name */}
+            //             <h3
+            //               className="
+            //                 mt-1
+            //                 text-lg
+            //                 font-bold
+            //                 leading-tight
+            //                 text-[#063B5C]
+            //               "
+            //             >
+            //               {doctor.name}
+            //             </h3>
+
+            //             {/* Qualification */}
+            //             <p
+            //               className="
+            //                 mt-1
+            //                 truncate
+            //                 text-xs
+            //                 text-slate-500
+            //               "
+            //             >
+            //               {doctor.qualification}
+            //             </p>
+
+            //             {/* Bottom Row */}
+            //             <div
+            //               className="
+            //                 flex
+            //                 items-center
+            //                 justify-between
+            //               "
+            //             >
+            //               {/* Experience */}
+            //               <div
+            //                 className="
+            //                   flex
+            //                   items-center
+            //                   gap-1.5
+            //                   text-xs
+            //                   font-semibold
+            //                   text-slate-500
+            //                 "
+            //               >
+            //                 <Award
+            //                   className="
+            //                     h-3.5
+            //                     w-3.5
+            //                     text-[#0A7A78]
+            //                   "
+            //                 />
+
+            //                 {doctor.experience_years}+ Years
+            //               </div>
+
+            //               {/* Button */}
+            //               <Link
+            //                 href={`/doctors/${doctor.id}`}
+            //                 className="
+            //                   group/link
+            //                   flex
+            //                   items-center
+            //                   gap-1.5
+            //                   rounded-lg
+            //                   bg-[#0A7A78]
+            //                   px-3
+            //                   py-2
+            //                   text-xs
+            //                   font-bold
+            //                   text-white
+            //                   transition-all
+            //                   duration-300
+            //                   hover:bg-[#063B5C]
+            //                 "
+            //               >
+            //                 Profile
+
+            //                 <ArrowRight
+            //                   className="
+            //                     h-3.5
+            //                     w-3.5
+            //                     transition-transform
+            //                     duration-300
+            //                     group-hover/link:translate-x-1
+            //                   "
+            //                 />
+            //               </Link>
+            //             </div>
+            //           </div>
+            //         </div>
+
+
+
+            //       </div>
+            //     </motion.article>
+            <motion.article
+             key={doctor.id}
+              variants={{
+              hidden: {
+                opacity: 0,
+                y: 28,
+              },
+              visible: {
+                opacity: 1,
+                y: 0,
+                transition: {
+                  duration: 0.65,
+                  ease: [0.22, 1, 0.36, 1],
+                },
+              },
+            }}
+            whileHover={{
+              y: -7,
+            }}
+                className="
+                  group relative overflow-hidden rounded-[22px]
+                  bg-[#021F31]
+                  shadow-[0_10px_30px_rgba(15,23,42,.10)]
+                  transition-all duration-500
+                  hover:shadow-[0_22px_45px_rgba(3,47,73,.20)]
+                "
               >
                 {/* IMAGE */}
-                <div className="relative aspect-[4/4.2] overflow-hidden bg-slate-100">
-                  <Image
-                    src={doctor.image}
+                <div className="relative aspect-[0.82/1] overflow-hidden">
+
+                  <img
+                    // src="assets/images/doctor.png"
+                    src={doctor.image_url}
                     alt={doctor.name}
-                    fill
-                    className="object-cover transition duration-500 group-hover:scale-105"
+                    loading="lazy"
+                    className="
+                      h-full w-full object-cover
+                      transition duration-700 ease-out
+                      group-hover:scale-105
+                    "
                   />
 
-                  <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-slate-900/50 to-transparent" />
+                  {/* DARK OVERLAY */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#021F31] via-[#021F31]/25 to-transparent" />
 
-                  <span
-                    className={`absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold backdrop-blur-md ${
+                  <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#021F31]/80 to-transparent" />
+
+                  {/* AVAILABILITY */}
+                  <div
+                    className={`absolute left-3 top-3 rounded-full border border-white/15 px-2.5 py-1.5 text-[8px] font-bold uppercase tracking-[.08em] backdrop-blur-xl ${
                       doctor.available
-                        ? "bg-white/90 text-[#0A7A78]"
-                        : "bg-slate-900/70 text-white"
+                        ? "bg-[#063B5C]/80 text-white"
+                        : "bg-black/45 text-white/60"
                     }`}
                   >
-                    <span
-                      className={`h-1.5 w-1.5 rounded-full ${
-                        doctor.available ? "bg-[#0A7A78]" : "bg-slate-300"
-                      }`}
-                    />
-                    {doctor.available ? "Available" : "Unavailable"}
-                  </span>
-                </div>
+                    <div className="flex items-center gap-1.5">
+                      <span
+                        className={`h-1.5 w-1.5 rounded-full ${
+                          doctor.available
+                            ? "bg-[#61E2B8] shadow-[0_0_7px_#61E2B8]"
+                            : "bg-white/40"
+                        }`}
+                      />
 
-                {/* CONTENT */}
-                <div className="p-5">
-                  <p className="text-sm font-bold text-[#0A7A78]">
-                    {doctor.specialty}
-                  </p>
-
-                  <h3 className="mt-1 text-xl font-bold text-[#063B5C]">
-                    {doctor.name}
-                  </h3>
-
-                  <p className="mt-2 line-clamp-2 min-h-10 text-sm leading-5 text-slate-500">
-                    {doctor.qualification}
-                  </p>
-
-                  <div className="mt-4 flex items-center gap-2 border-t border-slate-100 pt-4 text-sm text-slate-500">
-                    <Award className="h-4 w-4 text-[#0A7A78]" />
-                    {doctor.experience}
+                      {doctor.available
+                        ? "Available"
+                        : "Unavailable"}
+                    </div>
                   </div>
 
-                  <Link
-                    href={`/doctors/${doctor.id}`}
-                    className="group/link mt-5 flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3 text-sm font-bold text-[#063B5C] transition hover:bg-[#0A7A78] hover:text-white"
+                  {/* VERIFIED */}
+                  {doctor.verified && (
+                    <div
+                      className="
+                        absolute right-3 top-3
+                        flex h-7 w-7 items-center justify-center
+                        rounded-full
+                        border border-white/30
+                        bg-white/90
+                        shadow-lg
+                        backdrop-blur-md
+                        transition-all duration-300
+                        group-hover:scale-110
+                      "
+                    >
+                      <BadgeCheck className="h-3.5 w-3.5 text-[#0A7A78]" />
+                    </div>
+                  )}
+
+                  {/* PROFILE ARROW */}
+                  {/* <Link
+                    href={`/doctors/specialty/${doctor.id}`}
+                    aria-label={`View ${doctor.name} profile`}
+                    className="
+                      absolute bottom-[82px] right-4 z-20
+                      flex h-9 w-9 items-center justify-center
+                      rounded-full
+                      bg-white
+                      text-[#063B5C]
+                      opacity-0
+                      translate-y-3
+                      shadow-xl
+                      transition-all duration-500
+                      group-hover:translate-y-0
+                      group-hover:opacity-100
+                      hover:bg-[#72DED4]
+                      hover:scale-110
+                    "
                   >
-                    View Profile
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover/link:translate-x-1" />
-                  </Link>
+                    <ArrowUpRight className="h-4 w-4" />
+                  </Link> */}
+
+                  {/* CONTENT */}
+                  <div className="absolute bottom-0 left-0 right-0 p-4">
+
+                    <p className="mb-1 text-[8px] font-bold uppercase tracking-[.18em] text-[#72DED4]">
+                      {doctor.specialty}
+                    </p>
+
+                    <Link
+                      href={`/doctors/specialty/${doctor.id}`}
+                      className="block"
+                    >
+                      <h3
+                        className="
+                          text-[19px] font-semibold leading-tight
+                          tracking-[-0.03em] text-white
+                          transition-colors duration-300
+                          hover:text-[#72DED4]
+                        "
+                     style={{textTransform:"capitalize"}} >
+                        {doctor.name}
+                      </h3>
+                    </Link>
+
+                    <p className="mt-1 text-[9px] text-white/70">
+                      {doctor.focus}
+                    </p>
+
+                    <p className="mt-1 line-clamp-1 text-[9px] leading-4 text-white/55">
+                      {doctor.qualification}
+                    </p>
+
+                    <div className="mt-1.5 flex items-center gap-1.5 text-[12px] font-medium text-white/60">
+                      <Award className="h-3 w-3 text-[#72DED4]" />
+                      {doctor.experience_years}+ years experience
+                    </div>
+
+                    {/* BOOK BUTTON */}
+                    <Link
+                     href={`/doctors/${doctor.id}`}
+                      className="
+                        mt-3 flex w-full items-center justify-center
+                        gap-1.5 rounded-full
+                        bg-white px-4 py-2.5
+                        text-[12px] font-bold text-[#063B5C]
+                        shadow-lg
+                        transition-all duration-300
+                        hover:bg-[#72DED4]
+                        hover:shadow-xl
+                        hover:-translate-y-0.5
+                      "
+                    >
+                      View Profile
+
+                      <ArrowRight
+                        className="
+                          h-3 w-3
+                          transition-transform duration-300
+                          group-hover:translate-x-0.5
+                        "
+                      />
+                    </Link>
+
+                  </div>
                 </div>
               </motion.article>
-            ))}
-          </div>
+              ))}
+            </div>
+
         ) : (
           <div className="rounded-3xl border border-dashed border-slate-200 bg-white py-20 text-center">
             <Search className="mx-auto h-10 w-10 text-slate-300" />

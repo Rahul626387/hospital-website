@@ -1,0 +1,1014 @@
+import React from "react";
+import Link from "next/link";
+import Image from "next/image";
+import {
+  ArrowRight,
+  Award,
+  CheckCircle2,
+  Clock3,
+  HeartPulse,
+  Phone,
+  ShieldCheck,
+  Stethoscope,
+  Users,
+  CalendarDays,
+  Star,
+  MapPin,
+} from "lucide-react";
+
+import PageHero from "../../components/Pagehero";
+
+/* =========================================================
+   ICON MAP
+========================================================= */
+
+const iconMap = {
+  HeartPulse,
+  Stethoscope,
+  ShieldCheck,
+  Clock3,
+  Award,
+  Users,
+};
+
+/* =========================================================
+   DEPARTMENT DATA
+   Later this can come from API
+========================================================= */
+
+const department = {
+  id: 12,
+  user_id: 1,
+  name: "Cardiology",
+  slug: "cardiology",
+  icon: "HeartPulse",
+
+  short_description:
+    "Advanced heart care with experienced cardiologists, cutting-edge diagnostic technology, and personalized treatment plans for every patient.",
+
+  description:
+    "Our Cardiology Department is dedicated to providing comprehensive, world-class care for every aspect of heart health. From routine check-ups to complex interventional procedures, our team combines advanced technology with a compassionate, patient-first approach.\n\nWe diagnose and treat a wide range of cardiovascular conditions, including coronary artery disease, heart failure, arrhythmias, valvular heart disease, congenital heart defects, hypertension, and high cholesterol.",
+
+  image:
+    "https://images.pexels.com/photos/6129507/pexels-photo-6129507.jpeg",
+
+  banner_image:
+    "https://images.pexels.com/photos/6129507/pexels-photo-6129507.jpeg",
+
+  phone: "+91 98765 43210",
+
+  location: "Baderia Metro Prime Hospital",
+
+  timing: "09:00 AM - 06:00 PM",
+
+  emergency_available: 1,
+
+  appointment_available: 1,
+
+  status: "active",
+
+  created_at: "2026-09-17T10:37:15.000Z",
+
+  updated_at: "2026-09-17T10:37:15.000Z",
+
+  delete_status: 0,
+
+  doctors: [
+    {
+      id: 1,
+      name: "Dr. Rajesh Sharma",
+      specialization: "Senior Cardiologist",
+      qualification: "MBBS, MD, DM Cardiology",
+      experience: "15 Years",
+      image: "https://randomuser.me/api/portraits/men/32.jpg",
+      rating: 4.9,
+      reviews: 128,
+      phone: "+91 98765 43211",
+      available: true,
+    },
+
+    {
+      id: 2,
+      name: "Dr. Priya Verma",
+      specialization: "Interventional Cardiologist",
+      qualification: "MBBS, MD, DM",
+      experience: "12 Years",
+      image: "https://randomuser.me/api/portraits/women/44.jpg",
+      rating: 4.8,
+      reviews: 96,
+      phone: "+91 98765 43212",
+      available: true,
+    },
+
+    {
+      id: 3,
+      name: "Dr. Amit Patel",
+      specialization: "Cardiac Surgeon",
+      qualification: "MBBS, MS, MCh",
+      experience: "10 Years",
+      image: "https://randomuser.me/api/portraits/men/46.jpg",
+      rating: 4.7,
+      reviews: 84,
+      phone: "+91 98765 43213",
+      available: false,
+    },
+  ],
+};
+
+/* =========================================================
+   SERVICES
+========================================================= */
+
+const services = [
+  {
+    icon: HeartPulse,
+    title: "Cardiac Consultation",
+    description:
+      "Comprehensive cardiovascular evaluation by experienced cardiology specialists.",
+  },
+
+  {
+    icon: Stethoscope,
+    title: "Heart Diagnostics",
+    description:
+      "Advanced diagnostic services including ECG, echocardiography and cardiac testing.",
+  },
+
+  {
+    icon: ShieldCheck,
+    title: "Preventive Cardiology",
+    description:
+      "Personalized plans to reduce cardiovascular risks and maintain long-term heart health.",
+  },
+
+  {
+    icon: Award,
+    title: "Interventional Cardiology",
+    description:
+      "Advanced minimally invasive procedures performed using modern cardiac technology.",
+  },
+];
+
+/* =========================================================
+   TREATMENTS
+========================================================= */
+
+const treatments = [
+  "Coronary Artery Disease",
+  "Heart Failure",
+  "Cardiac Arrhythmia",
+  "Valvular Heart Disease",
+  "Hypertension",
+  "High Cholesterol",
+  "Congenital Heart Disease",
+  "Heart Attack",
+  "Peripheral Artery Disease",
+  "Preventive Heart Care",
+];
+
+/* =========================================================
+   HIGHLIGHTS
+========================================================= */
+
+const highlights = [
+  {
+    icon: CheckCircle2,
+    title: "Experienced Specialists",
+    description:
+      "Highly experienced cardiologists and cardiac specialists.",
+  },
+
+  {
+    icon: ShieldCheck,
+    title: "Advanced Technology",
+    description:
+      "Modern diagnostic and treatment facilities for better outcomes.",
+  },
+
+  {
+    icon: Users,
+    title: "Patient-Centered Care",
+    description:
+      "Personalized treatment plans designed around every patient.",
+  },
+
+  {
+    icon: Award,
+    title: "Comprehensive Services",
+    description:
+      "Complete cardiovascular care under one roof.",
+  },
+];
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+const DepartmentDetailsPage = async ({ params }) => {
+  const { slug } = await params;
+
+  /*
+   * Currently using static data.
+   *
+   * Later:
+   * const data = await getDepartment(slug);
+   */
+
+  const data = department;
+
+  const DepartmentIcon =
+    iconMap[data.icon] || HeartPulse;
+
+  return (
+    <main className="min-h-screen bg-white">
+
+      {/* =====================================================
+          HERO
+      ===================================================== */}
+
+      <PageHero
+        backgroundImage={
+          data.banner_image || data.image
+        }
+        badge={
+          <span className="flex items-center gap-2">
+            <DepartmentIcon className="h-4 w-4" />
+            Department
+          </span>
+        }
+        title={data.name}
+        highlight="Specialized Care"
+        description={data.short_description}
+        breadcrumbs={[
+          {
+            label: "Departments",
+            href: "/departments",
+          },
+          {
+            label: data.name,
+          },
+        ]}
+      />
+
+      {/* =====================================================
+          INTRODUCTION
+      ===================================================== */}
+
+      <section className="relative overflow-hidden bg-white px-6 py-20 sm:px-10 lg:px-14 lg:py-28">
+
+        {/* Background */}
+        <div className="pointer-events-none absolute -right-40 top-20 h-[500px] w-[500px] rounded-full bg-[#0A7A78]/5 blur-3xl" />
+
+        <div className="relative mx-auto grid max-w-7xl items-center gap-14 lg:grid-cols-[0.9fr_1.1fr]">
+
+          {/* IMAGE */}
+
+          <div className="relative">
+
+            <div className="overflow-hidden rounded-[2rem] shadow-[0_30px_80px_rgba(8,59,73,0.14)]">
+
+              <Image
+                src={data.image}
+                alt={data.name}
+                width={900}
+                height={700}
+                className="h-[420px] w-full object-cover sm:h-[500px]"
+                priority
+              />
+
+            </div>
+
+            {/* Floating Card */}
+
+            <div className="absolute -bottom-7 -right-5 hidden w-[250px] rounded-3xl border border-white/80 bg-white/95 p-5 shadow-[0_20px_60px_rgba(8,59,73,0.16)] backdrop-blur sm:block">
+
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#0A7A78]/10 text-[#0A7A78]">
+
+                <HeartPulse className="h-6 w-6" />
+
+              </div>
+
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#0A7A78]">
+                Trusted Care
+              </p>
+
+              <h3 className="mt-1 text-lg font-bold text-[#083B49]">
+                Experienced Specialists
+              </h3>
+
+              <p className="mt-2 text-sm leading-6 text-slate-500">
+                Advanced treatment with compassionate patient care.
+              </p>
+
+            </div>
+
+          </div>
+
+          {/* CONTENT */}
+
+          <div>
+
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-[#0A7A78]/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[#0A7A78]">
+
+              <DepartmentIcon className="h-4 w-4" />
+
+              About Department
+
+            </div>
+
+            <h2 className="max-w-3xl text-3xl font-bold leading-tight text-[#083B49] sm:text-4xl lg:text-5xl">
+
+              Complete care for your{" "}
+              <span className="text-[#0A7A78]">
+                heart health
+              </span>
+
+            </h2>
+
+            <div className="mt-7 space-y-5">
+
+              {data.description
+                .split("\n\n")
+                .map((paragraph, index) => (
+                  <p
+                    key={index}
+                    className="text-base leading-8 text-slate-600"
+                  >
+                    {paragraph}
+                  </p>
+                ))}
+
+            </div>
+
+            {/* Highlights */}
+
+            <div className="mt-8 grid gap-4 sm:grid-cols-2">
+
+              {highlights.map((item) => {
+                const Icon = item.icon;
+
+                return (
+                  <div
+                    key={item.title}
+                    className="group rounded-2xl border border-slate-100 bg-slate-50/70 p-4 transition duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-lg"
+                  >
+
+                    <div className="flex gap-3">
+
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#0A7A78]/10 text-[#0A7A78]">
+
+                        <Icon className="h-5 w-5" />
+
+                      </div>
+
+                      <div>
+
+                        <h3 className="font-bold text-[#083B49]">
+                          {item.title}
+                        </h3>
+
+                        <p className="mt-1 text-sm leading-6 text-slate-500">
+                          {item.description}
+                        </p>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+                );
+              })}
+
+            </div>
+
+            {/* Buttons */}
+
+            <div className="mt-9 flex flex-wrap gap-4">
+
+              <Link
+                href="/appointments"
+                className="group inline-flex items-center gap-2 rounded-full bg-[#0A7A78] px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-[#0A7A78]/20 transition hover:bg-[#086563]"
+              >
+
+                Book Appointment
+
+                <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+
+              </Link>
+
+              <Link
+                href="/doctors"
+                className="inline-flex items-center gap-2 rounded-full border border-[#0A7A78]/20 bg-white px-6 py-3.5 text-sm font-bold text-[#0A7A78] transition hover:border-[#0A7A78] hover:bg-[#0A7A78]/5"
+              >
+
+                <Users className="h-4 w-4" />
+
+                Meet Our Doctors
+
+              </Link>
+
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* =====================================================
+          DEPARTMENT INFORMATION
+      ===================================================== */}
+
+      <section className="bg-[#F3FBFA] px-6 py-16 sm:px-10 lg:px-14">
+
+        <div className="mx-auto max-w-7xl">
+
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+
+            {/* Location */}
+
+            <div className="rounded-3xl border border-white bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+
+              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#0A7A78]/10 text-[#0A7A78]">
+
+                <MapPin className="h-6 w-6" />
+
+              </div>
+
+              <p className="text-xs font-bold uppercase tracking-[0.15em] text-slate-400">
+                Location
+              </p>
+
+              <h3 className="mt-2 font-bold text-[#083B49]">
+                {data.location}
+              </h3>
+
+            </div>
+
+            {/* Timing */}
+
+            <div className="rounded-3xl border border-white bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+
+              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
+
+                <Clock3 className="h-6 w-6" />
+
+              </div>
+
+              <p className="text-xs font-bold uppercase tracking-[0.15em] text-slate-400">
+                Department Timing
+              </p>
+
+              <h3 className="mt-2 font-bold text-[#083B49]">
+                {data.timing}
+              </h3>
+
+            </div>
+
+            {/* Emergency */}
+
+            <div className="rounded-3xl border border-white bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+
+              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-red-50 text-red-600">
+
+                <HeartPulse className="h-6 w-6" />
+
+              </div>
+
+              <p className="text-xs font-bold uppercase tracking-[0.15em] text-slate-400">
+                Emergency
+              </p>
+
+              <h3 className="mt-2 font-bold text-[#083B49]">
+
+                {Number(data.emergency_available) === 1
+                  ? "24/7 Emergency Available"
+                  : "Emergency Not Available"}
+
+              </h3>
+
+            </div>
+
+            {/* Phone */}
+
+            <div className="rounded-3xl border border-white bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+
+              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-50 text-amber-600">
+
+                <Phone className="h-6 w-6" />
+
+              </div>
+
+              <p className="text-xs font-bold uppercase tracking-[0.15em] text-slate-400">
+                Contact
+              </p>
+
+              <a
+                href={`tel:${data.phone}`}
+                className="mt-2 block font-bold text-[#083B49] hover:text-[#0A7A78]"
+              >
+                {data.phone}
+              </a>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* =====================================================
+          STATS
+      ===================================================== */}
+
+      <section className="bg-white px-6 py-20 sm:px-10 lg:px-14">
+
+        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-y-12 md:grid-cols-4">
+
+          <div className="text-center">
+
+            <div className="flex justify-center">
+
+              <Stethoscope className="h-8 w-8 text-[#0A7A78]" />
+
+            </div>
+
+            <div className="mt-4 text-4xl font-bold text-[#083B49]">
+              {data.doctors?.length || 0}+
+            </div>
+
+            <p className="mt-2 text-sm text-slate-500">
+              Specialist Doctors
+            </p>
+
+          </div>
+
+          <div className="text-center">
+
+            <div className="flex justify-center">
+
+              <HeartPulse className="h-8 w-8 text-red-500" />
+
+            </div>
+
+            <div className="mt-4 text-4xl font-bold text-[#083B49]">
+              24/7
+            </div>
+
+            <p className="mt-2 text-sm text-slate-500">
+              Emergency Support
+            </p>
+
+          </div>
+
+          <div className="text-center">
+
+            <div className="flex justify-center">
+
+              <CalendarDays className="h-8 w-8 text-blue-600" />
+
+            </div>
+
+            <div className="mt-4 text-4xl font-bold text-[#083B49]">
+              365
+            </div>
+
+            <p className="mt-2 text-sm text-slate-500">
+              Days of Care
+            </p>
+
+          </div>
+
+          <div className="text-center">
+
+            <div className="flex justify-center">
+
+              <Users className="h-8 w-8 text-amber-500" />
+
+            </div>
+
+            <div className="mt-4 text-4xl font-bold text-[#083B49]">
+              100%
+            </div>
+
+            <p className="mt-2 text-sm text-slate-500">
+              Patient Focused
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* =====================================================
+          SERVICES
+      ===================================================== */}
+
+      <section className="bg-[#F7FAFA] px-6 py-20 sm:px-10 lg:px-14">
+
+        <div className="mx-auto max-w-7xl">
+
+          <div className="mx-auto max-w-2xl text-center">
+
+            <span className="inline-flex rounded-full bg-[#0A7A78]/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[#0A7A78]">
+              Our Services
+            </span>
+
+            <h2 className="mt-5 text-3xl font-bold text-[#083B49] sm:text-4xl">
+              Specialized services for every stage of care
+            </h2>
+
+            <p className="mt-4 leading-7 text-slate-500">
+              From preventive care to advanced treatment,
+              our department provides comprehensive
+              cardiovascular services.
+            </p>
+
+          </div>
+
+          <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+
+            {services.map((service) => {
+
+              const Icon = service.icon;
+
+              return (
+                <div
+                  key={service.title}
+                  className="group rounded-[2rem] border border-slate-100 bg-white p-7 shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-[0_25px_60px_rgba(8,59,73,0.12)]"
+                >
+
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#0A7A78]/10 text-[#0A7A78] transition group-hover:bg-[#0A7A78] group-hover:text-white">
+
+                    <Icon className="h-7 w-7" />
+
+                  </div>
+
+                  <h3 className="mt-6 text-lg font-bold text-[#083B49]">
+                    {service.title}
+                  </h3>
+
+                  <p className="mt-3 text-sm leading-7 text-slate-500">
+                    {service.description}
+                  </p>
+
+                  <Link
+                    href="/appointments"
+                    className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-[#0A7A78]"
+                  >
+
+                    Learn More
+
+                    <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+
+                  </Link>
+
+                </div>
+              );
+            })}
+
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* =====================================================
+          TREATMENTS
+      ===================================================== */}
+
+      <section className="bg-white px-6 py-20 sm:px-10 lg:px-14">
+
+        <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[1fr_0.75fr]">
+
+          {/* Conditions */}
+
+          <div>
+
+            <span className="inline-flex rounded-full bg-[#0A7A78]/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[#0A7A78]">
+              Conditions We Treat
+            </span>
+
+            <h2 className="mt-5 text-3xl font-bold text-[#083B49] sm:text-4xl">
+              Comprehensive treatment for heart conditions
+            </h2>
+
+            <p className="mt-5 max-w-2xl leading-8 text-slate-500">
+              Our multidisciplinary team provides diagnosis,
+              treatment and ongoing management for a wide
+              range of cardiovascular conditions.
+            </p>
+
+            <div className="mt-9 grid gap-3 sm:grid-cols-2">
+
+              {treatments.map((treatment) => (
+
+                <div
+                  key={treatment}
+                  className="flex items-center gap-3 rounded-2xl border border-slate-100 bg-slate-50/70 p-4"
+                >
+
+                  <CheckCircle2 className="h-5 w-5 shrink-0 text-[#0A7A78]" />
+
+                  <span className="text-sm font-semibold text-[#083B49]">
+                    {treatment}
+                  </span>
+
+                </div>
+
+              ))}
+
+            </div>
+
+          </div>
+
+          {/* CTA CARD */}
+
+          <div className="relative overflow-hidden rounded-[2.5rem] bg-[#083B49] p-8 text-white sm:p-10">
+
+            <div className="absolute -right-20 -top-20 h-56 w-56 rounded-full bg-[#0A7A78]/30 blur-2xl" />
+
+            <div className="absolute -bottom-20 -left-20 h-56 w-56 rounded-full bg-cyan-400/10 blur-2xl" />
+
+            <div className="relative">
+
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10">
+
+                <HeartPulse className="h-7 w-7 text-white" />
+
+              </div>
+
+              <h3 className="mt-7 text-2xl font-bold sm:text-3xl">
+                Personalized care for your heart
+              </h3>
+
+              <p className="mt-4 leading-8 text-white/70">
+                Our specialists combine medical expertise,
+                advanced technology and compassionate care
+                to create treatment plans designed for you.
+              </p>
+
+              <Link
+                href="/appointments"
+                className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-bold text-[#083B49] transition hover:bg-[#0A7A78] hover:text-white"
+              >
+
+                Schedule Consultation
+
+                <ArrowRight className="h-4 w-4" />
+
+              </Link>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* =====================================================
+          DOCTORS
+      ===================================================== */}
+
+      <section className="bg-[#F3FBFA] px-6 py-20 sm:px-10 lg:px-14">
+
+        <div className="mx-auto max-w-7xl">
+
+          <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
+
+            <div>
+
+              <span className="inline-flex rounded-full bg-[#0A7A78]/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[#0A7A78]">
+                Our Specialists
+              </span>
+
+              <h2 className="mt-5 text-3xl font-bold text-[#083B49] sm:text-4xl">
+                Meet our expert doctors
+              </h2>
+
+              <p className="mt-4 max-w-2xl leading-7 text-slate-500">
+                Experienced specialists dedicated to providing
+                exceptional cardiovascular care.
+              </p>
+
+            </div>
+
+            <Link
+              href="/doctors"
+              className="inline-flex items-center gap-2 font-bold text-[#0A7A78]"
+            >
+
+              View All Doctors
+
+              <ArrowRight className="h-4 w-4" />
+
+            </Link>
+
+          </div>
+
+          <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+
+            {data.doctors?.map((doctor) => (
+
+              <div
+                key={doctor.id}
+                className="group overflow-hidden rounded-[2rem] border border-white bg-white shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-[0_25px_70px_rgba(8,59,73,0.14)]"
+              >
+
+                {/* Doctor Image */}
+
+                <div className="relative h-[320px] overflow-hidden bg-slate-100">
+
+                  <Image
+                    src={doctor.image}
+                    alt={doctor.name}
+                    width={600}
+                    height={700}
+                    className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                  />
+
+                  {/* Availability */}
+
+                  <div className="absolute left-5 top-5">
+
+                    <span
+                      className={`inline-flex items-center gap-2 rounded-full px-3 py-2 text-xs font-bold shadow-lg backdrop-blur ${
+                        doctor.available
+                          ? "bg-emerald-500 text-white"
+                          : "bg-slate-700 text-white"
+                      }`}
+                    >
+
+                      <span
+                        className={`h-2 w-2 rounded-full ${
+                          doctor.available
+                            ? "bg-white"
+                            : "bg-slate-300"
+                        }`}
+                      />
+
+                      {doctor.available
+                        ? "Available Today"
+                        : "Currently Unavailable"}
+
+                    </span>
+
+                  </div>
+
+                </div>
+
+                {/* Doctor Info */}
+
+                <div className="p-6">
+
+                  <h3 className="text-xl font-bold text-[#083B49]">
+                    {doctor.name}
+                  </h3>
+
+                  <p className="mt-1 text-sm font-semibold text-[#0A7A78]">
+                    {doctor.specialization}
+                  </p>
+
+                  <p className="mt-3 text-sm text-slate-500">
+                    {doctor.qualification}
+                  </p>
+
+                  <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-5">
+
+                    <div>
+
+                      <p className="text-xs text-slate-400">
+                        Experience
+                      </p>
+
+                      <p className="mt-1 text-sm font-bold text-[#083B49]">
+                        {doctor.experience}
+                      </p>
+
+                    </div>
+
+                    <div className="flex items-center gap-1">
+
+                      <Star className="h-4 w-4 fill-current text-amber-400" />
+
+                      <span className="text-sm font-bold text-[#083B49]">
+                        {doctor.rating}
+                      </span>
+
+                      <span className="text-xs text-slate-400">
+                        ({doctor.reviews})
+                      </span>
+
+                    </div>
+
+                  </div>
+
+                  <div className="mt-5 flex gap-3">
+
+                    <Link
+                      href={`/doctors/${doctor.id}`}
+                      className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#0A7A78] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#086563]"
+                    >
+
+                      View Profile
+
+                      <ArrowRight className="h-4 w-4" />
+
+                    </Link>
+
+                    <a
+                      href={`tel:${doctor.phone}`}
+                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-200 text-[#0A7A78] transition hover:border-[#0A7A78] hover:bg-[#0A7A78]/5"
+                      aria-label={`Call ${doctor.name}`}
+                    >
+
+                      <Phone className="h-4 w-4" />
+
+                    </a>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            ))}
+
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* =====================================================
+          FINAL CTA
+      ===================================================== */}
+
+      <section className="px-6 py-20 sm:px-10 lg:px-14">
+
+        <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2.5rem] bg-[#0A7A78] px-7 py-12 text-white sm:px-12 lg:px-16 lg:py-16">
+
+          {/* Decoration */}
+
+          <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
+
+          <div className="absolute -bottom-24 -left-20 h-72 w-72 rounded-full bg-[#083B49]/20 blur-3xl" />
+
+          <div className="relative flex flex-col justify-between gap-8 lg:flex-row lg:items-center">
+
+            <div className="max-w-2xl">
+
+              <p className="text-sm font-bold uppercase tracking-[0.2em] text-white/70">
+                Need Expert Care?
+              </p>
+
+              <h2 className="mt-3 text-3xl font-bold sm:text-4xl">
+                Take the next step towards better heart health.
+              </h2>
+
+              <p className="mt-4 leading-7 text-white/75">
+                Schedule an appointment with one of our
+                experienced specialists today.
+              </p>
+
+            </div>
+
+            <div className="flex flex-wrap gap-3">
+
+              <Link
+                href="/doctors"
+                className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-bold text-[#083B49] transition hover:bg-slate-100"
+              >
+
+                View Doctors
+
+                <ArrowRight className="h-4 w-4" />
+
+              </Link>
+
+              <a
+                href={`tel:${data.phone}`}
+                className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-6 py-3.5 text-sm font-bold text-white backdrop-blur transition hover:bg-white/20"
+              >
+
+                <Phone className="h-4 w-4" />
+
+                Call Us
+
+              </a>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+  );
+};
+
+export default DepartmentDetailsPage;

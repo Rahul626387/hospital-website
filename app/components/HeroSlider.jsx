@@ -600,8 +600,8 @@ import {
 
 const heroSlides = [
   {
-    image:
-      "https://images.unsplash.com/photo-1586773860418-d37222d8fce3",
+    // image:"/assets/images/sliderimage01.png",
+    image:"https://images.unsplash.com/photo-1586773860418-d37222d8fce3",
     badge: "Trusted Healthcare Excellence",
     title: "Your Health Is Our",
     highlight: "Highest Priority.",
@@ -611,8 +611,8 @@ const heroSlides = [
     cardText: "Compassionate care for every patient",
   },
   {
-    image:
-      "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d",
+    // image:"/assets/images/sliderimage02.png",
+    image:"https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d",
     badge: "Modern Hospital Facilities",
     title: "Advanced Care.",
     highlight: "Better Outcomes.",
@@ -622,8 +622,8 @@ const heroSlides = [
     cardText: "Technology designed around patient care",
   },
   {
-    image:
-      "https://images.unsplash.com/photo-1551076805-e1869033e561",
+    image:"https://images.unsplash.com/photo-1551076805-e1869033e561",
+    // image:"/assets/images/sliderimage03.png",
     badge: "Expert Medical Team",
     title: "Care You Can",
     highlight: "Trust.",
@@ -671,7 +671,8 @@ export default function HomeHero() {
           />
 
           {/* Dark overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#032B42]/95 via-[#063B5C]/75 to-[#063B5C]/25" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#032B42]/95 via-[#063B5C]/75 to-[#fff]/25" />
+          {/* <div className="absolute inset-0 bg-gradient-to-r from-[#032B42]/95 via-[#063B5C]/75 to-[#063B5C]/25" /> */}
 
           {/* Bottom gradient */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
@@ -783,7 +784,7 @@ export default function HomeHero() {
           EMERGENCY CARD
       ========================================================== */}
       <motion.a
-        href="tel:+919876543210"
+        href="tel:+919575300110"
         animate={{ y: [0, -5, 0] }}
         transition={{
           duration: 3,
@@ -803,7 +804,7 @@ export default function HomeHero() {
             </p>
 
             <p className="text-sm font-black text-[#063B5C]">
-              +91 98765 43210
+              +91 9575300110
             </p>
           </div>
         </div>

@@ -16,7 +16,24 @@ import {
   ShieldCheck,
   Stethoscope,
   Syringe,
+  HeartHandshake,
+  Award
 } from "lucide-react";
+import PageHero from "../components/Pagehero";
+import ApiService from "../src/services/Apiservices";
+import  useSWR  from "swr";
+import  DepartmentCard  from "../components/DepartmentCard";
+import HospitalStats from "../components/HospitalStats";
+import { hospitalStats } from "../data/stats";
+
+import features from "../data/aboutFeatures.json";
+
+const iconMap = {
+  HeartHandshake,
+  Award,
+  Microscope,
+  Clock3,
+};
 
 const services = [
   {
@@ -63,6 +80,8 @@ const services = [
   },
 ];
 
+
+
 const facilities = [
   "24/7 Emergency & Trauma Care",
   "Advanced ICU & Critical Care",
@@ -72,20 +91,19 @@ const facilities = [
   "Ambulance Services",
 ];
 
-const stats = [
-  ["50+", "Expert Doctors"],
-  ["25+", "Years Experience"],
-  ["10K+", "Patients Served"],
-  ["24/7", "Emergency Care"],
-];
+
 
 export default function Servicespage() {
+
+  const {data,error,isLoading} = useSWR('departments',ApiService.get)
+  const departments = data?.data
+
   return (
     <main className="min-h-screen bg-white">
       {/* =====================================================
           HERO
       ====================================================== */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#063B5C] to-[#0A7A78]">
+      {/* <section className="relative overflow-hidden bg-gradient-to-br from-[#063B5C] to-[#0A7A78]">
         <div className="absolute left-[-100px] top-[-100px] h-72 w-72 rounded-full bg-white/10 blur-3xl" />
         <div className="absolute bottom-[-150px] right-[-100px] h-96 w-96 rounded-full bg-cyan-300/10 blur-3xl" />
 
@@ -167,12 +185,21 @@ export default function Servicespage() {
             </div>
           </motion.div>
         </div>
-      </section>
+      </section> */}
+
+     <PageHero
+      backgroundImage="https://images.pexels.com/photos/4386466/pexels-photo-4386466.jpeg"
+      badge="Our Departments"
+      title="Specialized"
+      highlight="Medical Departments."
+      description="Explore our specialized medical departments, equipped with experienced specialists, advanced facilities and patient-centered care."
+      breadcrumb="Departments"
+    />
 
       {/* =====================================================
           STATS
       ====================================================== */}
-      <section className="relative z-10 -mt-8 px-4">
+      {/* <section className="relative z-10 -mt-8 px-4">
         <div className="mx-auto grid max-w-6xl grid-cols-2 overflow-hidden rounded-2xl bg-white shadow-xl sm:grid-cols-4">
           {stats.map(([number, label]) => (
             <div
@@ -189,12 +216,13 @@ export default function Servicespage() {
             </div>
           ))}
         </div>
-      </section>
+      </section> */}
+      <HospitalStats />
 
       {/* =====================================================
           SERVICES
       ====================================================== */}
-      <section className="py-20">
+      {/* <section className="py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-sm font-bold uppercase tracking-widest text-[#0A7A78]">
@@ -211,51 +239,91 @@ export default function Servicespage() {
             </p>
           </div>
 
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {services.map((service, index) => {
-              const Icon = service.icon;
-
-              return (
-                <motion.div
-                  key={service.title}
-                  initial={{ opacity: 0, y: 25 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.08 }}
-                  className="group rounded-2xl border border-slate-100 bg-white p-7 shadow-sm transition duration-300 hover:-translate-y-2 hover:border-teal-100 hover:shadow-xl"
-                >
-                  <div
-                    className={`flex h-14 w-14 items-center justify-center rounded-2xl ${service.color}`}
-                  >
-                    <Icon className="h-7 w-7" />
-                  </div>
-
-                  <h3 className="mt-6 text-xl font-bold text-[#063B5C]">
-                    {service.title}
-                  </h3>
-
-                  <p className="mt-3 text-sm leading-7 text-slate-500">
-                    {service.description}
-                  </p>
-
-                  <Link
-                    href="/appointment"
-                    className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-[#0A7A78]"
-                  >
-                    Book Consultation
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </Link>
-                </motion.div>
-              );
-            })}
-          </div>
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {departments?.map((department, index) => (
+            <DepartmentCard
+              key={department.id}
+              department={department}
+              index={index}
+              href={`/services/${department.id}`}
+            />
+          ))}
         </div>
-      </section>
+        </div>
+      </section> */}
+
+      {/* <section className="relative overflow-hidden bg-slate-50 py-20"> */}
+      <section
+  className="
+    relative overflow-hidden py-20
+    bg-gradient-to-b
+    from-[#f0fafa]
+    via-white
+    to-[#f8fbfc]
+  "
+>
+  {/* Background Decorations */}
+  <div className="pointer-events-none absolute -left-32 top-20 h-72 w-72 rounded-full bg-[#0A7A78]/5 blur-3xl" />
+
+  <div className="pointer-events-none absolute -right-32 bottom-0 h-80 w-80 rounded-full bg-[#063B5C]/5 blur-3xl" />
+
+  <div className="pointer-events-none absolute left-1/2 top-0 h-40 w-40 -translate-x-1/2 rounded-full bg-teal-100/30 blur-3xl" />
+
+  <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    {/* Heading */}
+    <div className="mx-auto max-w-2xl text-center">
+      <motion.p
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="text-sm font-bold uppercase tracking-[0.2em] text-[#0A7A78]"
+      >
+        Our Services
+      </motion.p>
+
+      <motion.h2
+        initial={{ opacity: 0, y: 15 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.1 }}
+        className="mt-3 text-3xl font-black tracking-tight text-[#063B5C] sm:text-4xl"
+      >
+        Specialized healthcare
+        <span className="text-[#0A7A78]"> under one roof.</span>
+      </motion.h2>
+
+      <motion.p
+        initial={{ opacity: 0, y: 15 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.2 }}
+        className="mt-4 leading-7 text-slate-500"
+      >
+        Our multidisciplinary team provides a wide range of medical
+        services using modern technology and patient-focused care.
+      </motion.p>
+    </div>
+
+    {/* Department Cards */}
+    <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {departments?.map((department, index) => (
+        <DepartmentCard
+          key={department.id}
+          department={department}
+          index={index}
+          href={`/department/${department.id}`}
+        />
+      ))}
+    </div>
+  </div>
+</section>
+
+      
 
       {/* =====================================================
           EMERGENCY
       ====================================================== */}
-      <section className="bg-red-50 py-16">
+      {/* <section className="bg-red-50 py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center justify-between gap-6 rounded-3xl bg-white p-8 shadow-sm md:flex-row md:p-10">
             <div className="flex items-center gap-5">
@@ -287,12 +355,12 @@ export default function Servicespage() {
             </a>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* =====================================================
           FACILITIES
       ====================================================== */}
-      <section className="bg-slate-50 py-20">
+      <section className="bg-slate-200 py-20">
         <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
           <div className="relative h-[430px] overflow-hidden rounded-[2rem]">
             <Image
@@ -352,45 +420,93 @@ export default function Servicespage() {
             </h2>
           </div>
 
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            <div className="rounded-2xl bg-teal-50 p-8">
-              <HeartPulse className="h-9 w-9 text-[#0A7A78]" />
+        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {features.map((item, index) => {
+              const Icon = iconMap[item.icon];
 
-              <h3 className="mt-5 text-xl font-bold text-[#063B5C]">
-                Patient First
-              </h3>
+              return (
+                <motion.div
+                  key={item.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{
+                    duration: 0.5,
+                    delay: index * 0.1,
+                    ease: "easeOut",
+                  }}
+                  whileHover={{
+                    y: -5,
+                    transition: {
+                      duration: 0.3,
+                      ease: "easeOut",
+                    },
+                  }}
+                  className={`
+                    group relative overflow-visible
+                    rounded-2xl border border-slate-100
+                    bg-white px-5 pb-5 pt-8
+                    shadow-sm
+                    transition-all duration-500
+                    ${item.hoverBg}
+                    hover:border-transparent
+                    hover:shadow-xl
+                    cursor-pointer
+                  `}
+                >
+                  {/* Floating Icon */}
+                  <motion.div
+                    className={`
+                      absolute -top-6 left-1/2
+                      flex h-12 w-12
+                      -translate-x-1/2
+                      items-center justify-center
+                      rounded-xl
+                      ${item.bg}
+                      ${item.color}
+                      shadow-md
+                      transition-all duration-500
+                      group-hover:scale-110
+                      group-hover:rotate-3
+                      group-hover:bg-white
+                    `}
+                  >
+                    <Icon
+                      className="
+                        h-6 w-6
+                        transition-all duration-500
+                        group-hover:scale-110
+                      "
+                    />
+                  </motion.div>
 
-              <p className="mt-3 text-sm leading-7 text-slate-600">
-                Your comfort, safety and wellbeing are at the center of
-                everything we do.
-              </p>
-            </div>
+                  {/* Content */}
+                  <div className="transition-colors duration-500">
+                    <h3
+                      className="
+                        text-base font-black
+                        text-[#063B5C]
+                        transition-colors duration-500
+                        group-hover:text-white
+                      "
+                    >
+                      {item.title}
+                    </h3>
 
-            <div className="rounded-2xl bg-blue-50 p-8">
-              <ShieldCheck className="h-9 w-9 text-blue-600" />
-
-              <h3 className="mt-5 text-xl font-bold text-[#063B5C]">
-                Trusted Specialists
-              </h3>
-
-              <p className="mt-3 text-sm leading-7 text-slate-600">
-                Experienced medical professionals dedicated to delivering
-                high-quality healthcare.
-              </p>
-            </div>
-
-            <div className="rounded-2xl bg-purple-50 p-8">
-              <Clock3 className="h-9 w-9 text-purple-600" />
-
-              <h3 className="mt-5 text-xl font-bold text-[#063B5C]">
-                Available 24/7
-              </h3>
-
-              <p className="mt-3 text-sm leading-7 text-slate-600">
-                Emergency and critical care services are available around the
-                clock.
-              </p>
-            </div>
+                    <p
+                      className="
+                        mt-2 text-xs leading-6
+                        text-slate-500
+                        transition-colors duration-500
+                        group-hover:text-white/90
+                      "
+                    >
+                      {item.text}
+                    </p>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>

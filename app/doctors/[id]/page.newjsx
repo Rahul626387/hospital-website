@@ -1,0 +1,3931 @@
+// "use client";
+
+// import React from "react";
+// import Image from "next/image";
+// import Link from "next/link";
+// import { useParams } from "next/navigation";
+// import useSWR from "swr";
+// import { motion, useReducedMotion } from "framer-motion";
+
+
+
+// import {
+//   Award,
+//   BadgeCheck,
+//   BookOpen,
+//   BriefcaseMedical,
+//   CalendarDays,
+//   CheckCircle2,
+//   ChevronLeft,
+//   GraduationCap,
+//   Mail,
+//   Phone,
+//   ShieldCheck,
+//   Stethoscope,
+//   Trophy,
+//   Sparkles,
+//   FileCheck2,
+// } from "lucide-react";
+// import ApiService from "../../src/services/Apiservices";
+
+// /* =========================================================
+//    PAGE
+// ========================================================= */
+
+// const page = () => {
+//   const params = useParams();
+//   const shouldReduceMotion = useReducedMotion();
+
+//   const doctorId = Array.isArray(params?.id)
+//     ? params.id[0]
+//     : params?.id;
+
+//   /* =======================================================
+//      LIVE API
+//   ======================================================= */
+
+//   const {
+//     data,
+//     error,
+//     isLoading,
+//   } = useSWR(
+//     doctorId ? `doctors/${doctorId}` : null,
+//     ApiService.get
+//   );
+
+//   /*
+//    * API RESPONSE
+//    *
+//    * {
+//    *   success: true,
+//    *   data: {...}
+//    * }
+//    */
+
+//   const doctorData = data?.data || null;
+
+//   /* =======================================================
+//      ANIMATION
+//   ======================================================= */
+
+//   const fadeUp = {
+//     initial: {
+//       opacity: 0,
+//       y: shouldReduceMotion ? 0 : 25,
+//     },
+//     animate: {
+//       opacity: 1,
+//       y: 0,
+//     },
+//     transition: {
+//       duration: 0.65,
+//       ease: [0.22, 1, 0.36, 1],
+//     },
+//   };
+
+//   const staggerContainer = {
+//     initial: {},
+//     animate: {
+//       transition: {
+//         staggerChildren: shouldReduceMotion ? 0 : 0.08,
+//       },
+//     },
+//   };
+
+//   /* =======================================================
+//      LOADING
+//   ======================================================= */
+
+//   if (isLoading) {
+//     return <DoctorSkeleton />;
+//   }
+
+//   /* =======================================================
+//      ERROR
+//   ======================================================= */
+
+//   if (error) {
+//     return (
+//       <main className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
+//         <div className="w-full max-w-md rounded-3xl bg-white p-8 text-center shadow-sm ring-1 ring-slate-200">
+//           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-red-50 text-red-500">
+//             <Stethoscope size={30} />
+//           </div>
+
+//           <h1 className="mt-5 text-xl font-bold text-slate-900">
+//             Unable to load doctor
+//           </h1>
+
+//           <p className="mt-2 text-sm leading-6 text-slate-500">
+//             Something went wrong while loading the doctor profile.
+//             Please try again.
+//           </p>
+
+//           <button
+//             onClick={() => window.location.reload()}
+//             className="mt-6 rounded-xl bg-[#063B5C] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#052f49]"
+//           >
+//             Try Again
+//           </button>
+//         </div>
+//       </main>
+//     );
+//   }
+
+//   /* =======================================================
+//      NOT FOUND
+//   ======================================================= */
+
+//   if (!doctorData) {
+//     return (
+//       <main className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
+//         <div className="w-full max-w-md rounded-3xl bg-white p-8 text-center shadow-sm ring-1 ring-slate-200">
+//           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#063B5C]/10 text-[#063B5C]">
+//             <Stethoscope size={30} />
+//           </div>
+
+//           <h1 className="mt-5 text-xl font-bold text-slate-900">
+//             Doctor Not Found
+//           </h1>
+
+//           <p className="mt-2 text-sm text-slate-500">
+//             The doctor profile you are looking for does not exist.
+//           </p>
+
+//           <Link
+//             href="/doctors"
+//             className="mt-6 inline-flex items-center gap-2 rounded-xl bg-[#063B5C] px-5 py-3 text-sm font-semibold text-white"
+//           >
+//             <ChevronLeft size={17} />
+//             Back to Doctors
+//           </Link>
+//         </div>
+//       </main>
+//     );
+//   }
+
+//   /* =======================================================
+//      SAFE DATA
+//   ======================================================= */
+
+//   const specializations = Array.isArray(
+//     doctorData.web_specilization
+//   )
+//     ? doctorData.web_specilization
+//     : [];
+
+//   const certificates = Array.isArray(
+//     doctorData.web_certificat
+//   )
+//     ? doctorData.web_certificat
+//     : [];
+
+//   const awards = Array.isArray(doctorData.web_awards)
+//     ? doctorData.web_awards
+//     : [];
+
+//   const experience =
+//     doctorData.experience_years || 0;
+
+//   const image =
+//     doctorData.image_url || "/images/default-doctor.jpg";
+
+//   /* =======================================================
+//      RENDER
+//   ======================================================= */
+
+//   return (
+//     <main className="min-h-screen overflow-hidden bg-slate-50">
+
+//       {/* ===================================================
+//           BACKGROUND DECORATION
+//       =================================================== */}
+
+//       <div className="pointer-events-none fixed inset-0 overflow-hidden">
+//         <motion.div
+//           animate={
+//             shouldReduceMotion
+//               ? {}
+//               : {
+//                   x: [0, 30, 0],
+//                   y: [0, -20, 0],
+//                 }
+//           }
+//           transition={{
+//             duration: 10,
+//             repeat: Infinity,
+//             ease: "easeInOut",
+//           }}
+//           className="absolute -left-40 -top-40 h-80 w-80 rounded-full bg-cyan-200/20 blur-3xl"
+//         />
+
+//         <motion.div
+//           animate={
+//             shouldReduceMotion
+//               ? {}
+//               : {
+//                   x: [0, -30, 0],
+//                   y: [0, 30, 0],
+//                 }
+//           }
+//           transition={{
+//             duration: 12,
+//             repeat: Infinity,
+//             ease: "easeInOut",
+//           }}
+//           className="absolute -bottom-40 -right-40 h-96 w-96 rounded-full bg-blue-200/20 blur-3xl"
+//         />
+//       </div>
+
+//       <div className="relative mx-auto max-w-7xl px-4 py-6 sm:px-6 md:py-10 lg:px-8">
+
+//         {/* =================================================
+//             BACK
+//         ================================================= */}
+
+//         <motion.div {...fadeUp} className="mb-5">
+//           <Link
+//             href="/doctors"
+//             className="group inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-[#063B5C]"
+//           >
+//             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white shadow-sm ring-1 ring-slate-200 transition group-hover:-translate-x-1">
+//               <ChevronLeft size={17} />
+//             </span>
+
+//             Back to Doctors
+//           </Link>
+//         </motion.div>
+
+//         {/* =================================================
+//             HERO
+//         ================================================= */}
+
+//         <motion.section
+//           {...fadeUp}
+//           className="relative overflow-hidden rounded-[30px] bg-white shadow-sm ring-1 ring-slate-200"
+//         >
+
+//           {/* Gradient */}
+//           <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-r from-[#063B5C] via-[#075579] to-[#0A7891]" />
+
+//           {/* Animated Glow */}
+//           <motion.div
+//             animate={
+//               shouldReduceMotion
+//                 ? {}
+//                 : {
+//                     opacity: [0.15, 0.35, 0.15],
+//                     scale: [1, 1.08, 1],
+//                   }
+//             }
+//             transition={{
+//               duration: 5,
+//               repeat: Infinity,
+//               ease: "easeInOut",
+//             }}
+//             className="absolute right-10 top-5 h-40 w-40 rounded-full bg-cyan-300/30 blur-3xl"
+//           />
+
+//           <div className="relative px-5 pb-7 pt-20 sm:px-8 md:px-10">
+
+//             <div className="flex flex-col gap-7 lg:flex-row lg:items-end">
+
+//               {/* Doctor Image */}
+
+//               <motion.div
+//                 initial={{
+//                   opacity: 0,
+//                   scale: shouldReduceMotion ? 1 : 0.9,
+//                 }}
+//                 animate={{
+//                   opacity: 1,
+//                   scale: 1,
+//                 }}
+//                 transition={{
+//                   duration: 0.7,
+//                   delay: 0.1,
+//                 }}
+//                 className="relative mx-auto lg:mx-0"
+//               >
+//                 <div className="relative h-36 w-36 overflow-hidden rounded-[28px] border-[6px] border-white bg-slate-100 shadow-xl sm:h-44 sm:w-44">
+
+//                   <Image
+//                     src={image}
+//                     alt={doctorData.name || "Doctor"}
+//                     fill
+//                     sizes="(max-width: 640px) 144px, 176px"
+//                     className="object-cover"
+//                   />
+
+//                 </div>
+
+//                 {/* Verified */}
+
+//                 <motion.div
+//                   animate={
+//                     shouldReduceMotion
+//                       ? {}
+//                       : {
+//                           scale: [1, 1.08, 1],
+//                         }
+//                   }
+//                   transition={{
+//                     duration: 2.5,
+//                     repeat: Infinity,
+//                   }}
+//                   className="absolute -bottom-2 -right-2 flex h-11 w-11 items-center justify-center rounded-full bg-emerald-500 text-white shadow-lg ring-4 ring-white"
+//                 >
+//                   <BadgeCheck size={23} />
+//                 </motion.div>
+//               </motion.div>
+
+//               {/* Doctor Info */}
+
+//               <div className="min-w-0 flex-1 text-center lg:text-left">
+
+//                 <div className="flex flex-wrap justify-center gap-2 lg:justify-start">
+
+//                   <span className="rounded-full bg-[#063B5C]/10 px-3 py-1 text-xs font-bold text-[#063B5C]">
+//                     Specialist
+//                   </span>
+
+//                   <span className="flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
+//                     <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+//                     Available
+//                   </span>
+
+//                 </div>
+
+//                 <h1 className="mt-3 text-3xl font-black tracking-tight text-slate-900 sm:text-4xl">
+//                   {doctorData.name}
+//                 </h1>
+
+//                 <p className="mt-2 text-base font-semibold text-[#075579] sm:text-lg">
+//                   {doctorData.web_heading}
+//                 </p>
+
+//                 <div className="mt-4 flex flex-col items-center gap-3 text-sm text-slate-500 sm:flex-row sm:flex-wrap lg:justify-start">
+
+//                   {doctorData.qualification && (
+//                     <div className="flex items-center gap-2">
+//                       <GraduationCap
+//                         size={17}
+//                         className="text-violet-500"
+//                       />
+//                       <span>
+//                         {doctorData.qualification}
+//                       </span>
+//                     </div>
+//                   )}
+
+//                   <div className="hidden h-1 w-1 rounded-full bg-slate-300 sm:block" />
+
+//                   <div className="flex items-center gap-2">
+//                     <BriefcaseMedical
+//                       size={17}
+//                       className="text-orange-500"
+//                     />
+//                     <span>
+//                       {experience}+ Years Experience
+//                     </span>
+//                   </div>
+
+//                 </div>
+//               </div>
+
+//               {/* Contact Buttons */}
+
+//               <div className="flex w-full flex-col gap-3 sm:flex-row lg:w-auto lg:flex-col">
+
+//                 <a
+//                   href={`tel:${doctorData.contact_no}`}
+//                   className="flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#063B5C] px-6 text-sm font-bold text-white shadow-lg shadow-[#063B5C]/20 transition duration-300 hover:-translate-y-0.5 hover:bg-[#052f49]"
+//                 >
+//                   <Phone size={17} />
+//                   Contact Doctor
+//                 </a>
+
+//                 <a
+//                   href={`mailto:${doctorData.email}`}
+//                   className="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-6 text-sm font-bold text-slate-700 transition duration-300 hover:-translate-y-0.5 hover:bg-slate-50"
+//                 >
+//                   <Mail size={17} />
+//                   Email
+//                 </a>
+
+//               </div>
+
+//             </div>
+//           </div>
+//         </motion.section>
+
+//         {/* =================================================
+//             STATS
+//         ================================================= */}
+
+//         <motion.section
+//           variants={staggerContainer}
+//           initial="initial"
+//           animate="animate"
+//           className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-2 md:grid-cols-4 md:gap-4"
+//         >
+
+//           <StatCard
+//             icon={<BriefcaseMedical size={21} />}
+//             iconClass="bg-orange-50 text-orange-500"
+//             value={`${experience}+`}
+//             label="Years Experience"
+//           />
+
+//           <StatCard
+//             icon={<Stethoscope size={21} />}
+//             iconClass="bg-blue-50 text-blue-500"
+//             value={specializations.length}
+//             label="Specializations"
+//           />
+
+//           <StatCard
+//             icon={<FileCheck2 size={21} />}
+//             iconClass="bg-violet-50 text-violet-500"
+//             value={certificates.length}
+//             label="Certifications"
+//           />
+
+//           <StatCard
+//             icon={<Trophy size={21} />}
+//             iconClass="bg-amber-50 text-amber-500"
+//             value={awards.length}
+//             label="Awards"
+//           />
+
+//         </motion.section>
+
+//         {/* =================================================
+//             MAIN GRID
+//         ================================================= */}
+
+//         <div className="mt-5 grid gap-5 lg:grid-cols-[minmax(0,1fr)_350px]">
+
+//           {/* LEFT */}
+
+//           <div className="space-y-5">
+
+//             {/* ABOUT */}
+
+//             {doctorData.web_bio && (
+//               <AnimatedCard>
+
+//                 <SectionTitle
+//                   icon={<BookOpen size={20} />}
+//                   iconClass="bg-blue-50 text-blue-500"
+//                   title="About Doctor"
+//                 />
+
+//                 <p className="mt-5 text-sm leading-7 text-slate-600 sm:text-[15px] sm:leading-8">
+//                   {doctorData.web_bio}
+//                 </p>
+
+//               </AnimatedCard>
+//             )}
+
+//             {/* SPECIALIZATIONS */}
+
+//             {specializations.length > 0 && (
+//               <AnimatedCard>
+
+//                 <SectionTitle
+//                   icon={<Stethoscope size={20} />}
+//                   iconClass="bg-emerald-50 text-emerald-500"
+//                   title="Specializations"
+//                 />
+
+//                 <motion.div
+//                   variants={staggerContainer}
+//                   initial="initial"
+//                   whileInView="animate"
+//                   viewport={{ once: true, amount: 0.2 }}
+//                   className="mt-5 grid gap-3 sm:grid-cols-2"
+//                 >
+//                   {specializations.map((item, index) => (
+//                     <SpecializationCard
+//                       key={index}
+//                       item={item}
+//                       index={index}
+//                     />
+//                   ))}
+//                 </motion.div>
+
+//               </AnimatedCard>
+//             )}
+
+//             {/* CERTIFICATES */}
+
+//             {certificates.length > 0 && (
+//               <AnimatedCard>
+
+//                 <SectionTitle
+//                   icon={<ShieldCheck size={20} />}
+//                   iconClass="bg-violet-50 text-violet-500"
+//                   title="Certifications"
+//                 />
+
+//                 <div className="mt-5 space-y-3">
+
+//                   {certificates.map(
+//                     (certificate, index) => (
+//                       <CertificateCard
+//                         key={index}
+//                         certificate={certificate}
+//                         index={index}
+//                       />
+//                     )
+//                   )}
+
+//                 </div>
+
+//               </AnimatedCard>
+//             )}
+
+//             {/* AWARDS */}
+
+//             {awards.length > 0 && (
+//               <AnimatedCard>
+
+//                 <SectionTitle
+//                   icon={<Award size={20} />}
+//                   iconClass="bg-amber-50 text-amber-500"
+//                   title="Awards & Recognition"
+//                 />
+
+//                 <div className="mt-5 grid gap-3 sm:grid-cols-2">
+
+//                   {awards.map((award, index) => (
+//                     <AwardCard
+//                       key={index}
+//                       award={award}
+//                       index={index}
+//                     />
+//                   ))}
+
+//                 </div>
+
+//               </AnimatedCard>
+//             )}
+
+//           </div>
+
+//           {/* RIGHT */}
+
+//           <aside className="space-y-5">
+
+//             {/* EXPERIENCE CARD */}
+
+//             <motion.div
+//               initial={{ opacity: 0, y: 25 }}
+//               whileInView={{ opacity: 1, y: 0 }}
+//               viewport={{ once: true }}
+//               transition={{ duration: 0.6 }}
+//               className="relative overflow-hidden rounded-[28px] bg-[#063B5C] p-6 text-white shadow-xl"
+//             >
+
+//               <motion.div
+//                 animate={
+//                   shouldReduceMotion
+//                     ? {}
+//                     : {
+//                         x: [0, 20, 0],
+//                         y: [0, -15, 0],
+//                       }
+//                 }
+//                 transition={{
+//                   duration: 7,
+//                   repeat: Infinity,
+//                   ease: "easeInOut",
+//                 }}
+//                 className="absolute -right-12 -top-12 h-36 w-36 rounded-full bg-cyan-300/20 blur-2xl"
+//               />
+
+//               <div className="relative">
+
+//                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10">
+//                   <Sparkles size={22} />
+//                 </div>
+
+//                 <p className="mt-6 text-sm font-medium text-white/60">
+//                   Professional Experience
+//                 </p>
+
+//                 <div className="mt-1 flex items-end gap-2">
+//                   <span className="text-5xl font-black">
+//                     {experience}+
+//                   </span>
+
+//                   <span className="mb-1 text-sm text-white/60">
+//                     Years
+//                   </span>
+//                 </div>
+
+//                 <p className="mt-2 text-sm text-white/75">
+//                   Experience in medical care and patient treatment.
+//                 </p>
+
+//               </div>
+//             </motion.div>
+
+//             {/* CONTACT */}
+
+//             <AnimatedCard>
+
+//               <SectionTitle
+//                 icon={<Phone size={20} />}
+//                 iconClass="bg-rose-50 text-rose-500"
+//                 title="Contact Information"
+//               />
+
+//               <div className="mt-5 space-y-3">
+
+//                 <ContactItem
+//                   icon={<Phone size={18} />}
+//                   iconClass="bg-emerald-50 text-emerald-500"
+//                   label="Phone"
+//                   value={doctorData.contact_no}
+//                   href={`tel:${doctorData.contact_no}`}
+//                 />
+
+//                 <ContactItem
+//                   icon={<Mail size={18} />}
+//                   iconClass="bg-blue-50 text-blue-500"
+//                   label="Email"
+//                   value={doctorData.email}
+//                   href={`mailto:${doctorData.email}`}
+//                 />
+
+//               </div>
+
+//             </AnimatedCard>
+
+//             {/* QUALIFICATION */}
+
+//             {doctorData.qualification && (
+//               <AnimatedCard>
+
+//                 <SectionTitle
+//                   icon={<GraduationCap size={20} />}
+//                   iconClass="bg-violet-50 text-violet-500"
+//                   title="Qualification"
+//                 />
+
+//                 <div className="mt-5 rounded-2xl bg-slate-50 p-4">
+//                   <p className="text-sm font-medium leading-7 text-slate-600">
+//                     {doctorData.qualification}
+//                   </p>
+//                 </div>
+
+//               </AnimatedCard>
+//             )}
+
+//           </aside>
+
+//         </div>
+//       </div>
+//     </main>
+//   );
+// };
+
+// /* =========================================================
+//    STAT CARD
+// ========================================================= */
+
+// const StatCard = ({
+//   icon,
+//   iconClass,
+//   value,
+//   label,
+// }) => {
+//   return (
+//     <motion.div
+//       variants={{
+//         initial: {
+//           opacity: 0,
+//           y: 20,
+//         },
+//         animate: {
+//           opacity: 1,
+//           y: 0,
+//         },
+//       }}
+//       whileHover={{
+//         y: -4,
+//       }}
+//       transition={{
+//         duration: 0.3,
+//       }}
+//       className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200 sm:p-5"
+//     >
+//       <div className="flex items-center gap-3">
+
+//         <div
+//           className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${iconClass}`}
+//         >
+//           {icon}
+//         </div>
+
+//         <div className="min-w-0">
+//           <p className="text-xl font-black text-slate-900">
+//             {value}
+//           </p>
+
+//           <p className="truncate text-xs font-medium text-slate-500">
+//             {label}
+//           </p>
+//         </div>
+
+//       </div>
+//     </motion.div>
+//   );
+// };
+
+// /* =========================================================
+//    ANIMATED CARD
+// ========================================================= */
+
+// const AnimatedCard = ({ children }) => {
+//   return (
+//     <motion.section
+//       initial={{
+//         opacity: 0,
+//         y: 25,
+//       }}
+//       whileInView={{
+//         opacity: 1,
+//         y: 0,
+//       }}
+//       viewport={{
+//         once: true,
+//         amount: 0.15,
+//       }}
+//       transition={{
+//         duration: 0.6,
+//         ease: [0.22, 1, 0.36, 1],
+//       }}
+//       className="rounded-[28px] bg-white p-5 shadow-sm ring-1 ring-slate-200 sm:p-7"
+//     >
+//       {children}
+//     </motion.section>
+//   );
+// };
+
+// /* =========================================================
+//    SECTION TITLE
+// ========================================================= */
+
+// const SectionTitle = ({
+//   icon,
+//   iconClass,
+//   title,
+// }) => {
+//   return (
+//     <div className="flex items-center gap-3">
+
+//       <div
+//         className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${iconClass}`}
+//       >
+//         {icon}
+//       </div>
+
+//       <h2 className="text-lg font-black text-slate-900 sm:text-xl">
+//         {title}
+//       </h2>
+
+//     </div>
+//   );
+// };
+
+// /* =========================================================
+//    SPECIALIZATION
+// ========================================================= */
+
+// const SpecializationCard = ({
+//   item,
+//   index,
+// }) => {
+//   const colors = [
+//     "bg-blue-50 text-blue-500",
+//     "bg-emerald-50 text-emerald-500",
+//     "bg-violet-50 text-violet-500",
+//     "bg-orange-50 text-orange-500",
+//     "bg-rose-50 text-rose-500",
+//     "bg-cyan-50 text-cyan-500",
+//   ];
+
+//   return (
+//     <motion.div
+//       variants={{
+//         initial: {
+//           opacity: 0,
+//           x: -15,
+//         },
+//         animate: {
+//           opacity: 1,
+//           x: 0,
+//         },
+//       }}
+//       whileHover={{
+//         x: 4,
+//       }}
+//       className="flex items-center gap-3 rounded-2xl border border-slate-100 bg-slate-50 p-4 transition"
+//     >
+
+//       <div
+//         className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
+//           colors[index % colors.length]
+//         }`}
+//       >
+//         <CheckCircle2 size={18} />
+//       </div>
+
+//       <span className="text-sm font-semibold text-slate-700">
+//         {item}
+//       </span>
+
+//     </motion.div>
+//   );
+// };
+
+// /* =========================================================
+//    CERTIFICATE
+// ========================================================= */
+
+// const CertificateCard = ({
+//   certificate,
+//   index,
+// }) => {
+//   return (
+//     <motion.div
+//       initial={{
+//         opacity: 0,
+//         x: -20,
+//       }}
+//       whileInView={{
+//         opacity: 1,
+//         x: 0,
+//       }}
+//       viewport={{
+//         once: true,
+//       }}
+//       transition={{
+//         delay: index * 0.08,
+//         duration: 0.5,
+//       }}
+//       className="flex flex-col gap-4 rounded-2xl border border-slate-100 bg-slate-50 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5"
+//     >
+
+//       <div className="flex min-w-0 gap-3">
+
+//         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-violet-50 text-violet-500">
+//           <ShieldCheck size={21} />
+//         </div>
+
+//         <div className="min-w-0">
+
+//           <h3 className="text-sm font-bold text-slate-800">
+//             {certificate.title}
+//           </h3>
+
+//           {certificate.organization && (
+//             <p className="mt-1 text-xs leading-5 text-slate-500">
+//               {certificate.organization}
+//             </p>
+//           )}
+
+//         </div>
+//       </div>
+
+//       <div className="flex items-center gap-2 self-start rounded-full bg-white px-3 py-1.5 text-xs font-bold text-violet-500 shadow-sm sm:self-center">
+//         <CalendarDays size={14} />
+//         {certificate.year}
+//       </div>
+
+//     </motion.div>
+//   );
+// };
+
+// /* =========================================================
+//    AWARD
+// ========================================================= */
+
+// const AwardCard = ({
+//   award,
+//   index,
+// }) => {
+//   return (
+//     <motion.div
+//       initial={{
+//         opacity: 0,
+//         scale: 0.96,
+//       }}
+//       whileInView={{
+//         opacity: 1,
+//         scale: 1,
+//       }}
+//       viewport={{
+//         once: true,
+//       }}
+//       transition={{
+//         delay: index * 0.08,
+//         duration: 0.5,
+//       }}
+//       whileHover={{
+//         y: -3,
+//       }}
+//       className="rounded-2xl border border-slate-100 bg-slate-50 p-5"
+//     >
+
+//       <div className="flex items-start justify-between gap-3">
+
+//         <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-50 text-amber-500">
+//           <Award size={21} />
+//         </div>
+
+//         {award.year && (
+//           <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-slate-500 shadow-sm">
+//             {award.year}
+//           </span>
+//         )}
+
+//       </div>
+
+//       <h3 className="mt-4 text-sm font-bold text-slate-800">
+//         {award.title}
+//       </h3>
+
+//       {award.organization && (
+//         <p className="mt-1 text-xs leading-5 text-slate-500">
+//           {award.organization}
+//         </p>
+//       )}
+
+//     </motion.div>
+//   );
+// };
+
+// /* =========================================================
+//    CONTACT ITEM
+// ========================================================= */
+
+// const ContactItem = ({
+//   icon,
+//   iconClass,
+//   label,
+//   value,
+//   href,
+// }) => {
+//   return (
+//     <a
+//       href={href}
+//       className="flex min-w-0 gap-3 rounded-2xl bg-slate-50 p-4 transition duration-300 hover:bg-slate-100"
+//     >
+
+//       <div
+//         className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${iconClass}`}
+//       >
+//         {icon}
+//       </div>
+
+//       <div className="min-w-0">
+//         <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+//           {label}
+//         </p>
+
+//         <p className="mt-1 truncate text-sm font-bold text-slate-700">
+//           {value || "Not available"}
+//         </p>
+//       </div>
+
+//     </a>
+//   );
+// };
+
+// /* =========================================================
+//    SKELETON
+// ========================================================= */
+
+// const DoctorSkeleton = () => {
+//   return (
+//     <main className="min-h-screen bg-slate-50">
+//       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+
+//         <div className="h-6 w-32 animate-pulse rounded bg-slate-200" />
+
+//         <div className="mt-6 overflow-hidden rounded-[30px] bg-white shadow-sm ring-1 ring-slate-200">
+
+//           <div className="h-40 animate-pulse bg-slate-200" />
+
+//           <div className="p-6">
+
+//             <div className="-mt-20 flex flex-col items-center lg:flex-row lg:items-end">
+
+//               <div className="h-40 w-40 animate-pulse rounded-[28px] bg-slate-300" />
+
+//               <div className="mt-5 w-full lg:ml-6 lg:mt-0">
+
+//                 <div className="h-4 w-24 animate-pulse rounded bg-slate-200" />
+
+//                 <div className="mt-3 h-9 w-64 animate-pulse rounded bg-slate-200" />
+
+//                 <div className="mt-3 h-5 w-48 animate-pulse rounded bg-slate-200" />
+
+//                 <div className="mt-4 h-4 w-80 max-w-full animate-pulse rounded bg-slate-200" />
+
+//               </div>
+
+//             </div>
+
+//           </div>
+//         </div>
+
+//         <div className="mt-5 grid grid-cols-2 gap-4 md:grid-cols-4">
+
+//           {[1, 2, 3, 4].map((item) => (
+//             <div
+//               key={item}
+//               className="h-24 animate-pulse rounded-2xl bg-white ring-1 ring-slate-200"
+//             />
+//           ))}
+
+//         </div>
+
+//         <div className="mt-5 grid gap-5 lg:grid-cols-[1fr_350px]">
+
+//           <div className="space-y-5">
+
+//             {[1, 2, 3].map((item) => (
+//               <div
+//                 key={item}
+//                 className="h-56 animate-pulse rounded-[28px] bg-white ring-1 ring-slate-200"
+//               />
+//             ))}
+
+//           </div>
+
+//           <div className="space-y-5">
+
+//             {[1, 2, 3].map((item) => (
+//               <div
+//                 key={item}
+//                 className="h-48 animate-pulse rounded-[28px] bg-white ring-1 ring-slate-200"
+//               />
+//             ))}
+
+//           </div>
+
+//         </div>
+
+//       </div>
+//     </main>
+//   );
+// };
+
+// export default page;
+
+
+
+
+// "use client";
+
+// import React from "react";
+// import Image from "next/image";
+// import {
+//   Award,
+//   BadgeCheck,
+//   BookOpen,
+//   BriefcaseMedical,
+//   CalendarDays,
+//   CheckCircle2,
+//   GraduationCap,
+//   Mail,
+//   Phone,
+//   ShieldCheck,
+//   Stethoscope,
+// } from "lucide-react";
+
+// const doctor = {
+//   id: 1,
+//   created_by: 1,
+//   department_id: 2,
+//   specialty_id: 5,
+//   name: "Dr. Rajesh Sharma",
+//   contact_no: "+91-9876543210",
+//   email: "dr.rajesh.sharma@example.com",
+//   qualification: "MBBS, MD (Medicine), DM (Cardiology)",
+//   experience_years: 18,
+//   web_experience: "18+ Years of Experience",
+//   image_url: "https://images.pexels.com/photos/5452293/pexels-photo-5452293.jpeg",
+
+//   web_bio:
+//     "Dr. Rajesh Sharma is a highly experienced cardiologist with more than 18 years of experience in diagnosing and treating cardiovascular diseases. He specializes in interventional cardiology, heart failure management, preventive cardiology and hypertension.",
+
+//   web_heading: "Senior Consultant Cardiologist",
+
+//   web_specilization: [
+//     "Interventional Cardiology",
+//     "Heart Failure Management",
+//     "Preventive Cardiology",
+//     "Hypertension",
+//   ],
+
+//   web_certificat: [
+//     {
+//       title: "Advanced Cardiac Life Support",
+//       organization: "American Heart Association",
+//       year: 2021,
+//       file_url: "/uploads/certificates/acls.pdf",
+//     },
+//     {
+//       title: "Interventional Cardiology Certification",
+//       organization: "National Cardiology Institute",
+//       year: 2022,
+//       file_url:
+//         "/uploads/certificates/interventional-cardiology.pdf",
+//     },
+//   ],
+
+//   web_awards: [
+//     {
+//       title: "Best Cardiologist Award",
+//       organization: "Healthcare Excellence Foundation",
+//       year: 2023,
+//     },
+//     {
+//       title: "Outstanding Medical Service Award",
+//       organization: "State Medical Association",
+//       year: 2024,
+//     },
+//   ],
+// };
+
+// const page = () => {
+//   return (
+//     <main className="min-h-screen bg-slate-50 py-8 md:py-12">
+//       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+//         {/* Hero */}
+//         {/* <section className="overflow-hidden rounded-[32px] bg-white shadow-sm ring-1 ring-slate-200">
+//           <div className="h-32 bg-gradient-to-r from-[#063B5C] via-[#075579] to-[#0A7891] md:h-44" />
+
+//           <div className="relative px-5 pb-8 sm:px-8 lg:px-12">
+//             <div className="-mt-20 flex flex-col gap-7 md:-mt-24 md:flex-row md:items-end">
+
+            
+//               <div className="relative shrink-0">
+//                 <div className="h-36 w-36 overflow-hidden rounded-[28px] border-[6px] border-white bg-slate-100 shadow-xl sm:h-44 sm:w-44 md:h-48 md:w-48">
+//                   <Image
+//                     src={doctor.image_url}
+//                     alt={doctor.name}
+//                     width={192}
+//                     height={192}
+//                     className="h-full w-full object-cover"
+//                   />
+//                 </div>
+
+//                 <div className="absolute -bottom-3 -right-3 flex h-11 w-11 items-center justify-center rounded-full bg-emerald-500 text-white shadow-lg ring-4 ring-white">
+//                   <BadgeCheck size={23} />
+//                 </div>
+//               </div>
+
+//               <div className="flex-1 pb-1">
+//                 <div className="mb-2 flex flex-wrap items-center gap-2">
+//                   <span className="rounded-full bg-[#063B5C]/10 px-3 py-1 text-xs font-semibold text-[#063B5C]">
+//                     Cardiology
+//                   </span>
+
+//                   <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+//                     Available
+//                   </span>
+//                 </div>
+
+//                 <h1 className="text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">
+//                   {doctor.name}
+//                 </h1>
+
+//                 <p className="mt-2 text-lg font-semibold text-[#075579]">
+//                   {doctor.web_heading}
+//                 </p>
+
+//                 <div className="mt-4 flex flex-wrap gap-4 text-sm text-slate-600">
+//                   <div className="flex items-center gap-2">
+//                     <GraduationCap size={18} className="text-[#075579]" />
+//                     {doctor.qualification}
+//                   </div>
+
+//                   <div className="flex items-center gap-2">
+//                     <BriefcaseMedical
+//                       size={18}
+//                       className="text-[#075579]"
+//                     />
+//                     {doctor.experience_years}+ Years Experience
+//                   </div>
+//                 </div>
+//               </div>
+
+          
+//               <div className="flex shrink-0 flex-col gap-3 md:pb-1">
+//                 <a
+//                   href={`tel:${doctor.contact_no}`}
+//                   className="flex items-center justify-center gap-2 rounded-xl bg-[#063B5C] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#052f49]"
+//                 >
+//                   <Phone size={17} />
+//                   Contact Doctor
+//                 </a>
+
+//                 <a
+//                   href={`mailto:${doctor.email}`}
+//                   className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+//                 >
+//                   <Mail size={17} />
+//                   Email Doctor
+//                 </a>
+//               </div>
+//             </div>
+//           </div>
+//         </section> */}
+//         <section className="relative overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
+//   {/* Diagonal Gradient Background */}
+//   {/* <div className="absolute inset-x-0 top-0 h-[250px] overflow-hidden"> */}
+//   <div className="absolute inset-x-0 top-0 h-[320px] overflow-hidden">
+//     <div
+//       className="
+//         absolute inset-0
+//         bg-gradient-to-r
+//         from-[#063B5C]
+//         via-[#075579]
+//         to-[#0A7891]
+//       "
+//       style={{
+//         clipPath: "polygon(0 0, 100% 0, 100% 1%, 0 100%)",
+//       }}
+//     />
+
+//     {/* Soft glow */}
+//     <div
+//       className="absolute inset-0 opacity-30"
+//       style={{
+//         clipPath: "polygon(0 0, 100% 0, 100% 5%, 0 100%)",
+//         background:
+//           "radial-gradient(circle at 75% 20%, rgba(255,255,255,0.25), transparent 35%)",
+//       }}
+//     />
+//   </div>
+
+//   {/* Content */}
+//   <div className="relative px-5 pb-8 pt-20 sm:px-8 sm:pt-24 lg:px-12">
+//     <div className="flex flex-col gap-7 md:flex-row md:items-end">
+
+//       {/* Doctor Image */}
+//       <div className="relative shrink-0">
+//         <div
+//           className="
+//             h-36 w-36
+//             overflow-hidden
+//             rounded-[28px]
+//             border-[6px]
+//             border-white
+//             bg-slate-100
+//             shadow-2xl
+//             sm:h-44 sm:w-44
+//             md:h-48 md:w-48
+//           "
+//         >
+//           <Image
+//             src={doctor.image_url}
+//             alt={doctor.name}
+//             width={192}
+//             height={192}
+//             className="h-full w-full object-cover"
+//           />
+//         </div>
+
+//         {/* Verified Badge */}
+//         <div
+//           className="
+//             absolute
+//             -bottom-3
+//             -right-3
+//             flex
+//             h-11
+//             w-11
+//             items-center
+//             justify-center
+//             rounded-full
+//             bg-emerald-500
+//             text-white
+//             shadow-lg
+//             ring-4
+//             ring-white
+//           "
+//         >
+//           <BadgeCheck size={23} />
+//         </div>
+//       </div>
+
+//       {/* Basic Information */}
+//       <div className="flex-1 pb-1">
+//         <div className="mb-2 flex flex-wrap items-center gap-2">
+
+//           <span
+//             className="
+//               rounded-full
+//               bg-[#063B5C]/10
+//               px-3
+//               py-1
+//               text-xs
+//               font-semibold
+//               text-[#063B5C]
+//               backdrop-blur-sm
+//             "
+//           >
+//             Cardiology
+//           </span>
+
+//           <span
+//             className="
+//               rounded-full
+//               bg-emerald-50
+//               px-3
+//               py-1
+//               text-xs
+//               font-semibold
+//               text-emerald-700
+//             "
+//           >
+//             Available
+//           </span>
+
+//         </div>
+
+//         <h1
+//           className="
+//             text-3xl
+//             font-bold
+//             tracking-tight
+//             text-slate-900
+//             md:text-4xl
+//           "
+//         >
+//           {doctor.name}
+//         </h1>
+
+//         <p className="mt-2 text-lg font-semibold text-[#075579]">
+//           {doctor.web_heading}
+//         </p>
+
+//         <div className="mt-4 flex flex-wrap gap-4 text-sm text-slate-600">
+
+//           <div className="flex items-center gap-2">
+//             <GraduationCap
+//               size={18}
+//               className="text-[#075579]"
+//             />
+//             {doctor.qualification}
+//           </div>
+
+//           <div className="flex items-center gap-2">
+//             <BriefcaseMedical
+//               size={18}
+//               className="text-[#075579]"
+//             />
+//             {doctor.experience_years}+ Years Experience
+//           </div>
+
+//         </div>
+//       </div>
+
+//       {/* Contact */}
+//       <div className="flex shrink-0 flex-col gap-3 md:pb-1">
+
+//         <a
+//           href={`tel:${doctor.contact_no}`}
+//           className="
+//             flex
+//             items-center
+//             justify-center
+//             gap-2
+//             rounded-xl
+//             bg-[#063B5C]
+//             px-5
+//             py-3
+//             text-sm
+//             font-semibold
+//             text-white
+//             shadow-lg
+//             shadow-[#063B5C]/15
+//             transition
+//             duration-300
+//             hover:-translate-y-0.5
+//             hover:bg-[#052f49]
+//           "
+//         >
+//           <Phone size={17} />
+//           Contact Doctor
+//         </a>
+
+//         <a
+//           href={`mailto:${doctor.email}`}
+//           className="
+//             flex
+//             items-center
+//             justify-center
+//             gap-2
+//             rounded-xl
+//             border
+//             border-slate-200
+//             bg-white/90
+//             px-5
+//             py-3
+//             text-sm
+//             font-semibold
+//             text-slate-700
+//             shadow-sm
+//             backdrop-blur
+//             transition
+//             duration-300
+//             hover:-translate-y-0.5
+//             hover:bg-slate-50
+//           "
+//         >
+//           <Mail size={17} />
+//           Email Doctor
+//         </a>
+
+//       </div>
+//     </div>
+//   </div>
+// </section>
+
+//         {/* Stats */}
+//         <section className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
+//           <StatCard
+//             icon={<BriefcaseMedical size={21} />}
+//             value={`${doctor.experience_years}+`}
+//             label="Years Experience"
+//           />
+
+//           <StatCard
+//             icon={<Stethoscope size={21} />}
+//             value={doctor.web_specilization.length}
+//             label="Specializations"
+//           />
+
+//           <StatCard
+//             icon={<ShieldCheck size={21} />}
+//             value={doctor.web_certificat.length}
+//             label="Certifications"
+//           />
+
+//           <StatCard
+//             icon={<Award size={21} />}
+//             value={doctor.web_awards.length}
+//             label="Awards"
+//           />
+//         </section>
+
+//         {/* Main Content */}
+//         <section className="mt-6 grid gap-6 lg:grid-cols-[1fr_380px]">
+
+//           {/* Left */}
+//           <div className="space-y-6">
+
+//             {/* About */}
+//             <Card>
+//               <SectionTitle
+//                 icon={<BookOpen size={20} />}
+//                 title="About Doctor"
+//               />
+
+//               <p className="mt-5 text-[15px] leading-8 text-slate-600">
+//                 {doctor.web_bio}
+//               </p>
+//             </Card>
+
+//             {/* Specialization */}
+//             <Card>
+//               <SectionTitle
+//                 icon={<Stethoscope size={20} />}
+//                 title="Specializations"
+//               />
+
+//               <div className="mt-5 grid gap-3 sm:grid-cols-2">
+//                 {doctor.web_specilization.map((item, index) => (
+//                   <div
+//                     key={index}
+//                     className="flex items-center gap-3 rounded-2xl border border-slate-100 bg-slate-50 p-4"
+//                   >
+//                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#063B5C]/10 text-[#063B5C]">
+//                       <CheckCircle2 size={18} />
+//                     </div>
+
+//                     <span className="text-sm font-medium text-slate-700">
+//                       {item}
+//                     </span>
+//                   </div>
+//                 ))}
+//               </div>
+//             </Card>
+
+//             {/* Certificates */}
+//             <Card>
+//               <SectionTitle
+//                 icon={<ShieldCheck size={20} />}
+//                 title="Certifications"
+//               />
+
+//               <div className="mt-5 space-y-3">
+//                 {doctor.web_certificat.map((certificate, index) => (
+//                   <div
+//                     key={index}
+//                     className="flex flex-col gap-4 rounded-2xl border border-slate-100 bg-slate-50 p-5 sm:flex-row sm:items-center sm:justify-between"
+//                   >
+//                     <div className="flex gap-4">
+//                       <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-[#063B5C] shadow-sm">
+//                         <ShieldCheck size={21} />
+//                       </div>
+
+//                       <div>
+//                         <h3 className="font-semibold text-slate-800">
+//                           {certificate.title}
+//                         </h3>
+
+//                         <p className="mt-1 text-sm text-slate-500">
+//                           {certificate.organization}
+//                         </p>
+//                       </div>
+//                     </div>
+
+//                     <div className="flex items-center gap-2 text-sm font-semibold text-[#075579]">
+//                       <CalendarDays size={16} />
+//                       {certificate.year}
+//                     </div>
+//                   </div>
+//                 ))}
+//               </div>
+//             </Card>
+
+//             {/* Awards */}
+//             <Card>
+//               <SectionTitle
+//                 icon={<Award size={20} />}
+//                 title="Awards & Recognition"
+//               />
+
+//               <div className="mt-5 grid gap-4 sm:grid-cols-2">
+//                 {doctor.web_awards.map((award, index) => (
+//                   <div
+//                     key={index}
+//                     className="rounded-2xl border border-slate-100 bg-slate-50 p-5"
+//                   >
+//                     <div className="flex items-start justify-between gap-4">
+//                       <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#063B5C]/10 text-[#063B5C]">
+//                         <Award size={21} />
+//                       </div>
+
+//                       <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-slate-500">
+//                         {award.year}
+//                       </span>
+//                     </div>
+
+//                     <h3 className="mt-4 font-semibold text-slate-800">
+//                       {award.title}
+//                     </h3>
+
+//                     <p className="mt-1 text-sm text-slate-500">
+//                       {award.organization}
+//                     </p>
+//                   </div>
+//                 ))}
+//               </div>
+//             </Card>
+//           </div>
+
+//           {/* Right Sidebar */}
+//           <aside className="space-y-6">
+
+//             {/* Experience */}
+//             <div className="rounded-[28px] bg-[#063B5C] p-6 text-white shadow-lg">
+//               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10">
+//                 <BriefcaseMedical size={23} />
+//               </div>
+
+//               <p className="mt-6 text-sm text-white/70">
+//                 Professional Experience
+//               </p>
+
+//               <h2 className="mt-1 text-3xl font-bold">
+//                 {doctor.experience_years}+
+//               </h2>
+
+//               <p className="mt-1 text-sm text-white/80">
+//                 Years of Medical Experience
+//               </p>
+//             </div>
+
+//             {/* Contact Card */}
+//             <Card>
+//               <SectionTitle
+//                 icon={<Phone size={20} />}
+//                 title="Contact Information"
+//               />
+
+//               <div className="mt-5 space-y-4">
+
+//                 <a
+//                   href={`tel:${doctor.contact_no}`}
+//                   className="flex gap-3 rounded-2xl bg-slate-50 p-4 transition hover:bg-slate-100"
+//                 >
+//                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-[#063B5C] shadow-sm">
+//                     <Phone size={18} />
+//                   </div>
+
+//                   <div>
+//                     <p className="text-xs font-medium text-slate-400">
+//                       Phone
+//                     </p>
+//                     <p className="mt-1 text-sm font-semibold text-slate-700">
+//                       {doctor.contact_no}
+//                     </p>
+//                   </div>
+//                 </a>
+
+//                 <a
+//                   href={`mailto:${doctor.email}`}
+//                   className="flex gap-3 rounded-2xl bg-slate-50 p-4 transition hover:bg-slate-100"
+//                 >
+//                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-[#063B5C] shadow-sm">
+//                     <Mail size={18} />
+//                   </div>
+
+//                   <div className="min-w-0">
+//                     <p className="text-xs font-medium text-slate-400">
+//                       Email
+//                     </p>
+
+//                     <p className="mt-1 truncate text-sm font-semibold text-slate-700">
+//                       {doctor.email}
+//                     </p>
+//                   </div>
+//                 </a>
+//               </div>
+//             </Card>
+
+//             {/* Qualification */}
+//             <Card>
+//               <SectionTitle
+//                 icon={<GraduationCap size={20} />}
+//                 title="Qualification"
+//               />
+
+//               <div className="mt-5 rounded-2xl bg-slate-50 p-5">
+//                 <p className="text-sm leading-7 text-slate-600">
+//                   {doctor.qualification}
+//                 </p>
+//               </div>
+//             </Card>
+
+//           </aside>
+//         </section>
+//       </div>
+//     </main>
+//   );
+// };
+
+// /* ----------------------------------
+//    Reusable Components
+// ----------------------------------- */
+
+// const Card = ({ children }) => {
+//   return (
+//     <div className="rounded-[28px] bg-white p-5 shadow-sm ring-1 ring-slate-200 sm:p-7">
+//       {children}
+//     </div>
+//   );
+// };
+
+// const SectionTitle = ({ icon, title }) => {
+//   return (
+//     <div className="flex items-center gap-3">
+//       <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#063B5C]/10 text-[#063B5C]">
+//         {icon}
+//       </div>
+
+//       <h2 className="text-xl font-bold text-slate-900">
+//         {title}
+//       </h2>
+//     </div>
+//   );
+// };
+
+// const StatCard = ({ icon, value, label }) => {
+//   return (
+//     <div className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
+//       <div className="flex items-center gap-3">
+//         <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#063B5C]/10 text-[#063B5C]">
+//           {icon}
+//         </div>
+
+//         <div>
+//           <p className="text-xl font-bold text-slate-900">
+//             {value}
+//           </p>
+
+//           <p className="text-xs font-medium text-slate-500">
+//             {label}
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default page;
+
+// "use client";
+
+// import React from "react";
+// import Image from "next/image";
+// import { motion } from "framer-motion";
+// import {
+//   Award,
+//   BadgeCheck,
+//   BookOpen,
+//   BriefcaseMedical,
+//   CalendarDays,
+//   CheckCircle2,
+//   GraduationCap,
+//   Mail,
+//   Phone,
+//   ShieldCheck,
+//   Stethoscope,
+// } from "lucide-react";
+
+// /* =========================================================
+//    DOCTOR DATA
+// ========================================================= */
+
+// const doctor = {
+//   id: 1,
+//   created_by: 1,
+//   department_id: 2,
+//   specialty_id: 5,
+
+//   name: "Dr. Rajesh Sharma",
+
+//   contact_no: "+91-9876543210",
+
+//   email: "dr.rajesh.sharma@example.com",
+
+//   qualification: "MBBS, MD (Medicine), DM (Cardiology)",
+
+//   experience_years: 18,
+
+//   web_experience: "18+ Years of Experience",
+
+//   image_url:
+//     "https://images.pexels.com/photos/5452293/pexels-photo-5452293.jpeg",
+
+//   web_bio:
+//     "Dr. Rajesh Sharma is a highly experienced cardiologist with more than 18 years of experience in diagnosing and treating cardiovascular diseases. He specializes in interventional cardiology, heart failure management, preventive cardiology and hypertension.",
+
+//   web_heading: "Senior Consultant Cardiologist",
+
+//   web_specilization: [
+//     "Interventional Cardiology",
+//     "Heart Failure Management",
+//     "Preventive Cardiology",
+//     "Hypertension",
+//   ],
+
+//   web_certificat: [
+//     {
+//       title: "Advanced Cardiac Life Support",
+//       organization: "American Heart Association",
+//       year: 2021,
+//       file_url: "/uploads/certificates/acls.pdf",
+//     },
+//     {
+//       title: "Interventional Cardiology Certification",
+//       organization: "National Cardiology Institute",
+//       year: 2022,
+//       file_url:
+//         "/uploads/certificates/interventional-cardiology.pdf",
+//     },
+//   ],
+
+//   web_awards: [
+//     {
+//       title: "Best Cardiologist Award",
+//       organization: "Healthcare Excellence Foundation",
+//       year: 2023,
+//     },
+//     {
+//       title: "Outstanding Medical Service Award",
+//       organization: "State Medical Association",
+//       year: 2024,
+//     },
+//   ],
+// };
+
+// /* =========================================================
+//    ANIMATION VARIANTS
+// ========================================================= */
+
+// const fadeUp = {
+//   hidden: {
+//     opacity: 0,
+//     y: 25,
+//   },
+
+//   visible: {
+//     opacity: 1,
+//     y: 0,
+
+//     transition: {
+//       duration: 0.65,
+//       ease: [0.22, 1, 0.36, 1],
+//     },
+//   },
+// };
+
+// const fadeLeft = {
+//   hidden: {
+//     opacity: 0,
+//     x: -30,
+//   },
+
+//   visible: {
+//     opacity: 1,
+//     x: 0,
+
+//     transition: {
+//       duration: 0.7,
+//       ease: [0.22, 1, 0.36, 1],
+//     },
+//   },
+// };
+
+// const fadeRight = {
+//   hidden: {
+//     opacity: 0,
+//     x: 30,
+//   },
+
+//   visible: {
+//     opacity: 1,
+//     x: 0,
+
+//     transition: {
+//       duration: 0.7,
+//       ease: [0.22, 1, 0.36, 1],
+//     },
+//   },
+// };
+
+// const staggerContainer = {
+//   hidden: {},
+
+//   visible: {
+//     transition: {
+//       staggerChildren: 0.1,
+//     },
+//   },
+// };
+
+// /* =========================================================
+//    CARD COMPONENT
+// ========================================================= */
+
+// const Card = ({
+//   children,
+//   className = "",
+//   glowColor = "bg-[#063B5C]/10",
+// }) => {
+//   return (
+//     <motion.div
+//       variants={fadeUp}
+//       whileHover={{
+//         y: -4,
+//       }}
+//       transition={{
+//         duration: 0.25,
+//       }}
+//       className={`
+//         group
+//         relative
+//         overflow-hidden
+//         rounded-[28px]
+//         border border-slate-200/70
+//         bg-white
+//         p-5
+//         shadow-[0_8px_30px_rgba(15,23,42,0.045)]
+//         transition-shadow
+//         duration-300
+//         hover:shadow-[0_18px_45px_rgba(15,23,42,0.08)]
+//         sm:p-7
+//         ${className}
+//       `}
+//     >
+//       {/* Decorative Glow */}
+
+//       <div
+//         className={`
+//           pointer-events-none
+//           absolute
+//           -right-16
+//           -top-16
+//           h-32
+//           w-32
+//           rounded-full
+//           ${glowColor}
+//           opacity-30
+//           blur-3xl
+//           transition-all
+//           duration-500
+//           group-hover:scale-150
+//           group-hover:opacity-50
+//         `}
+//       />
+
+//       <div className="relative z-10">
+//         {children}
+//       </div>
+//     </motion.div>
+//   );
+// };
+
+// /* =========================================================
+//    SECTION TITLE
+// ========================================================= */
+
+// const SectionTitle = ({
+//   icon,
+//   title,
+//   iconBg = "bg-[#063B5C]/10",
+//   iconColor = "text-[#063B5C]",
+// }) => {
+//   return (
+//     <div className="flex items-center gap-3">
+//       <motion.div
+//         whileHover={{
+//           scale: 1.08,
+//           rotate: 5,
+//         }}
+//         transition={{
+//           duration: 0.2,
+//         }}
+//         className={`
+//           flex
+//           h-11
+//           w-11
+//           shrink-0
+//           items-center
+//           justify-center
+//           rounded-2xl
+//           ${iconBg}
+//           ${iconColor}
+//         `}
+//       >
+//         {icon}
+//       </motion.div>
+
+//       <div>
+//         <h2 className="text-xl font-bold tracking-tight text-slate-900">
+//           {title}
+//         </h2>
+
+//         <div className="mt-1.5 h-1 w-8 rounded-full bg-gradient-to-r from-[#063B5C] to-[#0A7891]" />
+//       </div>
+//     </div>
+//   );
+// };
+
+// /* =========================================================
+//    STAT CARD
+// ========================================================= */
+
+// const StatCard = ({
+//   icon,
+//   value,
+//   label,
+//   iconBg,
+//   iconColor,
+//   cardBg,
+// }) => {
+//   return (
+//     <motion.div
+//       variants={fadeUp}
+//       whileHover={{
+//         y: -5,
+//         scale: 1.015,
+//       }}
+//       transition={{
+//         duration: 0.25,
+//       }}
+//       className={`
+//         group
+//         relative
+//         overflow-hidden
+//         rounded-[24px]
+//         border border-slate-200/70
+//         ${cardBg}
+//         p-5
+//         shadow-[0_8px_25px_rgba(15,23,42,0.04)]
+//         transition-shadow
+//         duration-300
+//         hover:shadow-[0_16px_35px_rgba(15,23,42,0.08)]
+//       `}
+//     >
+//       {/* Background Glow */}
+
+//       <div
+//         className={`
+//           absolute
+//           -right-8
+//           -top-8
+//           h-24
+//           w-24
+//           rounded-full
+//           ${iconBg}
+//           opacity-40
+//           blur-xl
+//           transition-transform
+//           duration-500
+//           group-hover:scale-150
+//         `}
+//       />
+
+//       <div className="relative">
+//         <motion.div
+//           whileHover={{
+//             rotate: 6,
+//             scale: 1.08,
+//           }}
+//           className={`
+//             flex
+//             h-11
+//             w-11
+//             items-center
+//             justify-center
+//             rounded-2xl
+//             ${iconBg}
+//             ${iconColor}
+//           `}
+//         >
+//           {icon}
+//         </motion.div>
+
+//         <div className="mt-4">
+//           <p className="text-2xl font-bold tracking-tight text-slate-900">
+//             {value}
+//           </p>
+
+//           <p className="mt-1 text-xs font-medium text-slate-500">
+//             {label}
+//           </p>
+//         </div>
+//       </div>
+//     </motion.div>
+//   );
+// };
+
+// /* =========================================================
+//    PAGE
+// ========================================================= */
+
+// const Page = () => {
+//   return (
+//     <main className="min-h-screen bg-slate-50 py-8 md:py-12">
+
+//       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+//         {/* =================================================
+//             HERO
+//         ================================================= */}
+
+//         <motion.section
+//           initial="hidden"
+//           animate="visible"
+//           variants={fadeUp}
+//           className="
+//             relative
+//             overflow-hidden
+//             rounded-[30px]
+//             bg-white
+//             shadow-[0_12px_45px_rgba(15,23,42,0.07)]
+//             ring-1
+//             ring-slate-200/70
+//           "
+//         >
+
+//           {/* Gradient Header */}
+
+//           <div className="absolute inset-x-0 top-0 h-[320px] overflow-hidden">
+
+//             <motion.div
+//               animate={{
+//                 backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+//               }}
+//               transition={{
+//                 duration: 12,
+//                 repeat: Infinity,
+//                 ease: "linear",
+//               }}
+//               className="
+//                 absolute
+//                 inset-0
+//                 bg-[length:200%_200%]
+//                 bg-gradient-to-r
+//                 from-[#063B5C]
+//                 via-[#075579]
+//                 to-[#0A7891]
+//               "
+//               style={{
+//                 clipPath:
+//                   "polygon(0 0, 100% 0, 100% 3%, 0 100%)",
+//               }}
+//             />
+
+//             {/* White Glow */}
+
+//             <motion.div
+//               animate={{
+//                 opacity: [0.15, 0.3, 0.15],
+//                 scale: [1, 1.12, 1],
+//               }}
+//               transition={{
+//                 duration: 5,
+//                 repeat: Infinity,
+//                 ease: "easeInOut",
+//               }}
+//               className="
+//                 absolute
+//                 right-[10%]
+//                 top-[-80px]
+//                 h-72
+//                 w-72
+//                 rounded-full
+//                 bg-white/20
+//                 blur-3xl
+//               "
+//             />
+
+//             {/* Decorative Circle */}
+
+//             <motion.div
+//               animate={{
+//                 y: [0, 15, 0],
+//                 x: [0, -10, 0],
+//                 opacity: [0.1, 0.25, 0.1],
+//               }}
+//               transition={{
+//                 duration: 6,
+//                 repeat: Infinity,
+//                 ease: "easeInOut",
+//               }}
+//               className="
+//                 absolute
+//                 right-[22%]
+//                 top-8
+//                 h-28
+//                 w-28
+//                 rounded-full
+//                 border
+//                 border-white/20
+//               "
+//             />
+
+//           </div>
+
+//           {/* Hero Content */}
+
+//           <div className="relative px-5 pb-9 pt-20 sm:px-8 sm:pt-24 lg:px-12">
+
+//             <div className="flex flex-col gap-7 md:flex-row md:items-end">
+
+//               {/* =================================================
+//                   DOCTOR IMAGE
+//               ================================================= */}
+
+//               <motion.div
+//                 initial={{
+//                   opacity: 0,
+//                   scale: 0.8,
+//                   y: 25,
+//                 }}
+//                 animate={{
+//                   opacity: 1,
+//                   scale: 1,
+//                   y: 0,
+//                 }}
+//                 transition={{
+//                   duration: 0.7,
+//                   delay: 0.15,
+//                   ease: [0.22, 1, 0.36, 1],
+//                 }}
+//                 className="relative shrink-0"
+//               >
+
+//                 <motion.div
+//                   whileHover={{
+//                     scale: 1.025,
+//                   }}
+//                   transition={{
+//                     duration: 0.3,
+//                   }}
+//                   className="
+//                     h-36
+//                     w-36
+//                     overflow-hidden
+//                     rounded-[28px]
+//                     border-[6px]
+//                     border-white
+//                     bg-slate-100
+//                     shadow-2xl
+//                     sm:h-44
+//                     sm:w-44
+//                     md:h-48
+//                     md:w-48
+//                   "
+//                 >
+
+//                   <Image
+//                     src={doctor.image_url}
+//                     alt={doctor.name}
+//                     width={192}
+//                     height={192}
+//                     priority
+//                     className="
+//                       h-full
+//                       w-full
+//                       object-cover
+//                     "
+//                   />
+
+//                 </motion.div>
+
+//                 {/* Verified Badge */}
+
+//                 <motion.div
+//                   initial={{
+//                     scale: 0,
+//                     rotate: -45,
+//                   }}
+//                   animate={{
+//                     scale: 1,
+//                     rotate: 0,
+//                   }}
+//                   transition={{
+//                     delay: 0.8,
+//                     duration: 0.45,
+//                     type: "spring",
+//                     stiffness: 220,
+//                   }}
+//                   className="
+//                     absolute
+//                     -bottom-3
+//                     -right-3
+//                     flex
+//                     h-11
+//                     w-11
+//                     items-center
+//                     justify-center
+//                     rounded-full
+//                     bg-emerald-500
+//                     text-white
+//                     shadow-lg
+//                     ring-4
+//                     ring-white
+//                   "
+//                 >
+//                   <BadgeCheck size={23} />
+//                 </motion.div>
+
+//               </motion.div>
+
+//               {/* =================================================
+//                   BASIC INFORMATION
+//               ================================================= */}
+
+//               <motion.div
+//                 variants={fadeLeft}
+//                 className="flex-1 pb-1"
+//               >
+
+//                 <div className="mb-3 flex flex-wrap items-center gap-2">
+
+//                   <motion.span
+//                     whileHover={{
+//                       scale: 1.03,
+//                     }}
+//                     className="
+//                       rounded-full
+//                       bg-[#063B5C]/10
+//                       px-3.5
+//                       py-1.5
+//                       text-xs
+//                       font-bold
+//                       text-[#063B5C]
+//                       backdrop-blur-sm
+//                     "
+//                   >
+//                     Cardiology
+//                   </motion.span>
+
+//                   <motion.span
+//                     whileHover={{
+//                       scale: 1.03,
+//                     }}
+//                     className="
+//                       flex
+//                       items-center
+//                       gap-1.5
+//                       rounded-full
+//                       bg-emerald-50
+//                       px-3.5
+//                       py-1.5
+//                       text-xs
+//                       font-bold
+//                       text-emerald-700
+//                     "
+//                   >
+//                     <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+//                     Available
+//                   </motion.span>
+
+//                 </div>
+
+//                 <h1
+//                   className="
+//                     text-3xl
+//                     font-bold
+//                     tracking-tight
+//                     text-slate-900
+//                     md:text-4xl
+//                   "
+//                 >
+//                   {doctor.name}
+//                 </h1>
+
+//                 <p className="mt-2 text-lg font-semibold text-[#075579]">
+//                   {doctor.web_heading}
+//                 </p>
+
+//                 <div className="mt-4 flex flex-wrap gap-x-5 gap-y-3 text-sm text-slate-600">
+
+//                   <div className="flex items-center gap-2">
+//                     <GraduationCap
+//                       size={18}
+//                       className="text-[#075579]"
+//                     />
+
+//                     {doctor.qualification}
+//                   </div>
+
+//                   <div className="flex items-center gap-2">
+//                     <BriefcaseMedical
+//                       size={18}
+//                       className="text-[#075579]"
+//                     />
+
+//                     {doctor.experience_years}+ Years Experience
+//                   </div>
+
+//                 </div>
+
+//               </motion.div>
+
+//               {/* =================================================
+//                   CONTACT BUTTONS
+//               ================================================= */}
+
+//               <motion.div
+//                 variants={fadeRight}
+//                 className="flex shrink-0 flex-col gap-3 md:pb-1"
+//               >
+
+//                 <motion.a
+//                   whileHover={{
+//                     y: -2,
+//                     scale: 1.02,
+//                   }}
+//                   whileTap={{
+//                     scale: 0.98,
+//                   }}
+//                   href={`tel:${doctor.contact_no}`}
+//                   className="
+//                     flex
+//                     items-center
+//                     justify-center
+//                     gap-2
+//                     rounded-xl
+//                     bg-[#063B5C]
+//                     px-5
+//                     py-3
+//                     text-sm
+//                     font-semibold
+//                     text-white
+//                     shadow-lg
+//                     shadow-[#063B5C]/20
+//                     transition-colors
+//                     duration-300
+//                     hover:bg-[#052f49]
+//                   "
+//                 >
+//                   <Phone size={17} />
+//                   Contact Doctor
+//                 </motion.a>
+
+//                 <motion.a
+//                   whileHover={{
+//                     y: -2,
+//                     scale: 1.02,
+//                   }}
+//                   whileTap={{
+//                     scale: 0.98,
+//                   }}
+//                   href={`mailto:${doctor.email}`}
+//                   className="
+//                     flex
+//                     items-center
+//                     justify-center
+//                     gap-2
+//                     rounded-xl
+//                     border
+//                     border-slate-200
+//                     bg-white/90
+//                     px-5
+//                     py-3
+//                     text-sm
+//                     font-semibold
+//                     text-slate-700
+//                     shadow-sm
+//                     backdrop-blur
+//                     transition-colors
+//                     duration-300
+//                     hover:bg-slate-50
+//                   "
+//                 >
+//                   <Mail size={17} />
+//                   Email Doctor
+//                 </motion.a>
+
+//               </motion.div>
+
+//             </div>
+//           </div>
+//         </motion.section>
+
+//         {/* =================================================
+//             STATS
+//         ================================================= */}
+
+//         <motion.section
+//           initial="hidden"
+//           whileInView="visible"
+//           viewport={{
+//             once: true,
+//             amount: 0.15,
+//           }}
+//           variants={staggerContainer}
+//           className="
+//             mt-6
+//             grid
+//             grid-cols-2
+//             gap-4
+//             lg:grid-cols-4
+//           "
+//         >
+
+//           <StatCard
+//             icon={<BriefcaseMedical size={21} />}
+//             value={`${doctor.experience_years}+`}
+//             label="Years Experience"
+//             iconBg="bg-blue-100"
+//             iconColor="text-blue-600"
+//             cardBg="bg-blue-50/50"
+//           />
+
+//           <StatCard
+//             icon={<Stethoscope size={21} />}
+//             value={doctor.web_specilization.length}
+//             label="Specializations"
+//             iconBg="bg-cyan-100"
+//             iconColor="text-cyan-600"
+//             cardBg="bg-cyan-50/50"
+//           />
+
+//           <StatCard
+//             icon={<ShieldCheck size={21} />}
+//             value={doctor.web_certificat.length}
+//             label="Certifications"
+//             iconBg="bg-emerald-100"
+//             iconColor="text-emerald-600"
+//             cardBg="bg-emerald-50/50"
+//           />
+
+//           <StatCard
+//             icon={<Award size={21} />}
+//             value={doctor.web_awards.length}
+//             label="Awards"
+//             iconBg="bg-amber-100"
+//             iconColor="text-amber-600"
+//             cardBg="bg-amber-50/50"
+//           />
+
+//         </motion.section>
+
+//         {/* =================================================
+//             MAIN CONTENT
+//         ================================================= */}
+
+//         <section className="mt-6 grid gap-6 lg:grid-cols-[1fr_380px]">
+
+//           {/* =================================================
+//               LEFT CONTENT
+//           ================================================= */}
+
+//           <motion.div
+//             initial="hidden"
+//             whileInView="visible"
+//             viewport={{
+//               once: true,
+//               amount: 0.08,
+//             }}
+//             variants={staggerContainer}
+//             className="space-y-6"
+//           >
+
+//             {/* =================================================
+//                 ABOUT
+//             ================================================= */}
+
+//             <Card glowColor="bg-blue-100">
+
+//               <SectionTitle
+//                 icon={<BookOpen size={20} />}
+//                 title="About Doctor"
+//                 iconBg="bg-blue-50"
+//                 iconColor="text-blue-600"
+//               />
+
+//               <p className="mt-5 text-[15px] leading-8 text-slate-600">
+//                 {doctor.web_bio}
+//               </p>
+
+//             </Card>
+
+//             {/* =================================================
+//                 SPECIALIZATIONS
+//             ================================================= */}
+
+//             <Card glowColor="bg-cyan-100">
+
+//               <SectionTitle
+//                 icon={<Stethoscope size={20} />}
+//                 title="Specializations"
+//                 iconBg="bg-cyan-50"
+//                 iconColor="text-cyan-600"
+//               />
+
+//               <motion.div
+//                 variants={staggerContainer}
+//                 className="
+//                   mt-5
+//                   grid
+//                   gap-3
+//                   sm:grid-cols-2
+//                 "
+//               >
+
+//                 {doctor.web_specilization.map((item, index) => (
+//                   <motion.div
+//                     key={index}
+//                     variants={fadeUp}
+//                     whileHover={{
+//                       x: 5,
+//                     }}
+//                     className="
+//                       flex
+//                       items-center
+//                       gap-3
+//                       rounded-2xl
+//                       border
+//                       border-cyan-100
+//                       bg-cyan-50/50
+//                       p-4
+//                       transition-colors
+//                       duration-300
+//                       hover:bg-cyan-50
+//                     "
+//                   >
+
+//                     <div
+//                       className="
+//                         flex
+//                         h-9
+//                         w-9
+//                         shrink-0
+//                         items-center
+//                         justify-center
+//                         rounded-xl
+//                         bg-cyan-100
+//                         text-cyan-600
+//                       "
+//                     >
+//                       <CheckCircle2 size={18} />
+//                     </div>
+
+//                     <span className="text-sm font-medium text-slate-700">
+//                       {item}
+//                     </span>
+
+//                   </motion.div>
+//                 ))}
+
+//               </motion.div>
+
+//             </Card>
+
+//             {/* =================================================
+//                 CERTIFICATIONS
+//             ================================================= */}
+
+//             <Card glowColor="bg-emerald-100">
+
+//               <SectionTitle
+//                 icon={<ShieldCheck size={20} />}
+//                 title="Certifications"
+//                 iconBg="bg-emerald-50"
+//                 iconColor="text-emerald-600"
+//               />
+
+//               <motion.div
+//                 variants={staggerContainer}
+//                 className="mt-5 space-y-3"
+//               >
+
+//                 {doctor.web_certificat.map(
+//                   (certificate, index) => (
+//                     <motion.div
+//                       key={index}
+//                       variants={fadeUp}
+//                       whileHover={{
+//                         x: 5,
+//                       }}
+//                       className="
+//                         flex
+//                         flex-col
+//                         gap-4
+//                         rounded-2xl
+//                         border
+//                         border-emerald-100
+//                         bg-emerald-50/40
+//                         p-5
+//                         transition-all
+//                         duration-300
+//                         hover:bg-emerald-50/70
+//                         sm:flex-row
+//                         sm:items-center
+//                         sm:justify-between
+//                       "
+//                     >
+
+//                       <div className="flex gap-4">
+
+//                         <div
+//                           className="
+//                             flex
+//                             h-11
+//                             w-11
+//                             shrink-0
+//                             items-center
+//                             justify-center
+//                             rounded-xl
+//                             bg-emerald-100
+//                             text-emerald-600
+//                           "
+//                         >
+//                           <ShieldCheck size={21} />
+//                         </div>
+
+//                         <div>
+
+//                           <h3 className="font-semibold text-slate-800">
+//                             {certificate.title}
+//                           </h3>
+
+//                           <p className="mt-1 text-sm text-slate-500">
+//                             {certificate.organization}
+//                           </p>
+
+//                         </div>
+
+//                       </div>
+
+//                       <div
+//                         className="
+//                           flex
+//                           items-center
+//                           gap-2
+//                           text-sm
+//                           font-semibold
+//                           text-emerald-700
+//                         "
+//                       >
+//                         <CalendarDays size={16} />
+
+//                         {certificate.year}
+//                       </div>
+
+//                     </motion.div>
+//                   )
+//                 )}
+
+//               </motion.div>
+
+//             </Card>
+
+//             {/* =================================================
+//                 AWARDS
+//             ================================================= */}
+
+//             <Card glowColor="bg-amber-100">
+
+//               <SectionTitle
+//                 icon={<Award size={20} />}
+//                 title="Awards & Recognition"
+//                 iconBg="bg-amber-50"
+//                 iconColor="text-amber-600"
+//               />
+
+//               <motion.div
+//                 variants={staggerContainer}
+//                 className="
+//                   mt-5
+//                   grid
+//                   gap-4
+//                   sm:grid-cols-2
+//                 "
+//               >
+
+//                 {doctor.web_awards.map((award, index) => (
+//                   <motion.div
+//                     key={index}
+//                     variants={fadeUp}
+//                     whileHover={{
+//                       y: -5,
+//                     }}
+//                     className="
+//                       rounded-2xl
+//                       border
+//                       border-amber-100
+//                       bg-amber-50/40
+//                       p-5
+//                       transition-all
+//                       duration-300
+//                       hover:bg-amber-50/70
+//                     "
+//                   >
+
+//                     <div className="flex items-start justify-between gap-4">
+
+//                       <div
+//                         className="
+//                           flex
+//                           h-11
+//                           w-11
+//                           items-center
+//                           justify-center
+//                           rounded-xl
+//                           bg-amber-100
+//                           text-amber-600
+//                         "
+//                       >
+//                         <Award size={21} />
+//                       </div>
+
+//                       <span
+//                         className="
+//                           rounded-full
+//                           bg-white
+//                           px-3
+//                           py-1
+//                           text-xs
+//                           font-bold
+//                           text-amber-600
+//                           shadow-sm
+//                         "
+//                       >
+//                         {award.year}
+//                       </span>
+
+//                     </div>
+
+//                     <h3 className="mt-4 font-semibold text-slate-800">
+//                       {award.title}
+//                     </h3>
+
+//                     <p className="mt-1 text-sm text-slate-500">
+//                       {award.organization}
+//                     </p>
+
+//                   </motion.div>
+//                 ))}
+
+//               </motion.div>
+
+//             </Card>
+
+//           </motion.div>
+
+//           {/* =================================================
+//               RIGHT SIDEBAR
+//           ================================================= */}
+
+//           <motion.aside
+//             initial="hidden"
+//             whileInView="visible"
+//             viewport={{
+//               once: true,
+//               amount: 0.08,
+//             }}
+//             variants={staggerContainer}
+//             className="space-y-6"
+//           >
+
+//             {/* =================================================
+//                 EXPERIENCE CARD
+//             ================================================= */}
+
+//             <motion.div
+//               variants={fadeRight}
+//               whileHover={{
+//                 y: -5,
+//               }}
+//               className="
+//                 group
+//                 relative
+//                 overflow-hidden
+//                 rounded-[28px]
+//                 bg-gradient-to-br
+//                 from-[#063B5C]
+//                 via-[#075579]
+//                 to-[#0A7891]
+//                 p-6
+//                 text-white
+//                 shadow-[0_15px_40px_rgba(6,59,92,0.18)]
+//               "
+//             >
+
+//               {/* Glow */}
+
+//               <motion.div
+//                 animate={{
+//                   scale: [1, 1.2, 1],
+//                   opacity: [0.15, 0.25, 0.15],
+//                 }}
+//                 transition={{
+//                   duration: 5,
+//                   repeat: Infinity,
+//                   ease: "easeInOut",
+//                 }}
+//                 className="
+//                   absolute
+//                   -right-16
+//                   -top-16
+//                   h-40
+//                   w-40
+//                   rounded-full
+//                   bg-white/20
+//                   blur-3xl
+//                 "
+//               />
+
+//               {/* Decorative Circle */}
+
+//               <motion.div
+//                 animate={{
+//                   rotate: [0, 360],
+//                 }}
+//                 transition={{
+//                   duration: 18,
+//                   repeat: Infinity,
+//                   ease: "linear",
+//                 }}
+//                 className="
+//                   absolute
+//                   -right-12
+//                   bottom-[-40px]
+//                   h-36
+//                   w-36
+//                   rounded-full
+//                   border
+//                   border-white/10
+//                 "
+//               />
+
+//               <div className="relative">
+
+//                 <div
+//                   className="
+//                     flex
+//                     h-12
+//                     w-12
+//                     items-center
+//                     justify-center
+//                     rounded-2xl
+//                     bg-white/10
+//                     ring-1
+//                     ring-white/15
+//                   "
+//                 >
+//                   <BriefcaseMedical size={23} />
+//                 </div>
+
+//                 <p className="mt-6 text-sm text-white/70">
+//                   Professional Experience
+//                 </p>
+
+//                 <h2 className="mt-1 text-3xl font-bold">
+//                   {doctor.experience_years}+
+//                 </h2>
+
+//                 <p className="mt-1 text-sm text-white/80">
+//                   Years of Medical Experience
+//                 </p>
+
+//                 <div className="mt-5 h-px bg-white/10" />
+
+//                 <div className="mt-4 flex items-center gap-2 text-xs text-white/70">
+//                   <BadgeCheck size={15} />
+
+//                   Verified Professional
+//                 </div>
+
+//               </div>
+
+//             </motion.div>
+
+//             {/* =================================================
+//                 CONTACT INFORMATION
+//             ================================================= */}
+
+//             <Card glowColor="bg-violet-100">
+
+//               <SectionTitle
+//                 icon={<Phone size={20} />}
+//                 title="Contact Information"
+//                 iconBg="bg-violet-50"
+//                 iconColor="text-violet-600"
+//               />
+
+//               <div className="mt-5 space-y-3">
+
+//                 <motion.a
+//                   whileHover={{
+//                     x: 5,
+//                   }}
+//                   href={`tel:${doctor.contact_no}`}
+//                   className="
+//                     flex
+//                     gap-3
+//                     rounded-2xl
+//                     border
+//                     border-violet-100
+//                     bg-violet-50/40
+//                     p-4
+//                     transition-colors
+//                     duration-300
+//                     hover:bg-violet-50
+//                   "
+//                 >
+
+//                   <div
+//                     className="
+//                       flex
+//                       h-10
+//                       w-10
+//                       shrink-0
+//                       items-center
+//                       justify-center
+//                       rounded-xl
+//                       bg-violet-100
+//                       text-violet-600
+//                     "
+//                   >
+//                     <Phone size={18} />
+//                   </div>
+
+//                   <div>
+
+//                     <p className="text-xs font-medium text-slate-400">
+//                       Phone
+//                     </p>
+
+//                     <p className="mt-1 text-sm font-semibold text-slate-700">
+//                       {doctor.contact_no}
+//                     </p>
+
+//                   </div>
+
+//                 </motion.a>
+
+//                 <motion.a
+//                   whileHover={{
+//                     x: 5,
+//                   }}
+//                   href={`mailto:${doctor.email}`}
+//                   className="
+//                     flex
+//                     gap-3
+//                     rounded-2xl
+//                     border
+//                     border-violet-100
+//                     bg-violet-50/40
+//                     p-4
+//                     transition-colors
+//                     duration-300
+//                     hover:bg-violet-50
+//                   "
+//                 >
+
+//                   <div
+//                     className="
+//                       flex
+//                       h-10
+//                       w-10
+//                       shrink-0
+//                       items-center
+//                       justify-center
+//                       rounded-xl
+//                       bg-violet-100
+//                       text-violet-600
+//                     "
+//                   >
+//                     <Mail size={18} />
+//                   </div>
+
+//                   <div className="min-w-0">
+
+//                     <p className="text-xs font-medium text-slate-400">
+//                       Email
+//                     </p>
+
+//                     <p className="mt-1 truncate text-sm font-semibold text-slate-700">
+//                       {doctor.email}
+//                     </p>
+
+//                   </div>
+
+//                 </motion.a>
+
+//               </div>
+
+//             </Card>
+
+//             {/* =================================================
+//                 QUALIFICATION
+//             ================================================= */}
+
+//             <Card glowColor="bg-rose-100">
+
+//               <SectionTitle
+//                 icon={<GraduationCap size={20} />}
+//                 title="Qualification"
+//                 iconBg="bg-rose-50"
+//                 iconColor="text-rose-600"
+//               />
+
+//               <motion.div
+//                 whileHover={{
+//                   scale: 1.01,
+//                 }}
+//                 className="
+//                   mt-5
+//                   rounded-2xl
+//                   border
+//                   border-rose-100
+//                   bg-rose-50/40
+//                   p-5
+//                 "
+//               >
+
+//                 <div className="flex gap-3">
+
+//                   <div
+//                     className="
+//                       flex
+//                       h-10
+//                       w-10
+//                       shrink-0
+//                       items-center
+//                       justify-center
+//                       rounded-xl
+//                       bg-rose-100
+//                       text-rose-600
+//                     "
+//                   >
+//                     <GraduationCap size={19} />
+//                   </div>
+
+//                   <p className="text-sm leading-7 text-slate-600">
+//                     {doctor.qualification}
+//                   </p>
+
+//                 </div>
+
+//               </motion.div>
+
+//             </Card>
+
+//           </motion.aside>
+
+//         </section>
+
+//       </div>
+//     </main>
+//   );
+// };
+
+// export default Page;
+
+// deepsheek 
+
+"use client";
+
+import React from "react";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { useParams } from "next/navigation";
+import useSWR from "swr"; // Assuming you are using SWR
+import  ApiService  from "./../../src/services/Apiservices"; // Adjust this import path based on your project structure
+import {
+  Award,
+  BadgeCheck,
+  BookOpen,
+  BriefcaseMedical,
+  CalendarDays,
+  CheckCircle2,
+  GraduationCap,
+  Mail,
+  Phone,
+  ShieldCheck,
+  Stethoscope,
+} from "lucide-react";
+
+/* =========================================================
+   ANIMATION VARIANTS
+========================================================= */
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 25 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
+const fadeLeft = {
+  hidden: { opacity: 0, x: -30 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
+const fadeRight = {
+  hidden: { opacity: 0, x: 30 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
+const staggerContainer = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1 } },
+};
+
+/* =========================================================
+   CARD COMPONENT
+========================================================= */
+
+const Card = ({ children, className = "", glowColor = "bg-[#063B5C]/10" }) => {
+  return (
+    <motion.div
+      variants={fadeUp}
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.25 }}
+      className={`
+        group relative overflow-hidden rounded-[28px] border border-slate-200/70
+        bg-white p-5 shadow-[0_8px_30px_rgba(15,23,42,0.045)]
+        transition-shadow duration-300 hover:shadow-[0_18px_45px_rgba(15,23,42,0.08)]
+        sm:p-7 ${className}
+      `}
+    >
+      <div
+        className={`
+          pointer-events-none absolute -right-16 -top-16 h-32 w-32 rounded-full
+          ${glowColor} opacity-30 blur-3xl transition-all duration-500
+          group-hover:scale-150 group-hover:opacity-50
+        `}
+      />
+      <div className="relative z-10">{children}</div>
+    </motion.div>
+  );
+};
+
+/* =========================================================
+   SECTION TITLE
+========================================================= */
+
+const SectionTitle = ({
+  icon,
+  title,
+  iconBg = "bg-[#063B5C]/10",
+  iconColor = "text-[#063B5C]",
+}) => {
+  return (
+    <div className="flex items-center gap-3">
+      <motion.div
+        whileHover={{ scale: 1.08, rotate: 5 }}
+        transition={{ duration: 0.2 }}
+        className={`
+          flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl
+          ${iconBg} ${iconColor}
+        `}
+      >
+        {icon}
+      </motion.div>
+      <div>
+        <h2 className="text-xl font-bold tracking-tight text-slate-900">
+          {title}
+        </h2>
+        <div className="mt-1.5 h-1 w-8 rounded-full bg-gradient-to-r from-[#063B5C] to-[#0A7891]" />
+      </div>
+    </div>
+  );
+};
+
+/* =========================================================
+   STAT CARD
+========================================================= */
+
+const StatCard = ({ icon, value, label, iconBg, iconColor, cardBg }) => {
+  return (
+    // <motion.div
+    //   variants={fadeUp}
+    //   whileHover={{ y: -5, scale: 1.015 }}
+    //   transition={{ duration: 0.25 }}
+    //   className={`
+    //     group relative overflow-hidden rounded-[24px] border border-slate-200/70
+    //     ${cardBg} p-5 shadow-[0_8px_25px_rgba(15,23,42,0.04)]
+    //     transition-shadow duration-300 hover:shadow-[0_16px_35px_rgba(15,23,42,0.08)]
+    //   `}
+    // >
+    //   <div
+    //     className={`
+    //       absolute -right-8 -top-8 h-24 w-24 rounded-full ${iconBg}
+    //       opacity-40 blur-xl transition-transform duration-500 group-hover:scale-150
+    //     `}
+    //   />
+    //   <div className="relative">
+    //     <motion.div
+    //       whileHover={{ rotate: 6, scale: 1.08 }}
+    //       className={`
+    //         flex h-11 w-11 items-center justify-center rounded-2xl
+    //         ${iconBg} ${iconColor}
+    //       `}
+    //     >
+    //       {icon}
+    //     </motion.div>
+    //     <div className="mt-4">
+    //       <p className="text-2xl font-bold tracking-tight text-slate-900">
+    //         {value}
+    //       </p>
+    //       <p className="mt-1 text-xs font-medium text-slate-500">{label}</p>
+    //     </div>
+    //   </div>
+    // </motion.div>
+    <motion.div
+  variants={fadeUp}
+  whileHover={{ y: -5, scale: 1.015 }}
+  transition={{ duration: 0.25 }}
+  className={`
+    group relative overflow-hidden
+    rounded-[22px]
+    border border-slate-200/70
+    ${cardBg}
+    px-5 py-5
+    shadow-[0_7px_22px_rgba(15,23,42,0.045)]
+    transition-shadow duration-300
+    hover:shadow-[0_14px_32px_rgba(15,23,42,0.08)]
+  `}
+>
+  {/* Soft Glow */}
+  <div
+    className={`
+      absolute -right-8 -top-8
+      h-24 w-24
+      rounded-full
+      ${iconBg}
+      opacity-40
+      blur-xl
+      transition-transform duration-500
+      group-hover:scale-150
+    `}
+  />
+
+  {/* Watermark Icon */}
+  <div
+    className="
+      pointer-events-none
+      absolute -bottom-7 -right-5
+      text-slate-700
+      opacity-[0.065]
+      transition-all duration-500
+      group-hover:scale-110
+      group-hover:rotate-6
+      group-hover:opacity-[0.10]
+    "
+  >
+    <div className="h-28 w-28">
+      {React.cloneElement(icon, {
+        size: 112,
+        strokeWidth: 1.15,
+      })}
+    </div>
+  </div>
+
+  {/* Content */}
+  <div className="relative z-10 flex items-center gap-4">
+
+    {/* Icon */}
+    <motion.div
+      whileHover={{ rotate: 6, scale: 1.08 }}
+      transition={{ duration: 0.2 }}
+      className={`
+        flex h-12 w-12 shrink-0
+        items-center justify-center
+        rounded-2xl
+        ${iconBg}
+        ${iconColor}
+      `}
+    >
+      {icon}
+    </motion.div>
+
+    {/* Text */}
+    <div className="min-w-0">
+      <p
+        className="
+          text-[23px]
+          font-bold
+          leading-none
+          tracking-tight
+          text-slate-900
+        "
+      >
+        {value}
+      </p>
+
+      <p
+        className="
+          mt-1.5
+          truncate
+          text-xs
+          font-medium
+          text-slate-500
+        "
+      >
+        {label}
+      </p>
+    </div>
+
+  </div>
+</motion.div>
+  );
+};
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+const Page = () => {
+  const params = useParams();
+  const doctorId = Array.isArray(params?.id) ? params.id[0] : params?.id;
+
+  /* =======================================================
+     LIVE API
+  ======================================================= */
+  const { data, error, isLoading } = useSWR(
+    doctorId ? `doctors/${doctorId}` : null,
+    ApiService.get
+  );
+
+  const doctorData = data?.data || null;
+
+  console.log(doctorData)
+
+  
+
+  // Handle Loading State
+  if (isLoading) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-slate-50">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#063B5C] border-t-transparent"></div>
+          <p className="text-slate-600 font-medium">Loading Doctor Profile...</p>
+        </div>
+      </main>
+    );
+  }
+
+  // Handle Error State
+  if (error || !data) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-slate-50">
+        <div className="rounded-2xl bg-white p-8 text-center shadow-lg border border-slate-200 max-w-md">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-red-100 text-red-600 mb-4">
+            <ShieldCheck size={28} />
+          </div>
+          <h2 className="text-xl font-bold text-slate-800">Profile Not Found</h2>
+          <p className="mt-2 text-slate-500">
+            We couldn't load the doctor's information. Please try again later.
+          </p>
+        </div>
+      </main>
+    );
+  }
+
+  // Ensure arrays exist to prevent crashes
+  const specializations = data?.web_specilization || [];
+  const certifications = data?.web_certificat || [];
+  const awards = data?.web_awards || [];
+
+  return (
+    <main className="min-h-screen bg-slate-50 py-8 md:py-12">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        
+        {/* =================================================
+            HERO
+        ================================================= */}
+        <motion.section
+          initial="hidden"
+          animate="visible"
+          variants={fadeUp}
+          className="
+            relative overflow-hidden rounded-[30px] bg-white
+            shadow-[0_12px_45px_rgba(15,23,42,0.07)] ring-1 ring-slate-200/70
+          "
+        >
+          {/* Gradient Header */}
+          <div className="absolute inset-x-0 top-0 h-[320px] overflow-hidden">
+            <motion.div
+              animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
+              transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+              className="
+                absolute inset-0 bg-[length:200%_200%] bg-gradient-to-r
+                from-[#063B5C] via-[#075579] to-[#0A7891]
+              "
+              style={{ clipPath: "polygon(0 0, 100% 0, 100% 3%, 0 100%)" }}
+            />
+            <motion.div
+              animate={{ opacity: [0.15, 0.3, 0.15], scale: [1, 1.12, 1] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              className="
+                absolute right-[10%] top-[-80px] h-72 w-72 rounded-full
+                bg-white/20 blur-3xl
+              "
+            />
+            <motion.div
+              animate={{ y: [0, 15, 0], x: [0, -10, 0], opacity: [0.1, 0.25, 0.1] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              className="
+                absolute right-[22%] top-8 h-28 w-28 rounded-full
+                border border-white/20
+              "
+            />
+          </div>
+
+          {/* Hero Content */}
+          <div className="relative px-5 pb-9 pt-20 sm:px-8 sm:pt-24 lg:px-12">
+            <div className="flex flex-col gap-7 md:flex-row md:items-end">
+              
+              {/* DOCTOR IMAGE */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8, y: 25 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+                className="relative shrink-0"
+              >
+                <motion.div
+                  whileHover={{ scale: 1.025 }}
+                  transition={{ duration: 0.3 }}
+                  className="
+                    h-36 w-36 overflow-hidden rounded-[28px] border-[6px]
+                    border-white bg-slate-100 shadow-2xl sm:h-44 sm:w-44 md:h-48 md:w-48
+                  "
+                >
+                  <Image
+                    src={doctorData.image_url || "https://images.pexels.com/photos/5452293/pexels-photo-5452293.jpeg"}
+                    alt={doctorData.name || "Doctor"}
+                    width={192}
+                    height={192}
+                    priority
+                    className="h-full w-full object-cover"
+                  />
+                </motion.div>
+
+                {/* Verified Badge */}
+                <motion.div
+                  initial={{ scale: 0, rotate: -45 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{ delay: 0.8, duration: 0.45, type: "spring", stiffness: 220 }}
+                  className="
+                    absolute -bottom-3 -right-3 flex h-11 w-11 items-center justify-center
+                    rounded-full bg-emerald-500 text-white shadow-lg ring-4 ring-white
+                  "
+                >
+                  <BadgeCheck size={23} />
+                </motion.div>
+              </motion.div>
+
+              {/* BASIC INFORMATION */}
+              <motion.div variants={fadeLeft} className="flex-1 pb-1">
+                <div className="mb-3 flex flex-wrap items-center gap-2">
+                  <motion.span
+                    whileHover={{ scale: 1.03 }}
+                    className="
+                      rounded-full bg-[#063B5C]/10 px-3.5 py-1.5 text-xs
+                      font-bold text-[#063B5C] backdrop-blur-sm
+                    "
+                  >
+                    {data.web_heading || "Specialist"}
+                  </motion.span>
+                  <motion.span
+                    whileHover={{ scale: 1.03 }}
+                    className="
+                      flex items-center gap-1.5 rounded-full bg-emerald-50 px-3.5
+                      py-1.5 text-xs font-bold text-emerald-700
+                    "
+                  >
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                    Available
+                  </motion.span>
+                </div>
+
+                <h1 className="text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">
+                  {doctorData.name}
+                </h1>
+                <p className="mt-2 text-lg font-semibold text-[#075579]">
+                  {doctorData.web_heading}
+                </p>
+
+                <div className="mt-4 flex flex-wrap gap-x-5 gap-y-3 text-sm text-slate-600">
+                  <div className="flex items-center gap-2">
+                    <GraduationCap size={18} className="text-[#075579]" />
+                    {doctorData.qualification}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <BriefcaseMedical size={18} className="text-[#075579]" />
+                    {doctorData.experience_years}+ Years Experience
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* CONTACT BUTTONS */}
+              <motion.div variants={fadeRight} className="flex shrink-0 flex-col gap-3 md:pb-1">
+                <motion.a
+                  whileHover={{ y: -2, scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  href={`tel:${data.contact_no}`}
+                  className="
+                    flex items-center justify-center gap-2 rounded-xl bg-[#063B5C]
+                    px-5 py-3 text-sm font-semibold text-white shadow-lg
+                    shadow-[#063B5C]/20 transition-colors duration-300 hover:bg-[#052f49]
+                  "
+                >
+                  <Phone size={17} />
+                  Contact Doctor
+                </motion.a>
+                <motion.a
+                  whileHover={{ y: -2, scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  href={`mailto:${data.email}`}
+                  className="
+                    flex items-center justify-center gap-2 rounded-xl border border-slate-200
+                    bg-white/90 px-5 py-3 text-sm font-semibold text-slate-700 shadow-sm
+                    backdrop-blur transition-colors duration-300 hover:bg-slate-50
+                  "
+                >
+                  <Mail size={17} />
+                  Email Doctor
+                </motion.a>
+              </motion.div>
+            </div>
+          </div>
+        </motion.section>
+
+        {/* =================================================
+            STATS
+        ================================================= */}
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.15 }}
+          variants={staggerContainer}
+          className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4"
+        >
+          <StatCard
+            icon={<BriefcaseMedical size={21} />}
+            value={`${doctorData.experience_years}+`}
+            label="Years Experience"
+            iconBg="bg-blue-100"
+            iconColor="text-blue-600"
+            cardBg="bg-blue-50/50"
+          />
+          <StatCard
+            icon={<Stethoscope size={21} />}
+            value={specializations.length}
+            label="Specializations"
+            iconBg="bg-cyan-100"
+            iconColor="text-cyan-600"
+            cardBg="bg-cyan-50/50"
+          />
+          <StatCard
+            icon={<ShieldCheck size={21} />}
+            value={certifications.length}
+            label="Certifications"
+            iconBg="bg-emerald-100"
+            iconColor="text-emerald-600"
+            cardBg="bg-emerald-50/50"
+          />
+          <StatCard
+            icon={<Award size={21} />}
+            value={awards.length}
+            label="Awards"
+            iconBg="bg-amber-100"
+            iconColor="text-amber-600"
+            cardBg="bg-amber-50/50"
+          />
+        </motion.section>
+
+        {/* =================================================
+            MAIN CONTENT
+        ================================================= */}
+        <section className="mt-6 grid gap-6 lg:grid-cols-[1fr_380px]">
+          
+          {/* LEFT CONTENT */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.08 }}
+            variants={staggerContainer}
+            className="space-y-6"
+          >
+            {/* ABOUT */}
+            <Card glowColor="bg-blue-100">
+              <SectionTitle
+                icon={<BookOpen size={20} />}
+                title="About Doctor"
+                iconBg="bg-blue-50"
+                iconColor="text-blue-600"
+              />
+              <p className="mt-5 text-[15px] leading-8 text-slate-600">
+                {doctorData.web_bio}
+              </p>
+            </Card>
+
+            {/* SPECIALIZATIONS */}
+            {specializations.length > 0 && (
+              <Card glowColor="bg-cyan-100">
+                <SectionTitle
+                  icon={<Stethoscope size={20} />}
+                  title="Specializations"
+                  iconBg="bg-cyan-50"
+                  iconColor="text-cyan-600"
+                />
+                <motion.div variants={staggerContainer} className="mt-5 grid gap-3 sm:grid-cols-2">
+                  {specializations.map((item, index) => (
+                    <motion.div
+                      key={index}
+                      variants={fadeUp}
+                      whileHover={{ x: 5 }}
+                      className="
+                        flex items-center gap-3 rounded-2xl border border-cyan-100
+                        bg-cyan-50/50 p-4 transition-colors duration-300 hover:bg-cyan-50
+                      "
+                    >
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-cyan-100 text-cyan-600">
+                        <CheckCircle2 size={18} />
+                      </div>
+                      <span className="text-sm font-medium text-slate-700">{item}</span>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              </Card>
+            )}
+
+            {/* CERTIFICATIONS */}
+            {certifications.length > 0 && (
+              <Card glowColor="bg-emerald-100">
+                <SectionTitle
+                  icon={<ShieldCheck size={20} />}
+                  title="Certifications"
+                  iconBg="bg-emerald-50"
+                  iconColor="text-emerald-600"
+                />
+                <motion.div variants={staggerContainer} className="mt-5 space-y-3">
+                  {certifications.map((certificate, index) => (
+                    <motion.div
+                      key={index}
+                      variants={fadeUp}
+                      whileHover={{ x: 5 }}
+                      className="
+                        flex flex-col gap-4 rounded-2xl border border-emerald-100
+                        bg-emerald-50/40 p-5 transition-all duration-300 hover:bg-emerald-50/70
+                        sm:flex-row sm:items-center sm:justify-between
+                      "
+                    >
+                      <div className="flex gap-4">
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600">
+                          <ShieldCheck size={21} />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-slate-800">{certificate.title}</h3>
+                          <p className="mt-1 text-sm text-slate-500">{certificate.organization}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm font-semibold text-emerald-700">
+                        <CalendarDays size={16} />
+                        {certificate.year}
+                      </div>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              </Card>
+            )}
+
+            {/* AWARDS */}
+            {awards.length > 0 && (
+              <Card glowColor="bg-amber-100">
+                <SectionTitle
+                  icon={<Award size={20} />}
+                  title="Awards & Recognition"
+                  iconBg="bg-amber-50"
+                  iconColor="text-amber-600"
+                />
+                <motion.div variants={staggerContainer} className="mt-5 grid gap-4 sm:grid-cols-2">
+                  {awards.map((award, index) => (
+                    <motion.div
+                      key={index}
+                      variants={fadeUp}
+                      whileHover={{ y: -5 }}
+                      className="
+                        rounded-2xl border border-amber-100 bg-amber-50/40 p-5
+                        transition-all duration-300 hover:bg-amber-50/70
+                      "
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-100 text-amber-600">
+                          <Award size={21} />
+                        </div>
+                        <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-amber-600 shadow-sm">
+                          {award.year}
+                        </span>
+                      </div>
+                      <h3 className="mt-4 font-semibold text-slate-800">{award.title}</h3>
+                      <p className="mt-1 text-sm text-slate-500">{award.organization}</p>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              </Card>
+            )}
+          </motion.div>
+
+          {/* RIGHT SIDEBAR */}
+          <motion.aside
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.08 }}
+            variants={staggerContainer}
+            className="space-y-6"
+          >
+            {/* EXPERIENCE CARD */}
+            <motion.div
+              variants={fadeRight}
+              whileHover={{ y: -5 }}
+              className="
+                group relative overflow-hidden rounded-[28px] bg-gradient-to-br
+                from-[#063B5C] via-[#075579] to-[#0A7891] p-6 text-white
+                shadow-[0_15px_40px_rgba(6,59,92,0.18)]
+              "
+            >
+              <motion.div
+                animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-white/20 blur-3xl"
+              />
+              <motion.div
+                animate={{ rotate: [0, 360] }}
+                transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+                className="absolute -right-12 bottom-[-40px] h-36 w-36 rounded-full border border-white/10"
+              />
+              <div className="relative">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 ring-1 ring-white/15">
+                  <BriefcaseMedical size={23} />
+                </div>
+                <p className="mt-6 text-sm text-white/70">Professional Experience</p>
+                <h2 className="mt-1 text-3xl font-bold">{doctorData.experience_years}+</h2>
+                <p className="mt-1 text-sm text-white/80">Years of Medical Experience</p>
+                <div className="mt-5 h-px bg-white/10" />
+                <div className="mt-4 flex items-center gap-2 text-xs text-white/70">
+                  <BadgeCheck size={15} />
+                  Verified Professional
+                </div>
+              </div>
+            </motion.div>
+
+            {/* CONTACT INFORMATION */}
+            <Card glowColor="bg-violet-100">
+              <SectionTitle
+                icon={<Phone size={20} />}
+                title="Contact Information"
+                iconBg="bg-violet-50"
+                iconColor="text-violet-600"
+              />
+              <div className="mt-5 space-y-3">
+                <motion.a
+                  whileHover={{ x: 5 }}
+                  href={`tel:${doctorData.contact_no}`}
+                  className="
+                    flex gap-3 rounded-2xl border border-violet-100 bg-violet-50/40
+                    p-4 transition-colors duration-300 hover:bg-violet-50
+                  "
+                >
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-100 text-violet-600">
+                    <Phone size={18} />
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium text-slate-400">Phone</p>
+                    <p className="mt-1 text-sm font-semibold text-slate-700">{doctorData.contact_no}</p>
+                  </div>
+                </motion.a>
+                <motion.a
+                  whileHover={{ x: 5 }}
+                  href={`mailto:${doctorData.email}`}
+                  className="
+                    flex gap-3 rounded-2xl border border-violet-100 bg-violet-50/40
+                    p-4 transition-colors duration-300 hover:bg-violet-50
+                  "
+                >
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-100 text-violet-600">
+                    <Mail size={18} />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xs font-medium text-slate-400">Email</p>
+                    <p className="mt-1 truncate text-sm font-semibold text-slate-700">{doctorData.email}</p>
+                  </div>
+                </motion.a>
+              </div>
+            </Card>
+
+            {/* QUALIFICATION */}
+            <Card glowColor="bg-rose-100">
+              <SectionTitle
+                icon={<GraduationCap size={20} />}
+                title="Qualification"
+                iconBg="bg-rose-50"
+                iconColor="text-rose-600"
+              />
+              <motion.div
+                whileHover={{ scale: 1.01 }}
+                className="mt-5 rounded-2xl border border-rose-100 bg-rose-50/40 p-5"
+              >
+                <div className="flex gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-rose-100 text-rose-600">
+                    <GraduationCap size={19} />
+                  </div>
+                  <p className="text-sm leading-7 text-slate-600">{data.qualification}</p>
+                </div>
+              </motion.div>
+            </Card>
+          </motion.aside>
+        </section>
+      </div>
+    </main>
+  );
+};
+
+export default Page;

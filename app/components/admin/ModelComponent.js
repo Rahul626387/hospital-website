@@ -305,7 +305,7 @@ const ModalComponent = ({
               backdrop-blur-md
             "
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            animate={{ opacity: 0.7 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
           />

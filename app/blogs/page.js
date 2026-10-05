@@ -15,6 +15,10 @@ import {
   Tag,
   Mail,
 } from "lucide-react";
+import ApiService from "../src/services/Apiservices";
+import useSWR from 'swr'
+import PageHero from "../components/Pagehero";
+import BlogGrid from "../components/BlogGrid";
 
 const blogs = [
   {
@@ -107,77 +111,109 @@ const categories = [
 
 export default function BlogsPage() {
   const [search, setSearch] = useState("");
-  const [activeCategory, setActiveCategory] = useState("All Articles");
+  const [activeCategory, setActiveCategory] = useState("all");
 
-  const filteredBlogs = useMemo(() => {
-    return blogs.filter((blog) => {
-      const matchesSearch =
-        blog.title.toLowerCase().includes(search.toLowerCase()) ||
-        blog.excerpt.toLowerCase().includes(search.toLowerCase()) ||
-        blog.category.toLowerCase().includes(search.toLowerCase());
+  // const filteredBlogs = useMemo(() => {
+  //   return blogs.filter((blog) => {
+  //     const matchesSearch =
+  //       blog.title.toLowerCase().includes(search.toLowerCase()) ||
+  //       blog.excerpt.toLowerCase().includes(search.toLowerCase()) ||
+  //       blog.category.toLowerCase().includes(search.toLowerCase());
 
-      const matchesCategory =
-        activeCategory === "All Articles" ||
-        blog.category === activeCategory;
+  //     const matchesCategory =
+  //       activeCategory === "All Articles" ||
+  //       blog.category === activeCategory;
 
-      return matchesSearch && matchesCategory;
-    });
-  }, [search, activeCategory]);
+  //     return matchesSearch && matchesCategory;
+  //   });
+  // }, [search, activeCategory]);
 
-  const featuredBlog = blogs.find((blog) => blog.featured);
+  // const featuredBlog = blogs.find((blog) => blog.featured);
+
+  // const {data:category,categoryerror,categoryisLoading} = useSWR('blog-categories',ApiService.get)
+  // const {data:blogpost,error,isLoading} = useSWR('blog-post',ApiService.get)
+  // const categories = category?.data || []
+  // const blogs = blogpost?.data || []
+
+
+  // new code dynamic  
+ 
+
+const { data: category, error: categoryerror, isLoading: categoryisLoading } =
+  useSWR("blog-categories", ApiService.get);
+
+const { data: blogpost, error, isLoading } =
+  useSWR("blog-post", ApiService.get);
+
+const categories = category?.data || [];
+const blogs = blogpost?.data || [];
+
+// Filter blogs
+// const filteredBlogs = useMemo(() => {
+//   return blogs.filter((blog) => {
+//     const title = blog.title?.toLowerCase() || "";
+//     const excerpt = blog.excerpt?.toLowerCase() || "";
+//     const categoryName = blog.category_name?.toLowerCase() || "";
+
+//     const searchText = search?.toLowerCase() || "";
+
+//     const matchesSearch =
+//       title.includes(searchText) ||
+//       excerpt.includes(searchText) ||
+//       categoryName.includes(searchText);
+
+//     const matchesCategory =
+//       activeCategory === "All Articles" ||
+//       blog.category_name === activeCategory;
+
+//     return matchesSearch && matchesCategory;
+//   });
+// }, [blogs, search, activeCategory]);
+
+// // Featured blog
+// const featuredBlog = blogs.find(
+//   (blog) => Number(blog.is_featured) === 1
+// );
+
+const filteredBlogs = useMemo(() => {
+  return blogs.filter((blog) => {
+    const searchText = search?.toLowerCase().trim() || "";
+
+    const matchesSearch =
+      blog.title?.toLowerCase().includes(searchText) ||
+      blog.excerpt?.toLowerCase().includes(searchText) ||
+      blog.category_name?.toLowerCase().includes(searchText);
+
+    const matchesCategory =
+      activeCategory === "all" ||
+      Number(blog.category_id) === Number(activeCategory);
+
+    return matchesSearch && matchesCategory;
+  });
+}, [blogs, search, activeCategory]);
+
+const featuredBlog = blogs.find(
+  (blog) => Number(blog.is_featured) === 1
+);
+
+  // new code dynamic  
 
   return (
     <main className="min-h-screen overflow-hidden bg-[#F8FAFC]">
       {/* ================= HERO ================= */}
-      <section className="relative overflow-hidden bg-[#063B5C]">
-        <div className="absolute inset-0">
-          <div className="absolute -left-20 top-0 h-72 w-72 rounded-full bg-[#0A7A78]/30 blur-3xl" />
-          <div className="absolute -right-20 bottom-0 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl" />
-        </div>
-
-        <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-24">
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="flex items-center justify-center gap-2 text-sm text-white/60"
-          >
-            <Link href="/" className="transition hover:text-white">
-              Home
-            </Link>
-
-            <ChevronRight className="h-4 w-4" />
-            <span>Blogs</span>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 25 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="mx-auto mt-6 max-w-3xl text-center"
-          >
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-[#4DD4C6]">
-              <Newspaper className="h-4 w-4" />
-              Health & Wellness
-            </div>
-
-            <h1 className="mt-6 text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
-              Health Insights for a
-              <span className="block text-[#4DD4C6]">
-                Better Tomorrow.
-              </span>
-            </h1>
-
-            <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-white/65 sm:text-lg">
-              Explore health tips, wellness insights and helpful information
-              from the Baderia Metro Prime healthcare team.
-            </p>
-          </motion.div>
-        </div>
-      </section>
+     
+      <PageHero
+        // backgroundImage="/images/blog-banner.jpg"
+         backgroundImage="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1600&q=80"
+        badge="Health & Wellness"
+        title="Health Insights for a"
+        highlight="Better Tomorrow."
+        description="Explore health tips, wellness insights and helpful information."
+        breadcrumb="Blogs"
+      />
 
       {/* ================= FEATURED BLOG ================= */}
-      {featuredBlog && (
+      {/* {featuredBlog && (
         <section className="relative z-10 mx-auto -mt-8 max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.article
             initial={{ opacity: 0, y: 35 }}
@@ -235,7 +271,112 @@ export default function BlogsPage() {
             </div>
           </motion.article>
         </section>
-      )}
+      )} */}
+
+      {featuredBlog && (
+  <section className="relative z-10 mx-auto -mt-8 max-w-7xl px-4 sm:px-6 lg:px-8">
+    <motion.article
+      initial={{ opacity: 0, y: 35 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, delay: 0.2 }}
+      className="grid overflow-hidden rounded-[2rem] bg-white shadow-xl shadow-slate-900/5 lg:grid-cols-2"
+    >
+      {/* Image */}
+      <div className="relative min-h-[300px] lg:min-h-[430px]">
+        {/* <Image
+          src={featuredBlog.featured_image}
+          alt={featuredBlog.title || "Featured article"}
+          fill
+          priority
+          className="object-cover"
+        /> */}
+        <Image
+          src={
+            featuredBlog.featured_image ||
+            `https://picsum.photos/seed/featured-${featuredBlog.id}/1000/600`
+          }
+          alt={featuredBlog.title || "Featured article"}
+          fill
+          priority
+          className="object-cover"
+        />
+
+        <div className="absolute left-5 top-5 rounded-full bg-white/90 px-4 py-2 text-xs font-bold text-[#0A7A78] backdrop-blur">
+          Featured Article
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="flex flex-col justify-center p-7 sm:p-10 lg:p-12">
+        <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-slate-500">
+          {/* Category */}
+          <span className="inline-flex items-center gap-1.5 font-bold text-[#0A7A78]">
+            <Tag className="h-4 w-4" />
+            {featuredBlog.category_name}
+          </span>
+
+          {/* Date */}
+          <span className="inline-flex items-center gap-1.5">
+            <CalendarDays className="h-4 w-4" />
+
+            {featuredBlog.published_at
+              ? new Date(
+                  featuredBlog.published_at
+                ).toLocaleDateString("en-IN", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                })
+              : "Not Published"}
+          </span>
+
+          {/* Read Time */}
+          <span className="inline-flex items-center gap-1.5">
+            <Clock3 className="h-4 w-4" />
+
+            {(() => {
+              const text =
+                featuredBlog.content
+                  ?.replace(/<[^>]*>/g, "")
+                  .trim() || "";
+
+              const words = text
+                ? text.split(/\s+/).length
+                : 0;
+
+              const minutes = Math.max(
+                1,
+                Math.ceil(words / 200)
+              );
+
+              return `${minutes} min read`;
+            })()}
+          </span>
+        </div>
+
+        {/* Title */}
+        <h2 className="mt-6 text-3xl font-bold leading-tight text-[#063B5C] sm:text-4xl">
+          {featuredBlog.title}
+        </h2>
+
+        {/* Excerpt */}
+        <p className="mt-5 leading-7 text-slate-600">
+          {featuredBlog.excerpt}
+        </p>
+
+        {/* Read Article */}
+        <Link
+          href={`/blogs/${featuredBlog.id}`}
+          className="group mt-8 inline-flex w-fit items-center gap-2 rounded-xl bg-[#0A7A78] px-5 py-3 text-sm font-bold text-white transition hover:-translate-y-1 hover:bg-[#086663]"
+        >
+          Read Article
+
+          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+        </Link>
+      </div>
+    </motion.article>
+  </section>
+)}
 
       {/* ================= SEARCH & FILTER ================= */}
       <section className="mx-auto max-w-7xl px-4 pb-5 pt-16 sm:px-6 lg:px-8">
@@ -264,25 +405,66 @@ export default function BlogsPage() {
         </div>
 
         {/* Categories */}
-        <div className="mt-7 flex gap-2 overflow-x-auto pb-2">
-          {categories.map((category) => (
+
+        {/* <div className="mt-7 flex gap-2 overflow-x-auto pb-2">
+          {categories?.map((category) => (
             <button
-              key={category}
-              onClick={() => setActiveCategory(category)}
+              key={category.id}
+              onClick={() => setActiveCategory(category.id)}
               className={`whitespace-nowrap rounded-full px-4 py-2.5 text-sm font-semibold transition ${
                 activeCategory === category
                   ? "bg-[#0A7A78] text-white shadow-md shadow-teal-900/10"
                   : "bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-teal-50 hover:text-[#0A7A78]"
               }`}
             >
-              {category}
+              {category.name}
             </button>
           ))}
-        </div>
+        </div> */}
+
+        <div className="mt-7 flex gap-2 overflow-x-auto pb-2">
+  {/* All Articles */}
+  <button
+    onClick={() => setActiveCategory("all")}
+    className={`whitespace-nowrap rounded-full px-4 py-2.5 text-sm font-semibold transition ${
+      activeCategory === "all"
+        ? "bg-[#0A7A78] text-white shadow-md shadow-teal-900/10"
+        : "bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-teal-50 hover:text-[#0A7A78]"
+    }`}
+  >
+    All Articles
+  </button>
+
+  {/* API Categories */}
+  {categories
+    ?.filter((category) => Number(category.status) === 1)
+    .map((category) => (
+      <button
+        key={category.id}
+        onClick={() => setActiveCategory(category.id)}
+        className={`whitespace-nowrap rounded-full px-4 py-2.5 text-sm font-semibold transition ${
+          Number(activeCategory) === Number(category.id)
+            ? "bg-[#0A7A78] text-white shadow-md shadow-teal-900/10"
+            : "bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-teal-50 hover:text-[#0A7A78]"
+        }`}
+      >
+        {category.name}
+      </button>
+    ))}
+</div>
+
       </section>
 
       {/* ================= BLOG GRID ================= */}
-      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+
+      <BlogGrid
+        blogs={filteredBlogs}
+        onReset={() => {
+          setSearch("");
+          setActiveCategory("all");
+        }}
+      />
+      {/* <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
         {filteredBlogs.length > 0 ? (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {filteredBlogs.map((blog, index) => (
@@ -362,10 +544,10 @@ export default function BlogsPage() {
             </button>
           </div>
         )}
-      </section>
+      </section> */}
 
       {/* ================= NEWSLETTER ================= */}
-      <section className="px-4 pb-20 pt-8 sm:px-6 lg:px-8">
+      {/* <section className="px-4 pb-20 pt-8 sm:px-6 lg:px-8">
         <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-gradient-to-r from-[#063B5C] to-[#0A7A78] px-6 py-12 sm:px-10 lg:px-16 lg:py-14">
           <div className="absolute -left-16 top-0 h-48 w-48 rounded-full bg-white/5 blur-3xl" />
 
@@ -404,7 +586,7 @@ export default function BlogsPage() {
             </form>
           </div>
         </div>
-      </section>
+      </section> */}
     </main>
   );
 }

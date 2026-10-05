@@ -1,0 +1,66 @@
+{
+  "hospital": {
+    "name": "Baderia Metro Prime Hospital",
+    "shortName": "Baderia Metro Prime",
+    "tagline": "Advanced Healthcare, Compassionate Care"
+  },
+  "contact": {
+    "phone": "+91 9575300110",
+    "emergencyPhone": "9575300110",
+    "email": "info.metro@global.org.in",
+    "address": "Kuchani Parisar behind Kshetriya Bus Stand, Damoh naka, Jabalpur 482002, Madhya Pradesh",
+    "addressLines": [
+      "Baderia Metro Prime Hospital,",
+      "Jabalpur, Madhya Pradesh, India"
+    ],
+    "hours": {
+      "open": "Open 24 Hours",
+      "days": "7 Days a Week"
+    }
+  },
+  "social": {
+    "instagram": "https://www.instagram.com/baderia_metroprime/?hl=en",
+    "facebook": "https://facebook.com/...",
+    "youtube": "https://youtube.com/...",
+    "linkedin": "https://linkedin.com/..."
+  },
+  "navigation": {
+    "quickLinks": [
+      { "name": "Home", "href": "/" },
+      { "name": "About Us", "href": "/about" },
+      { "name": "Our Doctors", "href": "/doctors" },
+      { "name": "Our Departments", "href": "/department" },
+      { "name": "Blogs", "href": "/blogs" },
+      { "name": "Career", "href": "/career" },
+      { "name": "Contact Us", "href": "/contact" }
+    ],
+    "services": [
+      "General Medicine",
+      "Cardiology",
+      "Orthopedics",
+      "Gynecology",
+      "Pediatrics",
+      "Emergency Care"
+    ],
+    "legal": [
+      { "name": "Privacy Policy", "href": "/privacy-policy" },
+      { "name": "Terms & Conditions", "href": "/terms-conditions" }
+    ]
+  },
+  "footer": {
+    "description": "Providing compassionate, reliable and patient-centered healthcare with experienced professionals and modern medical facilities.",
+    "trustBadge": {
+      "title": "Trusted Healthcare",
+      "subtitle": "Patient First Approach"
+    },
+    "emergency": {
+      "label": "Emergency Support",
+      "heading": "Need immediate medical assistance?",
+      "description": "Our emergency healthcare team is available 24/7 to provide immediate medical assistance.",
+      "buttonText": "Call Emergency"
+    },
+    "copyright": "Baderia Metro Prime Hospital. All rights reserved."
+  }
+
+  
+}

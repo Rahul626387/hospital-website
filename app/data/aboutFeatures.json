@@ -1,0 +1,40 @@
+
+
+[
+  {
+    "id": 1,
+    "icon": "HeartHandshake",
+    "title": "Patient First",
+    "text": "Every decision starts with the needs, safety and comfort of our patients.",
+    "color": "text-rose-500",
+    "bg": "bg-rose-50",
+    "hoverBg": "hover:bg-rose-500"
+  },
+  {
+    "id": 2,
+    "icon": "Award",
+    "title": "Expert Doctors",
+    "text": "Experienced specialists across multiple medical disciplines.",
+    "color": "text-amber-500",
+    "bg": "bg-amber-50",
+    "hoverBg": "hover:bg-amber-500"
+  },
+  {
+    "id": 3,
+    "icon": "Microscope",
+    "title": "Advanced Technology",
+    "text": "Modern diagnostic and treatment technologies for better outcomes.",
+    "color": "text-blue-500",
+    "bg": "bg-blue-50",
+    "hoverBg": "hover:bg-blue-500"
+  },
+  {
+    "id": 4,
+    "icon": "Clock3",
+    "title": "24/7 Support",
+    "text": "Round-the-clock emergency and critical care services.",
+    "color": "text-emerald-500",
+    "bg": "bg-emerald-50",
+    "hoverBg": "hover:bg-emerald-500"
+  }
+]

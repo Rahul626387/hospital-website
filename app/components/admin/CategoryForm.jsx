@@ -4,12 +4,13 @@
 import React, { useState } from "react";
 import { FiSave } from "react-icons/fi";
 
-const CategoryForm = ({ onSubmit, onCancel }) => {
+const CategoryForm = ({ onSubmit, onCancel,userId }) => {
   const [formData, setFormData] = useState({
     name: "",
     slug: "",
     description: "",
     status: "active",
+    user_id:userId
   });
 
   const handleNameChange = (e) => {

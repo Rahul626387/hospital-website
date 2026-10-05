@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useRef, useState } from "react";
@@ -19,10 +18,16 @@ import {
   FiList,
   FiAlignLeft,
 } from "react-icons/fi";
+import ApiService from "../../src/services/Apiservices";
+import useSWR from "swr";
 
-const BlogPostForm = ({ onClose }) => {
+const BlogPostForm = ({ onSubmit, onClose, userId }) => {
   const editorRef = useRef(null);
   const fileInputRef = useRef(null);
+
+  // =============================================================
+  // FORM DATA
+  // =============================================================
 
   const [formData, setFormData] = useState({
     title: "",
@@ -32,31 +37,36 @@ const BlogPostForm = ({ onClose }) => {
     content: "",
     featuredImage: null,
     status: "published",
+
+    // Featured Article
+    // 0 = Normal Article
+    // 1 = Featured Article
+    is_featured: 0,
+
     tags: [],
     seoTitle: "",
     seoDescription: "",
+    userId: userId,
   });
 
   const [tagInput, setTagInput] = useState("");
-
   const [imagePreview, setImagePreview] = useState("");
 
-  const categories = [
-    "Health Tips",
-    "Heart Care",
-    "Diabetes",
-    "Women Health",
-    "Child Care",
-    "Mental Health",
-    "Nutrition",
-    "Fitness",
-    "Hospital News",
-    "Medical Awareness",
-  ];
+  // =============================================================
+  // CATEGORIES
+  // =============================================================
 
-  // ----------------------------------------
-  // Normal Input Change
-  // ----------------------------------------
+  const {
+    data,
+    error,
+    isLoading,
+  } = useSWR("blog-categories", ApiService.get);
+
+  const categories = data?.data || [];
+
+  // =============================================================
+  // NORMAL INPUT CHANGE
+  // =============================================================
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -67,9 +77,9 @@ const BlogPostForm = ({ onClose }) => {
     }));
   };
 
-  // ----------------------------------------
-  // Title + Auto Slug
-  // ----------------------------------------
+  // =============================================================
+  // TITLE + AUTO SLUG
+  // =============================================================
 
   const handleTitleChange = (e) => {
     const title = e.target.value;
@@ -88,9 +98,9 @@ const BlogPostForm = ({ onClose }) => {
     }));
   };
 
-  // ----------------------------------------
-  // Editor Input
-  // ----------------------------------------
+  // =============================================================
+  // EDITOR INPUT
+  // =============================================================
 
   const handleEditorInput = (e) => {
     const html = e.currentTarget?.innerHTML || "";
@@ -101,9 +111,9 @@ const BlogPostForm = ({ onClose }) => {
     }));
   };
 
-  // ----------------------------------------
-  // Editor Command
-  // ----------------------------------------
+  // =============================================================
+  // EDITOR COMMAND
+  // =============================================================
 
   const executeCommand = (command, value = null) => {
     if (!editorRef.current) return;
@@ -125,9 +135,9 @@ const BlogPostForm = ({ onClose }) => {
     }));
   };
 
-  // ----------------------------------------
-  // Heading
-  // ----------------------------------------
+  // =============================================================
+  // HEADING
+  // =============================================================
 
   const formatHeading = (level) => {
     if (!editorRef.current) return;
@@ -149,9 +159,9 @@ const BlogPostForm = ({ onClose }) => {
     }));
   };
 
-  // ----------------------------------------
-  // Link
-  // ----------------------------------------
+  // =============================================================
+  // LINK
+  // =============================================================
 
   const addLink = () => {
     if (!editorRef.current) return;
@@ -172,19 +182,12 @@ const BlogPostForm = ({ onClose }) => {
       return;
     }
 
-    const url = window.prompt(
-      "Enter URL",
-      "https://"
-    );
+    const url = window.prompt("Enter URL", "https://");
 
     if (!url) return;
 
     try {
-      document.execCommand(
-        "createLink",
-        false,
-        url
-      );
+      document.execCommand("createLink", false, url);
     } catch (error) {
       console.error("Link error:", error);
       return;
@@ -198,9 +201,9 @@ const BlogPostForm = ({ onClose }) => {
     }));
   };
 
-  // ----------------------------------------
-  // Image Upload
-  // ----------------------------------------
+  // =============================================================
+  // IMAGE UPLOAD
+  // =============================================================
 
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
@@ -217,9 +220,9 @@ const BlogPostForm = ({ onClose }) => {
     setImagePreview(previewUrl);
   };
 
-  // ----------------------------------------
-  // Remove Image
-  // ----------------------------------------
+  // =============================================================
+  // REMOVE IMAGE
+  // =============================================================
 
   const removeImage = () => {
     setFormData((prev) => ({
@@ -238,9 +241,20 @@ const BlogPostForm = ({ onClose }) => {
     }
   };
 
-  // ----------------------------------------
-  // Tags
-  // ----------------------------------------
+  // =============================================================
+  // FEATURED ARTICLE TOGGLE
+  // =============================================================
+
+  const toggleFeatured = () => {
+    setFormData((prev) => ({
+      ...prev,
+      is_featured: prev.is_featured === 1 ? 0 : 1,
+    }));
+  };
+
+  // =============================================================
+  // TAGS
+  // =============================================================
 
   const addTag = () => {
     const tag = tagInput.trim();
@@ -249,8 +263,7 @@ const BlogPostForm = ({ onClose }) => {
 
     if (
       formData.tags.some(
-        (item) =>
-          item.toLowerCase() === tag.toLowerCase()
+        (item) => item.toLowerCase() === tag.toLowerCase()
       )
     ) {
       setTagInput("");
@@ -281,9 +294,9 @@ const BlogPostForm = ({ onClose }) => {
     }
   };
 
-  // ----------------------------------------
-  // Submit
-  // ----------------------------------------
+  // =============================================================
+  // SUBMIT
+  // =============================================================
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -298,17 +311,22 @@ const BlogPostForm = ({ onClose }) => {
 
     console.log("Blog Post Data:", finalData);
 
-    alert("Blog post saved successfully!");
+    // Parent ko data pass
+    onSubmit(finalData);
   };
 
-  // ----------------------------------------
-  // Character Count
-  // ----------------------------------------
+  // =============================================================
+  // CHARACTER COUNT
+  // =============================================================
 
   const contentText = formData.content
     .replace(/<[^>]*>/g, "")
     .replace(/&nbsp;/g, " ")
     .trim();
+
+  // =============================================================
+  // RETURN
+  // =============================================================
 
   return (
     <form
@@ -323,9 +341,9 @@ const BlogPostForm = ({ onClose }) => {
 
         <div className="min-w-0 space-y-4">
 
-          {/* -----------------------------------------------------
+          {/* =====================================================
               BLOG TITLE
-          ----------------------------------------------------- */}
+          ===================================================== */}
 
           <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
 
@@ -363,16 +381,15 @@ const BlogPostForm = ({ onClose }) => {
               </span>
 
               <span className="font-medium text-[#087f8c]">
-                {formData.slug ||
-                  "your-blog-slug"}
+                {formData.slug || "your-blog-slug"}
               </span>
 
             </div>
           </div>
 
-          {/* -----------------------------------------------------
+          {/* =====================================================
               SHORT DESCRIPTION
-          ----------------------------------------------------- */}
+          ===================================================== */}
 
           <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
 
@@ -404,9 +421,7 @@ const BlogPostForm = ({ onClose }) => {
                 text-gray-700
                 outline-none
                 transition
-
                 placeholder:text-gray-400
-
                 focus:border-[#087f8c]
                 focus:bg-white
                 focus:ring-2
@@ -417,11 +432,12 @@ const BlogPostForm = ({ onClose }) => {
             <div className="mt-1 text-right text-[9px] text-gray-400">
               {formData.excerpt.length}/180
             </div>
+
           </div>
 
-          {/* -----------------------------------------------------
+          {/* =====================================================
               BLOG CONTENT EDITOR
-          ----------------------------------------------------- */}
+          ===================================================== */}
 
           <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
 
@@ -564,9 +580,7 @@ const BlogPostForm = ({ onClose }) => {
 
             </div>
 
-            {/* -------------------------------------------------
-                CONTENT EDITABLE
-            ------------------------------------------------- */}
+            {/* Content Editable */}
 
             <div
               ref={editorRef}
@@ -635,9 +649,9 @@ const BlogPostForm = ({ onClose }) => {
 
           </div>
 
-          {/* -----------------------------------------------------
+          {/* =====================================================
               SEO SETTINGS
-          ----------------------------------------------------- */}
+          ===================================================== */}
 
           <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
 
@@ -675,7 +689,6 @@ const BlogPostForm = ({ onClose }) => {
                     text-xs
                     outline-none
                     transition
-
                     focus:border-[#087f8c]
                     focus:bg-white
                     focus:ring-2
@@ -716,7 +729,6 @@ const BlogPostForm = ({ onClose }) => {
                     text-xs
                     outline-none
                     transition
-
                     focus:border-[#087f8c]
                     focus:bg-white
                     focus:ring-2
@@ -731,6 +743,7 @@ const BlogPostForm = ({ onClose }) => {
               </div>
 
             </div>
+
           </div>
 
         </div>
@@ -741,11 +754,13 @@ const BlogPostForm = ({ onClose }) => {
 
         <div className="space-y-4 xl:sticky xl:top-4 xl:self-start">
 
-          {/* -----------------------------------------------------
+          {/* =====================================================
               PUBLISH
-          ----------------------------------------------------- */}
+          ===================================================== */}
 
           <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+
+            {/* Publish Header */}
 
             <div
               className="
@@ -795,7 +810,9 @@ const BlogPostForm = ({ onClose }) => {
 
             <div className="space-y-3 p-4">
 
-              {/* Status */}
+              {/* =================================================
+                  STATUS
+              ================================================= */}
 
               <div>
 
@@ -823,13 +840,13 @@ const BlogPostForm = ({ onClose }) => {
                       text-gray-700
                       outline-none
                       transition
-
                       focus:border-[#087f8c]
                       focus:bg-white
                       focus:ring-2
                       focus:ring-[#087f8c]/10
                     "
                   >
+
                     <option value="published">
                       Published
                     </option>
@@ -841,6 +858,7 @@ const BlogPostForm = ({ onClose }) => {
                     <option value="inactive">
                       Inactive
                     </option>
+
                   </select>
 
                   <FiChevronDown
@@ -858,7 +876,103 @@ const BlogPostForm = ({ onClose }) => {
 
               </div>
 
-              {/* Category */}
+              {/* =================================================
+                  FEATURED ARTICLE
+              ================================================= */}
+
+              <div
+                className="
+                  rounded-lg
+                  border
+                  border-gray-200
+                  bg-gray-50/50
+                  p-3
+                "
+              >
+
+                <div className="flex items-center justify-between gap-3">
+
+                  <div className="min-w-0">
+
+                    <div className="flex items-center gap-1.5">
+
+                      <span className="text-[10px] font-semibold text-gray-700">
+                        Featured Article
+                      </span>
+
+                      {formData.is_featured === 1 && (
+                        <span
+                          className="
+                            rounded-full
+                            bg-[#087f8c]/10
+                            px-1.5
+                            py-0.5
+                            text-[8px]
+                            font-semibold
+                            text-[#087f8c]
+                          "
+                        >
+                          Featured
+                        </span>
+                      )}
+
+                    </div>
+
+                    <p className="mt-0.5 text-[9px] text-gray-400">
+                      Show this blog as a featured article
+                    </p>
+
+                  </div>
+
+                  {/* Toggle */}
+
+                  <button
+                    type="button"
+                    onClick={toggleFeatured}
+                    aria-label="Toggle featured article"
+                    aria-pressed={formData.is_featured === 1}
+                    className={`
+                      relative
+                      h-5
+                      w-9
+                      shrink-0
+                      rounded-full
+                      transition
+                      ${
+                        formData.is_featured === 1
+                          ? "bg-[#087f8c]"
+                          : "bg-gray-300"
+                      }
+                    `}
+                  >
+
+                    <span
+                      className={`
+                        absolute
+                        top-0.5
+                        h-4
+                        w-4
+                        rounded-full
+                        bg-white
+                        shadow-sm
+                        transition
+                        ${
+                          formData.is_featured === 1
+                            ? "left-[18px]"
+                            : "left-0.5"
+                        }
+                      `}
+                    />
+
+                  </button>
+
+                </div>
+
+              </div>
+
+              {/* =================================================
+                  CATEGORY
+              ================================================= */}
 
               <div>
 
@@ -886,7 +1000,6 @@ const BlogPostForm = ({ onClose }) => {
                       text-gray-700
                       outline-none
                       transition
-
                       focus:border-[#087f8c]
                       focus:bg-white
                       focus:ring-2
@@ -898,16 +1011,19 @@ const BlogPostForm = ({ onClose }) => {
                       Select category
                     </option>
 
-                    {categories.map(
-                      (category) => (
-                        <option
-                          key={category}
-                          value={category}
-                        >
-                          {category}
-                        </option>
+                    {categories
+                      ?.filter(
+                        (category) =>
+                          Number(category.status) === 1
                       )
-                    )}
+                      .map((category) => (
+                        <option
+                          key={category.id}
+                          value={category.id}
+                        >
+                          {category.name}
+                        </option>
+                      ))}
 
                   </select>
 
@@ -928,7 +1044,9 @@ const BlogPostForm = ({ onClose }) => {
 
             </div>
 
-            {/* Buttons */}
+            {/* =================================================
+                BUTTONS
+            ================================================= */}
 
             <div className="border-t border-gray-100 bg-gray-50/50 p-3">
 
@@ -950,10 +1068,8 @@ const BlogPostForm = ({ onClose }) => {
                   text-white
                   shadow-sm
                   transition
-
                   hover:-translate-y-0.5
                   hover:shadow-md
-
                   active:translate-y-0
                 "
               >
@@ -966,6 +1082,7 @@ const BlogPostForm = ({ onClose }) => {
 
               <button
                 type="button"
+                onClick={onClose}
                 className="
                   mt-2
                   flex
@@ -982,15 +1099,14 @@ const BlogPostForm = ({ onClose }) => {
                   font-medium
                   text-gray-500
                   transition
-
                   hover:border-gray-300
                   hover:text-gray-700
                 "
               >
 
-                <FiEye size={12} />
+                <FiX size={12} />
 
-                Preview
+                Cancel
 
               </button>
 
@@ -998,9 +1114,9 @@ const BlogPostForm = ({ onClose }) => {
 
           </div>
 
-          {/* -----------------------------------------------------
+          {/* =====================================================
               FEATURED IMAGE
-          ----------------------------------------------------- */}
+          ===================================================== */}
 
           <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
 
@@ -1069,7 +1185,6 @@ const BlogPostForm = ({ onClose }) => {
                     border-gray-200
                     bg-gray-50/70
                     transition
-
                     hover:border-[#087f8c]/40
                     hover:bg-[#087f8c]/[0.03]
                   "
@@ -1116,9 +1231,9 @@ const BlogPostForm = ({ onClose }) => {
 
           </div>
 
-          {/* -----------------------------------------------------
+          {/* =====================================================
               TAGS
-          ----------------------------------------------------- */}
+          ===================================================== */}
 
           <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
 
@@ -1149,7 +1264,6 @@ const BlogPostForm = ({ onClose }) => {
                   px-2.5
                   text-[10px]
                   outline-none
-
                   focus:border-[#087f8c]
                   focus:bg-white
                 "
@@ -1169,7 +1283,6 @@ const BlogPostForm = ({ onClose }) => {
                   bg-[#087f8c]/10
                   text-[#087f8c]
                   transition
-
                   hover:bg-[#087f8c]
                   hover:text-white
                 "
@@ -1227,6 +1340,7 @@ const BlogPostForm = ({ onClose }) => {
           </div>
 
         </div>
+
       </div>
     </form>
   );
@@ -1292,16 +1406,7 @@ const EditorButton = ({
       type="button"
       title={title}
       onMouseDown={(e) => {
-        /*
-          VERY IMPORTANT:
-
-          Button click se editor ki selection lose ho jati hai.
-
-          preventDefault() selection ko preserve karta hai,
-          isliye Bold / Italic / Link selected text par
-          properly apply hote hain.
-        */
-
+        // Selection preserve karne ke liye
         e.preventDefault();
 
         onClick();
@@ -1318,11 +1423,9 @@ const EditorButton = ({
         font-medium
         text-gray-500
         transition
-
         hover:bg-white
         hover:text-[#087f8c]
         hover:shadow-sm
-
         active:scale-95
       "
     >
@@ -1342,4 +1445,3 @@ const ToolbarDivider = () => {
 };
 
 export default BlogPostForm;
-

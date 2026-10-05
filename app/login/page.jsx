@@ -1317,7 +1317,7 @@
 
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   Eye,
@@ -1334,6 +1334,8 @@ import {
 } from "lucide-react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+
+const base_url = process.env.NEXT_PUBLIC_BASE_URL;
 
 const LoginPage = () => {
   const router = useRouter();
@@ -1421,12 +1423,16 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        "http://10.10.34.67:3000/api/auth/login",
-        {
+      const response = await axios.post(`${base_url}auth/login`,{
           email: email.trim(),
           password: password,
-        }
+        },
+         {
+        headers: {
+          "x-api-key": "metro12345",
+          "Content-Type": "application/json",
+        },
+      }
       );
 
       const data = response.data;
@@ -1439,7 +1445,7 @@ const LoginPage = () => {
         // ==========================================
 
         localStorage.setItem(
-          "user",
+          "adminUser",
           JSON.stringify(data.user)
         );
 
@@ -1537,6 +1543,34 @@ const LoginPage = () => {
       },
     },
   };
+
+useEffect(() => {
+  const adminUser = localStorage.getItem("adminUser");
+
+  console.log("LOGIN CHECK:", adminUser);
+
+  if (!adminUser) {
+    return;
+  }
+
+  try {
+    const user = JSON.parse(adminUser);
+
+    if (
+      user?.role === "admin" &&
+      Number(user?.status) === 1
+    ) {
+      console.log("ADMIN FOUND → REDIRECTING TO ADMIN");
+
+      router.replace("/admin");
+    }
+  } catch (error) {
+    console.error("Invalid adminUser:", error);
+
+    localStorage.removeItem("adminUser");
+    localStorage.removeItem("isLoggedIn");
+  }
+}, [router]);
 
   return (
     <main className="h-screen w-full overflow-hidden bg-slate-50">
@@ -1792,7 +1826,7 @@ const LoginPage = () => {
               DECORATIVE CIRCLE
           ================================================= */}
 
-          <motion.div
+          {/* <motion.div
             animate={{
               scale: [1, 1.08, 1],
               rotate: [0, 8, 0],
@@ -1814,7 +1848,7 @@ const LoginPage = () => {
               bg-white/5
               backdrop-blur-sm
             "
-          />
+          /> */}
 
           {/* =================================================
               BOTTOM CONTENT
@@ -2002,6 +2036,9 @@ const LoginPage = () => {
             </motion.div>
           </div>
         </motion.section>
+
+
+        
 
         {/* =====================================================
             RIGHT LOGIN SECTION

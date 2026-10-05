@@ -5,6 +5,21 @@
 // };
 
 // export default nextConfig;
+// /** @type {import('next').NextConfig} */
+// const nextConfig = {
+//   allowedDevOrigins: ["10.10.34.67"],
+//   images: {
+//     remotePatterns: [
+//       {
+//         protocol: "https",
+//         hostname: "images.unsplash.com",
+//       },
+//     ],
+//   },
+// };
+
+// module.exports = nextConfig;
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   allowedDevOrigins: ["10.10.34.67"],
@@ -13,6 +28,12 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "images.unsplash.com",
+      },
+      {
+        protocol: "https",           // 👈 Ye add karo
+        hostname: "images.pexels.com",
+        port: "",
+        pathname: "/**",
       },
     ],
   },

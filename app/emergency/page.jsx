@@ -1252,6 +1252,7 @@ import {
   Siren,
   Stethoscope,
 } from "lucide-react";
+import PageHero from "../components/Pagehero";
 
 const emergencyServices = [
   {
@@ -1335,7 +1336,7 @@ export default function EmergencyPage() {
   return (
     <main className="min-h-screen bg-white">
       {/* TOP EMERGENCY BAR */}
-      <div className="bg-red-700 text-white">
+      {/* <div className="bg-red-700 text-white">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-3 text-sm sm:flex-row sm:px-6 lg:px-8">
           <div className="flex items-center gap-2 font-semibold">
             <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-white" />
@@ -1350,9 +1351,19 @@ export default function EmergencyPage() {
             Emergency: +91 98765 43210
           </a>
         </div>
-      </div>
+      </div> */}
 
       {/* HERO */}
+
+      {/* <PageHero
+        backgroundImage="https://images.pexels.com/photos/6129507/pexels-photo-6129507.jpeg"
+        badge="Our Medical Team"
+        title="Meet Our Expert"
+        highlight="Doctors."
+        description="Experienced specialists dedicated to providing thoughtful, reliable and patient-centered healthcare."
+        breadcrumb="Doctors"
+      /> */}
+
       <section className="relative overflow-hidden bg-[#160707]">
         <div className="absolute left-[-150px] top-[-100px] h-[400px] w-[400px] rounded-full bg-red-600/20 blur-3xl" />
         <div className="absolute bottom-[-150px] right-[-100px] h-[450px] w-[450px] rounded-full bg-red-500/10 blur-3xl" />

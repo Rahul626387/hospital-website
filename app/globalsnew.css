@@ -1,0 +1,277 @@
+/* new code  */
+
+
+@plugin "daisyui";
+@import "tailwindcss";
+
+/* =========================================
+   TAILWIND CSS v4 DARK MODE
+   Works with next-themes
+========================================= */
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+
+/* =========================================
+   THEME VARIABLES
+========================================= */
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+
+  /* Hospital Theme */
+  --hospital-primary: #0a7a78;
+  --hospital-secondary: #063b5c;
+
+  /* Surface */
+  --surface: #ffffff;
+  --surface-secondary: #f8fafc;
+
+  /* Border */
+  --border: #e2e8f0;
+
+  /* Muted */
+  --muted: #64748b;
+}
+
+
+/* =========================================
+   DARK THEME
+========================================= */
+
+.dark {
+  --background: #020617;
+  --foreground: #e2e8f0;
+
+  /* Hospital Theme */
+  --hospital-primary: #2dd4bf;
+  --hospital-secondary: #38bdf8;
+
+  /* Surface */
+  --surface: #0f172a;
+  --surface-secondary: #1e293b;
+
+  /* Border */
+  --border: #334155;
+
+  /* Muted */
+  --muted: #94a3b8;
+}
+
+
+/* =========================================
+   TAILWIND THEME
+========================================= */
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-hospital-primary: var(--hospital-primary);
+  --color-hospital-secondary: var(--hospital-secondary);
+
+  --color-surface: var(--surface);
+  --color-surface-secondary: var(--surface-secondary);
+
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+
+/* =========================================
+   BODY
+========================================= */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+
+  background: var(--background);
+  color: var(--foreground);
+
+  font-family:
+    var(--font-geist-sans),
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
+}
+
+
+/* =========================================
+   GLOBAL ULTRA THIN SCROLLBAR
+========================================= */
+
+* {
+  scrollbar-width: thin !important;
+  scrollbar-color: #cbd5e1 transparent !important;
+}
+
+*::-webkit-scrollbar {
+  width: 1px !important;
+  height: 1px !important;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #cbd5e1 !important;
+  border-radius: 999px !important;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8 !important;
+}
+
+*::-webkit-scrollbar-button {
+  display: none !important;
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent !important;
+}
+
+
+/* =========================================
+   DARK MODE SCROLLBAR
+========================================= */
+
+.dark * {
+  scrollbar-color: #475569 transparent !important;
+}
+
+.dark *::-webkit-scrollbar-thumb {
+  background: #475569 !important;
+}
+
+.dark *::-webkit-scrollbar-thumb:hover {
+  background: #64748b !important;
+}
+
+
+/* =========================================
+   GOOGLE TRANSLATE HIDE
+========================================= */
+
+.goog-te-banner-frame,
+.goog-te-balloon-frame,
+.goog-te-menu-frame,
+.goog-tooltip,
+.goog-text-highlight,
+.goog-te-gadget,
+iframe.goog-te-banner-frame,
+iframe.goog-te-menu-frame,
+.skiptranslate iframe {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  width: 0 !important;
+}
+
+
+/* Google Translate body modification */
+
+body {
+  top: 0 !important;
+}
+
+body.skiptranslate {
+  top: 0 !important;
+}
+
+
+/* Google translation highlight */
+
+.goog-text-highlight {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+
+/* Remove Google injected spacing */
+
+.skiptranslate {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+
+/* =========================================
+   ANIMATED GRADIENT - LIGHT
+========================================= */
+
+.animated-gradient {
+  background: linear-gradient(
+    120deg,
+    #f8fafc,
+    #ecfeff,
+    #f0fdfa,
+    #f8fafc,
+    #eff6ff,
+    #f8fafc
+  );
+
+  background-size: 400% 400%;
+
+  animation: gradientMove 12s ease infinite;
+}
+
+
+/* =========================================
+   ANIMATED GRADIENT - DARK
+========================================= */
+
+.dark .animated-gradient {
+  background: linear-gradient(
+    120deg,
+    #020617,
+    #042f2e,
+    #0f172a,
+    #082f49,
+    #020617
+  );
+
+  background-size: 400% 400%;
+}
+
+
+/* =========================================
+   GRADIENT ANIMATION
+========================================= */
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  25% {
+    background-position: 50% 100%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  75% {
+    background-position: 50% 0%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+  
+}

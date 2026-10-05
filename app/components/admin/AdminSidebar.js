@@ -2640,6 +2640,7 @@ import {
   FiFileText,
   FiActivity,
   FiUsers,
+  FiBriefcase,
 } from "react-icons/fi";
 
 const menuItems = [
@@ -2672,30 +2673,45 @@ const menuItems = [
     ],
   },
 
-  // =========================
-  // MASTER
-  // =========================
+ 
+
   {
-    title: "Doctor Master",
-    icon: FiLayers,
-    children: [
-      {
-        title: "Departments",
-        icon: FiGrid,
-        path: "/admin/departments",
-      },
-      {
-        title: "Specialization",
-        icon: FiActivity,
-        path: "/admin/specialization",
-      },
-      {
-        title: "Doctors",
-        icon: FiUserPlus,
-        path: "/admin/doctors",
-      },
-    ],
-  },
+  title: "Medical Management",
+  icon: FiLayers,
+  children: [
+    {
+      title: "Departments",
+      icon: FiGrid,
+      path: "/admin/departments",
+    },
+    {
+      title: "Specialties",
+      icon: FiActivity,
+      path: "/admin/specialties",
+    },
+    {
+      title: "Doctors",
+      icon: FiUserPlus,
+      path: "/admin/doctors",
+    },
+  ],
+},
+ {
+  title: "Careers",
+  icon: FiBriefcase,
+  children: [
+    {
+      title: "Job Roles",
+      icon: FiGrid,
+      path: "/admin/career",
+    },
+    {
+      title: "Applications",
+      icon: FiUsers,
+      path: "/admin/career/applications",
+    },
+  ],
+},
 
   // =========================
   // DOCTOR MASTER
@@ -2740,7 +2756,18 @@ const AdminSidebar = () => {
   //   return pathname === path || pathname.startsWith(`${path}/`);
   // };
 
-  const isPathActive = (path) => {
+//   const isPathActive = (path) => {
+//   if (!path) return false;
+
+//   // Dashboard
+//   if (path === "/admin/" || path === "/admin") {
+//     return pathname === "/admin" || pathname === "/admin/";
+//   }
+
+//   return pathname === path || pathname.startsWith(`${path}/`);
+// };
+
+const isPathActive = (path) => {
   if (!path) return false;
 
   // Dashboard
@@ -2748,9 +2775,9 @@ const AdminSidebar = () => {
     return pathname === "/admin" || pathname === "/admin/";
   }
 
-  return pathname === path || pathname.startsWith(`${path}/`);
+  // Exact match only
+  return pathname === path;
 };
-
   // =====================================================
   // CHECK ACTIVE CHILD
   // =====================================================
@@ -2782,7 +2809,7 @@ const AdminSidebar = () => {
   // =====================================================
   // AUTO OPEN ACTIVE MENU
   // =====================================================
-
+// old code 28-09
   useEffect(() => {
     const activeMenus = {};
 
@@ -2798,16 +2825,47 @@ const AdminSidebar = () => {
     }));
   }, [pathname]);
 
+// new code 28-09
+//   useEffect(() => {
+//   const activeMenu = menuItems.find(
+//     (item) =>
+//       item.children?.length &&
+//       hasActiveChild(item)
+//   );
+
+//   setOpenMenus(
+//     activeMenu
+//       ? { [activeMenu.title]: true }
+//       : {}
+//   );
+// }, [pathname]);
+
   // =====================================================
   // TOGGLE MENU
   // =====================================================
 
+  // const toggleMenu = (title) => {
+  //   setOpenMenus((prev) => ({
+  //     ...prev,
+  //     [title]: !prev[title],
+  //   }));
+  // };
+
   const toggleMenu = (title) => {
-    setOpenMenus((prev) => ({
-      ...prev,
-      [title]: !prev[title],
-    }));
-  };
+  setOpenMenus((prev) => {
+    const isCurrentlyOpen = !!prev[title];
+
+    // Agar current menu already open hai → close it
+    if (isCurrentlyOpen) {
+      return {};
+    }
+
+    // Sirf clicked menu open hoga
+    return {
+      [title]: true,
+    };
+  });
+};
 
   // =====================================================
   // NAVIGATION
@@ -2825,8 +2883,8 @@ const AdminSidebar = () => {
   // =====================================================
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    router.push("/login");
+    localStorage.removeItem("adminUser");
+    router.push("/");
   };
 
   // =====================================================

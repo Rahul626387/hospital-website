@@ -57,6 +57,7 @@ import AdminNavbar from "../components/admin/AdminNavbar";
 import AdminSidebar from "../components/admin/AdminSidebar";
 import { motion } from "framer-motion";
 import Breadcrumb from "../components/admin/Breadcrumb";
+import { Toaster } from "react-hot-toast";
 const AdminLayout = ({ children }) => {
   return (
     <div className="min-h-screen bg-[#f5f6f8] flex">
@@ -72,8 +73,9 @@ const AdminLayout = ({ children }) => {
 
         {/* Page Content */}
         <div className="p-4 sm:p-3">
-           <Breadcrumb/>
+           {/* <Breadcrumb/> */}
           {children}
+            <Toaster position="top-right" />
         </div>
       </main>
 

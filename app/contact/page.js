@@ -16,6 +16,11 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import Link from "next/link";
+import PageHero from "../components/Pagehero";
+import contactimage from './../../public/assets/images/contact-hero-visual.png'
+import contactInfo from "../../lib/contactInfo";
+import { useDepartments } from "../api/hooks/useDepartments";
+import ApiService from "../src/services/Apiservices";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -23,10 +28,12 @@ export default function ContactPage() {
     phone: "",
     email: "",
     department: "",
+    inquiry_type: "Appointment",
     message: "",
   });
 
   const [submitted, setSubmitted] = useState(false);
+  
 
   const handleChange = (e) => {
     setFormData({
@@ -35,54 +42,61 @@ export default function ContactPage() {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
 
-    console.log("Contact Form:", formData);
 
-    setSubmitted(true);
+  // apis  Department 
 
-    setFormData({
-      name: "",
-      phone: "",
-      email: "",
-      department: "",
-      message: "",
-    });
+  const {
+     departments,
+     error: departmentError,
+     isLoading: departmentsLoading,
+   } = useDepartments();
 
-    setTimeout(() => {
-      setSubmitted(false);
-    }, 4000);
-  };
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-  const contactInfo = [
-    {
-      icon: Phone,
-      title: "Call Us",
-      text: "+91 99999 99999",
-      subText: "Our team is here to help you",
-      href: "tel:+919999999999",
-    },
-    {
-      icon: Mail,
-      title: "Email Us",
-      text: "info@baderiametroprime.com",
-      subText: "We will get back to you soon",
-      href: "mailto:info@baderiametroprime.com",
-    },
-    {
-      icon: MapPin,
-      title: "Visit Us",
-      text: "Baderia Metro Prime Hospital",
-      subText: "Jabalpur, Madhya Pradesh, India",
-      href: "#location",
-    },
-  ];
+  // console.log("Contact Form:", formData);
+
+  try {
+    const res = await ApiService.post("contact-us", formData);
+
+    // console.log("Contact API Response:", res);
+
+    // API success
+    if (res?.success) {
+      setSubmitted(true);
+
+      setFormData({
+        name: "",
+        phone: "",
+        email: "",
+        department: "",
+        inquiry_type: "",
+        message: "",
+      });
+
+      setTimeout(() => {
+        setSubmitted(false);
+      }, 4000);
+    } else {
+      console.error(
+        "Contact submission failed:",
+        res?.message || "Something went wrong"
+      );
+    }
+  } catch (error) {
+    console.error("Contact API Error:", error);
+
+    // Don't show success when API fails
+    setSubmitted(false);
+  }
+};
+ 
 
   return (
     <main className="min-h-screen overflow-hidden bg-[#F8FAFC]">
       {/* ================= HERO ================= */}
-      <section className="relative overflow-hidden bg-[#063B5C]">
+      {/* <section className="relative overflow-hidden bg-[#063B5C]">
         <div className="absolute inset-0">
           <div className="absolute -left-20 top-0 h-72 w-72 rounded-full bg-[#0A7A78]/30 blur-3xl" />
           <div className="absolute -right-20 bottom-0 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl" />
@@ -126,10 +140,20 @@ export default function ContactPage() {
             </p>
           </motion.div>
         </div>
-      </section>
+      </section> */}
+    <PageHero
+        // backgroundImage="https://images.pexels.com/photos/5327585/pexels-photo-5327585.jpeg"
+        backgroundImage="/assets/images/contact-hero-visual.png"
+        badge="Get In Touch"
+        badgeIcon={Stethoscope}
+        title="We Are Here"
+        highlight="To Help You."
+        description="Have a question, need assistance, or want to know more about our healthcare services? Our team is always ready to help."
+        breadcrumb="Contact Us"
+      />
 
       {/* ================= CONTACT CARDS ================= */}
-      <section className="relative z-10 mx-auto -mt-8 max-w-7xl px-4 sm:px-6 lg:px-8">
+      {/* <section className="relative z-10 mx-auto -mt-8 max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-4 md:grid-cols-3">
           {contactInfo.map((item, index) => {
             const Icon = item.icon;
@@ -166,7 +190,140 @@ export default function ContactPage() {
             );
           })}
         </div>
-      </section>
+      </section> */}
+
+      <section className="relative z-10 mx-auto -mt-8 max-w-7xl px-4 sm:px-6 lg:px-8">
+  <div className="grid gap-4 md:grid-cols-3">
+    {contactInfo.map((item, index) => {
+      const Icon = item.icon;
+
+      const cardStyles = [
+        {
+          bg: "bg-[#EAF8F7]",
+          iconBg: "bg-[#D5F1EF]",
+          iconColor: "text-[#0A7A78]",
+          hoverBg: "group-hover:bg-[#0A7A78]",
+          hoverText: "group-hover:text-white",
+          watermark: "text-[#0A7A78]/10",
+          border: "border-[#D8F0EE]",
+        },
+        {
+          bg: "bg-[#EEF5FB]",
+          iconBg: "bg-[#DCECF8]",
+          iconColor: "text-[#063B5C]",
+          hoverBg: "group-hover:bg-[#063B5C]",
+          hoverText: "group-hover:text-white",
+          watermark: "text-[#063B5C]/10",
+          border: "border-[#DCEAF5]",
+        },
+        {
+          bg: "bg-[#FFF6E8]",
+          iconBg: "bg-[#FFEBC5]",
+          iconColor: "text-[#D97706]",
+          hoverBg: "group-hover:bg-[#D97706]",
+          hoverText: "group-hover:text-white",
+          watermark: "text-[#D97706]/10",
+          border: "border-[#F9E8C7]",
+        },
+      ];
+
+      const style = cardStyles[index % cardStyles.length];
+
+      return (
+        <motion.a
+          key={item.title}
+          href={item.href}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.4,
+            delay: 0.15 + index * 0.08,
+          }}
+          whileHover={{ y: -5 }}
+          className={`
+            group relative isolate overflow-hidden
+            rounded-xl border ${style.border} ${style.bg}
+            px-5 py-4
+            shadow-md shadow-slate-900/5
+            transition-all duration-300
+            hover:shadow-xl hover:shadow-slate-900/10
+          `}
+        >
+          {/* Watermark */}
+          <Icon
+            className={`
+              pointer-events-none absolute
+              -bottom-5 -right-5
+              h-24 w-24
+              rotate-[-10deg]
+              ${style.watermark}
+              transition-all duration-500
+              group-hover:scale-110
+              group-hover:rotate-0
+            `}
+          />
+
+          {/* Top Line */}
+          <div
+            className={`
+              absolute left-0 top-0 h-[3px] w-0
+              ${style.hoverBg}
+              transition-all duration-500
+              group-hover:w-full
+            `}
+          />
+
+          <div className="relative z-10 flex items-center gap-4">
+            {/* Icon */}
+            <div
+              className={`
+                flex h-11 w-11 shrink-0 items-center justify-center
+                rounded-xl
+                ${style.iconBg}
+                ${style.iconColor}
+                transition-all duration-300
+                ${style.hoverBg}
+                ${style.hoverText}
+                group-hover:scale-105
+              `}
+            >
+              <Icon className="h-5 w-5" />
+            </div>
+
+            {/* Content */}
+            <div className="min-w-0">
+              <h3 className="text-base font-bold text-[#063B5C]">
+                {item.title}
+              </h3>
+
+              <p className="mt-0.5 truncate text-sm font-semibold text-[#0A7A78]">
+                {item.text}
+              </p>
+
+              <p className="mt-0.5 truncate text-xs text-slate-500">
+                {item.subText}
+              </p>
+            </div>
+          </div>
+
+          {/* Arrow */}
+          <div
+            className="
+              absolute right-3 top-3
+              text-sm text-slate-400
+              opacity-0 translate-x-1
+              transition-all duration-300
+              group-hover:translate-x-0
+              group-hover:opacity-100
+            "
+          >
+            ↗
+          </div>
+        </motion.a>
+      );
+    })}
+  </div>
+</section>
 
       {/* ================= FORM SECTION ================= */}
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
@@ -338,20 +495,28 @@ export default function ContactPage() {
                     Select Department
                   </label>
 
-                  <select
+                 <select
                     name="department"
                     value={formData.department}
                     onChange={handleChange}
                     required
-                    className="h-12 w-full rounded-xl border border-slate-200 bg-white px-4 text-sm outline-none transition focus:border-[#0A7A78] focus:ring-4 focus:ring-teal-50"
+                    disabled={departmentsLoading}
+                    className="h-12 w-full rounded-xl border border-slate-200 bg-white px-4 text-sm outline-none transition focus:border-[#0A7A78] focus:ring-4 focus:ring-teal-50 disabled:cursor-not-allowed disabled:bg-slate-50"
                   >
-                    <option value="">Select Department</option>
-                    <option value="General Enquiry">General Enquiry</option>
-                    <option value="Appointment">Appointment</option>
-                    <option value="Cardiology">Cardiology</option>
-                    <option value="Orthopedics">Orthopedics</option>
-                    <option value="Gynecology">Gynecology</option>
-                    <option value="Emergency">Emergency</option>
+                    <option value="">
+                      {departmentsLoading ? "Loading Departments..." : "Select Department"}
+                    </option>
+
+                    {!departmentsLoading &&
+                      !departmentError &&
+                      departments?.map((department) => (
+                        <option
+                          key={department.id}
+                          value={department.id}
+                        >
+                          {department.name}
+                        </option>
+                      ))}
                   </select>
                 </div>
               </div>
@@ -385,62 +550,90 @@ export default function ContactPage() {
       </section>
 
       {/* ================= LOCATION ================= */}
+      
+
+
       <section id="location" className="px-4 pb-20 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-slate-100 bg-white shadow-sm">
-          <div className="grid lg:grid-cols-[0.8fr_1.2fr]">
-            <div className="p-8 sm:p-10">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#0A7A78]">
-                Our Location
-              </p>
+  <div className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-slate-100 bg-white shadow-sm">
+    <div className="grid lg:grid-cols-[0.8fr_1.2fr]">
+      
+      {/* LEFT CONTENT */}
+      <div className="p-8 sm:p-10">
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#0A7A78]">
+          Our Location
+        </p>
 
-              <h2 className="mt-4 text-3xl font-bold text-[#063B5C]">
-                Visit Our Hospital.
-              </h2>
+        <h2 className="mt-4 text-3xl font-bold text-[#063B5C]">
+          Visit Our Hospital.
+        </h2>
 
-              <p className="mt-4 leading-7 text-slate-600">
-                Visit Baderia Metro Prime Hospital for quality healthcare and
-                compassionate medical support.
-              </p>
+        <p className="mt-4 leading-7 text-slate-600">
+          Visit Baderia Metro Prime Hospital for quality healthcare and
+          compassionate medical support.
+        </p>
 
-              <div className="mt-7 flex items-start gap-3">
-                <MapPin className="mt-1 h-5 w-5 shrink-0 text-[#0A7A78]" />
+        <div className="mt-7 flex items-start gap-3">
+          <MapPin className="mt-1 h-5 w-5 shrink-0 text-[#0A7A78]" />
 
-                <p className="text-sm leading-6 text-slate-600">
-                  Baderia Metro Prime Hospital
-                  <br />
-                  Jabalpur, Madhya Pradesh, India
-                </p>
-              </div>
+          <p className="text-sm leading-6 text-slate-600">
+            Baderia Metro Prime Hospital
+            <br />
+            Jabalpur, Madhya Pradesh, India
+          </p>
+        </div>
 
-              <a
-                href="#"
-                className="group mt-8 inline-flex items-center gap-2 rounded-xl bg-[#063B5C] px-5 py-3 text-sm font-bold text-white transition hover:-translate-y-1"
-              >
-                Get Directions
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </a>
+        <a
+          href="https://www.google.com/maps/search/?api=1&query=Baderia+Metro+Prime+Hospital+Jabalpur+Madhya+Pradesh+India"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group mt-8 inline-flex items-center gap-2 rounded-xl bg-[#063B5C] px-5 py-3 text-sm font-bold text-white transition hover:-translate-y-1 hover:bg-[#0A7A78]"
+        >
+          Get Directions
+
+          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+        </a>
+      </div>
+
+      {/* GOOGLE MAP */}
+      <div className="relative min-h-[350px] overflow-hidden bg-slate-100">
+        <iframe
+          title="Baderia Metro Prime Hospital Location"
+          src="https://www.google.com/maps?q=Baderia+Metro+Prime+Hospital+Jabalpur+Madhya+Pradesh+India&output=embed"
+          width="100%"
+          height="100%"
+          style={{
+            border: 0,
+            minHeight: "350px",
+          }}
+          loading="lazy"
+          allowFullScreen
+          referrerPolicy="no-referrer-when-downgrade"
+        />
+
+        {/* Small Map Label */}
+        <div className="absolute left-4 top-4 rounded-xl bg-white/95 px-4 py-3 shadow-lg backdrop-blur-sm">
+          <div className="flex items-center gap-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#0A7A78] text-white">
+              <MapPin className="h-4 w-4" />
             </div>
 
-            {/* Map Placeholder */}
-            <div className="relative flex min-h-[350px] items-center justify-center bg-gradient-to-br from-teal-50 via-slate-50 to-cyan-50">
-              <div className="absolute h-56 w-56 rounded-full border border-dashed border-[#0A7A78]/20" />
-              <div className="absolute h-40 w-40 rounded-full border border-dashed border-[#0A7A78]/30" />
-
-              <motion.div
-                animate={{ y: [0, -8, 0] }}
-                transition={{
-                  duration: 2.5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="relative z-10 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#0A7A78] text-white shadow-xl shadow-teal-900/20"
-              >
-                <MapPin className="h-8 w-8" />
-              </motion.div>
+            <div>
+              <p className="text-sm font-bold text-[#063B5C]">
+                Baderia Metro Prime Hospital
+              </p>
+              <p className="text-xs text-slate-500">
+                Jabalpur, Madhya Pradesh
+              </p>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
 
       {/* ================= CTA ================= */}
       <section className="px-4 pb-20 sm:px-6 lg:px-8">

@@ -23,7 +23,7 @@ const AdminNavbar = ({ onMenuClick }) => {
   useEffect(() => {
     try {
       const user = JSON.parse(
-        localStorage.getItem("userData") || "{}"
+        localStorage.getItem("adminUser") || "{}"
       );
 
       const info = user?.response?.[0] || user?.user || user || {};
@@ -53,13 +53,13 @@ const AdminNavbar = ({ onMenuClick }) => {
 
   // ================= LOGOUT =================
   const handleLogout = () => {
-    localStorage.removeItem("userData");
+    localStorage.removeItem("adminUser");
     localStorage.removeItem("auth");
 
     setShowLogoutConfirm(false);
     setProfileOpen(false);
 
-    router.push("/login");
+    router.push("/");
   };
 
   return (

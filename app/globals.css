@@ -1,3 +1,4 @@
+@plugin "daisyui";
 @import "tailwindcss";
 
 :root {
@@ -61,3 +62,106 @@ body {
   background: transparent !important;
 }
 
+
+
+/* .hero-pagination .swiper-pagination-bullet {
+  width: 10px;
+  height: 10px;
+  opacity: 0.5;
+  border-radius: 9999px;
+  background: white;
+  transition: all 0.3s ease;
+}
+
+.hero-pagination .swiper-pagination-bullet-active {
+  width: 32px;
+  opacity: 1;
+  border-radius: 9999px;
+  background: #5eead4;
+} */
+
+
+
+/* Google Translate top banner hide
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
+/* =========================================
+   GOOGLE TRANSLATE HIDE
+========================================= */
+
+.goog-te-banner-frame,
+.goog-te-balloon-frame,
+.goog-te-menu-frame,
+.goog-tooltip,
+.goog-text-highlight,
+.goog-te-gadget,
+iframe.goog-te-banner-frame,
+iframe.goog-te-menu-frame,
+.skiptranslate iframe {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  width: 0 !important;
+}
+
+/* Google Translate body modification */
+body {
+  top: 0 !important;
+}
+
+body.skiptranslate {
+  top: 0 !important;
+}
+
+/* Google translation highlight */
+.goog-text-highlight {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Remove Google injected spacing */
+.skiptranslate {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+
+
+.animated-gradient {
+  background: linear-gradient(
+    120deg,
+    #f8fafc,
+    #ecfeff,
+    #f0fdfa,
+    #f8fafc,
+    #eff6ff,
+    #f8fafc
+  );
+
+  background-size: 400% 400%;
+  animation: gradientMove 12s ease infinite;
+}
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  25% {
+    background-position: 50% 100%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  75% {
+    background-position: 50% 0%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
