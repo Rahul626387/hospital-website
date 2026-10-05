@@ -1,37 +1,3 @@
-// import { NextResponse } from "next/server";
-
-// export function proxy(request) {
-//   const apiKey = request.headers.get("x-api-key");
-
-//   if (!apiKey) {
-//     return NextResponse.json(
-//       {
-//         success: false,
-//         message: "API key is required",
-//       },
-//       { status: 401 }
-//     );
-//   }
-
-//   if (apiKey !== process.env.API_KEY) {
-//     return NextResponse.json(
-//       {
-//         success: false,
-//         message: "Invalid API key",
-//       },
-//       { status: 403 }
-//     );
-//   }
-
-//   return NextResponse.next();
-// }
-
-// export const config = {
-//   matcher: [
-//     "/api/departments/:path*",
-//     "/api/doctors/:path*",
-//   ],
-// };
 
 
 import { NextResponse } from "next/server";
