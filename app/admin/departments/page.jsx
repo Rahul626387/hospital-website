@@ -40,7 +40,7 @@ const Departmentpage = () => {
   );
 
   // API response ke according adjust kar sakte hain
-  const departments = Array.isArray(data) ? data : data?.department_new || [];
+  const departments = Array.isArray(data) ? data : data?.data || [];
   // console.log(departments)
 
   const filteredDepartments = useMemo(() => {
