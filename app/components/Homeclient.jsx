@@ -49,6 +49,8 @@ export default function Homeclient() {
     isLoading: doctorsLoading,
   } = useDoctors();
 
+  console.log(departments)
+
   return (
     <main className="overflow-hidden bg-white text-slate-700">
       {/* =========================================================

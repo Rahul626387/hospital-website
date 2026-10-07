@@ -6,14 +6,11 @@ import path from "path";
 export async function GET() {
   try {
     const [rows] = await db.query("SELECT * FROM departments");
-     const [departmentNew] = await db.query(
-      "SELECT * FROM department_new"
-    );
+    
 
     return NextResponse.json({
       success: true,
       data: rows,
-      department_new: departmentNew,
     });
   } catch (error) {
     console.error("Department API Error:", error);
@@ -156,7 +153,7 @@ export async function POST(request) {
     const [existing] = await db.query(
       `
       SELECT id
-      FROM department_new
+      FROM departments
       WHERE slug = ?
       LIMIT 1
       `,
@@ -255,7 +252,7 @@ export async function POST(request) {
 
     const [result] = await db.query(
       `
-      INSERT INTO department_new
+      INSERT INTO departments
       (
         name,
         slug,

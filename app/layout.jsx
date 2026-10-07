@@ -69,6 +69,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import Smoothscrollview from "./components/Smoothscrollview";
 import { Toaster } from "react-hot-toast";
+import HospitalAIAgent from "./components/HospitalAIAgent";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -102,6 +103,7 @@ export default function RootLayout({ children }) {
             position="top-center"
             reverseOrder={false}
           />
+          {/* <HospitalAIAgent/> */}
         </ConditionalLayout>
       </body>
     </html>

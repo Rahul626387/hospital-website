@@ -14,19 +14,19 @@ import {
 const socialLinks = [
   {
     name: "Facebook",
-    href: "#",
+    href: "https://facebook.com/...",
     icon: FaFacebookF,
     color: "#1877F2",
   },
   {
     name: "Instagram",
-    href: "#",
+    href: "https://www.instagram.com/baderia_metroprime/?hl=en",
     icon: FaInstagram,
     color: "#E4405F",
   },
   {
     name: "YouTube",
-    href: "#",
+    href: "https://youtube.com/...",
     icon: FaYoutube,
     color: "#FF0000",
   },

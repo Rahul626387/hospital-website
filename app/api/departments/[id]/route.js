@@ -70,7 +70,7 @@ export async function GET(request, { params }) {
     const [departmentRows] = await db.query(
       `
       SELECT *
-      FROM department_new
+      FROM departments
       WHERE id = ?
       LIMIT 1
       `,

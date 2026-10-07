@@ -10,7 +10,7 @@ export function useDepartments() {
   );
 
   return {
-    departments: data?.department_new ?? [],
+    departments: data?.data ?? [],
     error,
     isLoading,
     mutate,

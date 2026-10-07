@@ -195,7 +195,7 @@ export default function AboutPartOne() {
           className="absolute inset-0"
         >
           <Image
-            src="/images/about/hero-building.jpg"
+            src="/assets/images/01.png"
             alt="Baderia MetroPrime Multi Speciality Hospital"
             fill
             priority
