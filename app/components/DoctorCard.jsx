@@ -522,7 +522,7 @@ const DoctorCard = ({ doctor, index = 0 }) => {
           <div className="relative h-[330px] overflow-hidden">
             
             <Image
-              src={doctor?.image_url}
+              src={doctor?.image_url || "/assets/images/doctor_01.png"}
               alt={doctor?.name || "Doctor"}
               fill
               priority={index < 2}
