@@ -1,0 +1,638 @@
+<section className="relative isolate overflow-hidden bg-slate-950 text-white">
+
+  {/* =======================================================
+      PREMIUM DARK MEDICAL BACKGROUND
+  ======================================================= */}
+
+  <div
+    aria-hidden="true"
+    className="pointer-events-none absolute inset-0"
+  >
+    {/* Main Gradient */}
+
+    <div className="absolute inset-0 bg-gradient-to-br from-[#062F4A] via-[#075B70] to-[#052A3D]" />
+
+    {/* Left Cyan Glow */}
+
+    <div className="absolute -left-32 -top-32 h-[420px] w-[420px] rounded-full bg-cyan-300/10 blur-[100px]" />
+
+    {/* Right Blue Glow */}
+
+    <div className="absolute -right-32 top-20 h-[380px] w-[380px] rounded-full bg-blue-400/10 blur-[100px]" />
+
+    {/* Bottom Teal Glow */}
+
+    <div className="absolute bottom-[-180px] left-1/2 h-[400px] w-[650px] -translate-x-1/2 rounded-full bg-teal-300/10 blur-[110px]" />
+
+    {/* Subtle Grid */}
+
+    <div
+      className="absolute inset-0 opacity-[0.025]"
+      style={{
+        backgroundImage:
+          "linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)",
+        backgroundSize: "70px 70px",
+      }}
+    />
+
+    {/* Soft Overlay */}
+
+    <div className="absolute inset-0 bg-gradient-to-r from-[#021F32]/20 via-transparent to-[#021F32]/20" />
+  </div>
+
+  {/* =======================================================
+      MAIN CONTAINER
+  ======================================================= */}
+
+  <div className="relative mx-auto max-w-7xl px-4 py-7 sm:px-6 sm:py-9 lg:px-8 lg:py-10">
+
+    <div className="grid items-center gap-5 lg:grid-cols-[0.88fr_1.12fr] lg:gap-6">
+
+      {/* =====================================================
+          LEFT CONTENT
+      ===================================================== */}
+
+      <motion.div
+        initial={{
+          opacity: 0,
+          x: -25,
+        }}
+        animate={{
+          opacity: 1,
+          x: 0,
+        }}
+        transition={{
+          duration: 0.65,
+          ease: [0.22, 1, 0.36, 1],
+        }}
+        className="relative z-10 lg:pr-2"
+      >
+
+        {/* =================================================
+            BREADCRUMB
+        ================================================= */}
+
+        <div className="mb-3 flex flex-wrap items-center gap-2 text-xs">
+
+          <Link
+            href="/"
+            className="font-medium text-slate-300 transition-colors duration-300 hover:text-white"
+          >
+            Home
+          </Link>
+
+          <ChevronRight className="h-3.5 w-3.5 text-slate-500" />
+
+          <span className="font-semibold text-cyan-300">
+            Awards & Achievements
+          </span>
+
+        </div>
+
+        {/* =================================================
+            BADGE
+        ================================================= */}
+
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: 8,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          transition={{
+            delay: 0.1,
+            duration: 0.45,
+          }}
+          className="mb-3 inline-flex items-center gap-2 rounded-full border border-cyan-300/20 bg-white/10 px-3 py-1.5 text-[11px] font-bold text-cyan-200 shadow-sm backdrop-blur-md"
+        >
+
+          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-cyan-400/15">
+            <Award className="h-3 w-3 text-cyan-300" />
+          </span>
+
+          Recognition & Excellence
+
+        </motion.div>
+
+        {/* =================================================
+            HEADING
+        ================================================= */}
+
+        <h1 className="max-w-xl text-3xl font-extrabold leading-[1.06] tracking-tight text-white sm:text-4xl lg:text-[43px]">
+
+          Excellence That Inspires
+
+          <span className="mt-1 block bg-gradient-to-r from-cyan-300 via-white to-blue-300 bg-clip-text text-transparent">
+            Trust & Recognition
+          </span>
+
+        </h1>
+
+        {/* =================================================
+            DESCRIPTION
+        ================================================= */}
+
+        <p className="mt-3 max-w-lg text-sm leading-5.5 text-slate-300 sm:text-[15px]">
+          Our commitment to clinical excellence, compassionate patient care
+          and continuous innovation continues to earn recognition across
+          healthcare excellence and professional standards.
+        </p>
+
+        {/* =================================================
+            BUTTONS
+        ================================================= */}
+
+        <div className="mt-5 flex flex-col gap-2 sm:flex-row">
+
+          {/* Primary */}
+
+          <Link
+            href="#awards-achievements"
+            className="group inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-400 px-4 py-2.5 text-xs font-bold text-slate-950 shadow-lg shadow-cyan-500/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-cyan-300"
+          >
+            Explore Achievements
+
+            <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+          </Link>
+
+          {/* Secondary */}
+
+          <Link
+            href="#recognition-highlights"
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/20 bg-white/10 px-4 py-2.5 text-xs font-bold text-white shadow-lg backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/15"
+          >
+            Recognition Highlights
+
+            <Trophy className="h-4 w-4 text-cyan-300" />
+          </Link>
+
+        </div>
+
+        {/* =================================================
+            STATS
+        ================================================= */}
+
+        <div className="mt-5 grid max-w-xl grid-cols-3 border-t border-white/10 pt-4">
+
+          {/* Stat 1 */}
+
+          <div className="pr-3">
+
+            <p className="text-xl font-extrabold text-white sm:text-2xl">
+              10+
+            </p>
+
+            <p className="mt-0.5 text-[10px] font-medium leading-4 text-slate-400 sm:text-[11px]">
+              Healthcare Recognitions
+            </p>
+
+          </div>
+
+          {/* Stat 2 */}
+
+          <div className="border-l border-white/10 px-3">
+
+            <p className="text-xl font-extrabold text-white sm:text-2xl">
+              5+
+            </p>
+
+            <p className="mt-0.5 text-[10px] font-medium leading-4 text-slate-400 sm:text-[11px]">
+              Excellence Awards
+            </p>
+
+          </div>
+
+          {/* Stat 3 */}
+
+          <div className="border-l border-white/10 pl-3">
+
+            <p className="text-xl font-extrabold text-white sm:text-2xl">
+              24/7
+            </p>
+
+            <p className="mt-0.5 text-[10px] font-medium leading-4 text-slate-400 sm:text-[11px]">
+              Patient-Centered Care
+            </p>
+
+          </div>
+
+        </div>
+
+        {/* =================================================
+            TRUST INDICATOR
+        ================================================= */}
+
+        <div className="mt-4 flex items-center gap-2 text-[10px] font-semibold text-slate-400 sm:text-xs">
+
+          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-400/10">
+            <CheckCircle2 className="h-3 w-3 text-emerald-300" />
+          </span>
+
+          Recognised for healthcare excellence & patient care
+
+        </div>
+
+      </motion.div>
+
+      {/* =====================================================
+          RIGHT IMAGE SLIDER
+      ===================================================== */}
+
+      <motion.div
+        initial={{
+          opacity: 0,
+          x: 25,
+          scale: 0.96,
+        }}
+        animate={{
+          opacity: 1,
+          x: 0,
+          scale: 1,
+        }}
+        transition={{
+          duration: 0.7,
+          delay: 0.1,
+          ease: [0.22, 1, 0.36, 1],
+        }}
+        className="relative mx-auto flex h-[390px] w-full max-w-2xl items-center justify-center sm:h-[430px] lg:h-[450px]"
+      >
+
+        {/* =================================================
+            BACK GLOW
+        ================================================= */}
+
+        <div
+          aria-hidden="true"
+          className="absolute left-1/2 top-1/2 h-[310px] w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-300/10 blur-3xl"
+        />
+
+        <div
+          aria-hidden="true"
+          className="absolute left-1/2 top-1/2 h-[230px] w-[230px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-400/10 blur-3xl"
+        />
+
+        {/* =================================================
+            SLIDER
+        ================================================= */}
+
+        <div className="relative flex h-full w-full items-center justify-center [perspective:1400px]">
+
+          {awardSlides.map((slide, index) => {
+
+            const position =
+              (index - activeSlide + awardSlides.length) %
+              awardSlides.length;
+
+            let style = {
+              transform:
+                "translateX(0px) translateY(0px) scale(1) rotateY(0deg)",
+              zIndex: 30,
+              opacity: 1,
+              filter: "brightness(1)",
+            };
+
+            /* =============================================
+               ACTIVE CENTER
+            ============================================= */
+
+            if (position === 0) {
+
+              style = {
+                transform:
+                  "translateX(0px) translateY(-8px) scale(1.08) rotateY(0deg)",
+                zIndex: 60,
+                opacity: 1,
+                filter: "brightness(1.08)",
+              };
+
+            }
+
+            /* =============================================
+               RIGHT CARD
+            ============================================= */
+
+            else if (position === 1) {
+
+              style = {
+                transform:
+                  "translateX(165px) translateY(12px) scale(0.88) rotateY(-10deg)",
+                zIndex: 40,
+                opacity: 0.9,
+                filter: "brightness(0.82)",
+              };
+
+            }
+
+            /* =============================================
+               RIGHT BACK CARD
+            ============================================= */
+
+            else if (position === 2) {
+
+              style = {
+                transform:
+                  "translateX(280px) translateY(25px) scale(0.72) rotateY(-14deg)",
+                zIndex: 20,
+                opacity: 0.55,
+                filter: "brightness(0.68)",
+              };
+
+            }
+
+            /* =============================================
+               LEFT CARD
+            ============================================= */
+
+            else if (
+              position === awardSlides.length - 1
+            ) {
+
+              style = {
+                transform:
+                  "translateX(-165px) translateY(12px) scale(0.88) rotateY(10deg)",
+                zIndex: 40,
+                opacity: 0.9,
+                filter: "brightness(0.82)",
+              };
+
+            }
+
+            /* =============================================
+               LEFT BACK CARD
+            ============================================= */
+
+            else if (
+              position === awardSlides.length - 2
+            ) {
+
+              style = {
+                transform:
+                  "translateX(-280px) translateY(25px) scale(0.72) rotateY(14deg)",
+                zIndex: 20,
+                opacity: 0.55,
+                filter: "brightness(0.68)",
+              };
+
+            }
+
+            /* =============================================
+               HIDDEN
+            ============================================= */
+
+            else {
+
+              style = {
+                transform:
+                  "translateX(0px) translateY(30px) scale(0.55)",
+                zIndex: 0,
+                opacity: 0,
+                filter: "brightness(0.5)",
+              };
+
+            }
+
+            return (
+
+              <motion.div
+                key={index}
+                animate={style}
+                transition={{
+                  duration: 0.85,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className={`
+                  absolute
+                  h-[325px]
+                  w-[210px]
+                  overflow-hidden
+                  rounded-[25px]
+                  bg-slate-900
+                  sm:h-[365px]
+                  sm:w-[235px]
+
+                  ${
+                    position === 0
+                      ? "border-2 border-cyan-300/70 shadow-[0_25px_70px_rgba(34,211,238,0.28)]"
+                      : "border border-white/15 shadow-2xl"
+                  }
+                `}
+                style={{
+                  transformStyle: "preserve-3d",
+                }}
+              >
+
+                {/* =========================================
+                    IMAGE
+                ========================================= */}
+
+                <img
+                  src={slide.image}
+                  alt={slide.title}
+                  className="h-full w-full object-cover"
+                  loading={
+                    index === activeSlide
+                      ? "eager"
+                      : "lazy"
+                  }
+                  decoding="async"
+                />
+
+                {/* =========================================
+                    IMAGE GRADIENT
+                ========================================= */}
+
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/20 to-transparent" />
+
+                {/* =========================================
+                    ACTIVE CARD GLOW
+                ========================================= */}
+
+                {position === 0 && (
+                  <>
+                    <div className="absolute inset-x-8 top-0 h-24 rounded-full bg-cyan-300/20 blur-2xl" />
+
+                    <div className="absolute inset-0 rounded-[25px] border-2 border-cyan-300/50" />
+
+                    <div className="absolute inset-[5px] rounded-[20px] border border-white/20" />
+                  </>
+                )}
+
+                {/* =========================================
+                    CARD CONTENT
+                ========================================= */}
+
+                <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
+
+                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-cyan-300 sm:text-xs">
+                    {slide.subtitle}
+                  </p>
+
+                  <h3 className="mt-1.5 text-base font-extrabold leading-tight text-white sm:text-xl">
+                    {slide.title}
+                  </h3>
+
+                  {position === 0 && (
+                    <div className="mt-3 flex items-center gap-2">
+
+                      <span className="h-1.5 w-1.5 rounded-full bg-cyan-300 shadow-[0_0_8px_rgba(103,232,249,0.8)]" />
+
+                      <span className="text-[10px] font-medium text-slate-300 sm:text-xs">
+                        Award & Recognition
+                      </span>
+
+                    </div>
+                  )}
+
+                </div>
+
+                {/* =========================================
+                    TOP SHINE
+                ========================================= */}
+
+                {position === 0 && (
+                  <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-white/15 to-transparent" />
+                )}
+
+              </motion.div>
+
+            );
+          })}
+
+          {/* =================================================
+              PREVIOUS BUTTON
+          ================================================= */}
+
+          <button
+            type="button"
+            onClick={prevSlide}
+            aria-label="Previous award"
+            className="
+              absolute
+              left-0
+              top-1/2
+              z-[80]
+              flex
+              h-10
+              w-10
+              -translate-y-1/2
+              items-center
+              justify-center
+              rounded-full
+              border
+              border-white/20
+              bg-slate-950/65
+              text-white
+              shadow-xl
+              backdrop-blur-xl
+              transition-all
+              duration-300
+              hover:scale-110
+              hover:border-cyan-300/50
+              hover:bg-cyan-500
+              sm:-left-1
+            "
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+
+          {/* =================================================
+              NEXT BUTTON
+          ================================================= */}
+
+          <button
+            type="button"
+            onClick={nextSlide}
+            aria-label="Next award"
+            className="
+              absolute
+              right-0
+              top-1/2
+              z-[80]
+              flex
+              h-10
+              w-10
+              -translate-y-1/2
+              items-center
+              justify-center
+              rounded-full
+              border
+              border-white/20
+              bg-slate-950/65
+              text-white
+              shadow-xl
+              backdrop-blur-xl
+              transition-all
+              duration-300
+              hover:scale-110
+              hover:border-cyan-300/50
+              hover:bg-cyan-500
+              sm:-right-1
+            "
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
+
+        </div>
+
+        {/* =================================================
+            DOTS
+        ================================================= */}
+
+        <div className="absolute bottom-0 left-1/2 z-[90] flex -translate-x-1/2 items-center gap-2">
+
+          {awardSlides.map((_, index) => (
+
+            <button
+              key={index}
+              type="button"
+              onClick={() => setActiveSlide(index)}
+              aria-label={`Go to award ${index + 1}`}
+              className={`
+                h-1.5
+                rounded-full
+                transition-all
+                duration-300
+
+                ${
+                  activeSlide === index
+                    ? "w-7 bg-cyan-300 shadow-[0_0_12px_rgba(103,232,249,0.7)]"
+                    : "w-1.5 bg-white/30 hover:bg-white/60"
+                }
+              `}
+            />
+
+          ))}
+
+        </div>
+
+      </motion.div>
+
+    </div>
+  </div>
+
+  {/* =======================================================
+      BOTTOM WAVE
+  ======================================================= */}
+
+  <div className="absolute bottom-0 left-0 right-0">
+
+    <svg
+      viewBox="0 0 1440 60"
+      className="block h-auto w-full"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+
+      <path
+        fill="white"
+        d="M0,40 C240,65 420,8 720,30 C1020,52 1190,8 1440,34 L1440,60 L0,60 Z"
+      />
+
+    </svg>
+
+  </div>
+
+</section>

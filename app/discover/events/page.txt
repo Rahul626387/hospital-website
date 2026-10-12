@@ -1,0 +1,833 @@
+
+"use client";
+
+import React, { useMemo, useState } from "react";
+import Link from "next/link";
+import useSWR from "swr";
+import moment from "moment";
+import { motion, AnimatePresence } from "framer-motion";
+import ApiService from "../../src/services/Apiservices";
+import {
+  ArrowUpRight,
+  ArrowRight,
+  CalendarDays,
+  Clock3,
+  MapPin,
+  Search,
+  HeartPulse,
+  Stethoscope,
+  ShieldCheck,
+  Sparkles,
+  Activity,
+  X,
+  RefreshCw,
+  ChevronDown,
+  MoveUpRight,
+} from "lucide-react";
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+const formatDate = (date) => {
+  if (!date || !moment(date).isValid()) return "Date to be announced";
+  return moment.utc(date).format("DD MMM YYYY");
+};
+
+const getDateParts = (date) => {
+  if (!date || !moment(date).isValid()) {
+    return { day: "--", month: "TBA" };
+  }
+
+  return {
+    day: moment.utc(date).format("DD"),
+    month: moment.utc(date).format("MMM"),
+  };
+};
+
+const isFeatured = (event) =>
+  event.featured === 1 ||
+  event.featured === "1" ||
+  event.featured === true;
+
+const getEventDate = (event) => event.event_date || event.date || null;
+
+const getEventDescription = (event) =>
+  event.short_description ||
+  event.shortDescription ||
+  event.description ||
+  "Discover our healthcare initiatives and community wellness programs.";
+
+const getEventStatus = (event) => {
+  if (event.status) return String(event.status).toLowerCase();
+
+  const date = getEventDate(event);
+  if (!date) return "upcoming";
+
+  return moment.utc(date).isBefore(moment.utc(), "day")
+    ? "completed"
+    : "upcoming";
+};
+
+/* =========================================================
+   IMAGE WITH FALLBACK
+========================================================= */
+
+function EventImage({ event, className = "" }) {
+  const [failed, setFailed] = useState(false);
+
+  return (
+    <div className={`relative overflow-hidden bg-[#DCEDEF] ${className}`}>
+      {event.image && !failed ? (
+        <img
+          src={event.image}
+          alt={event.title || "Hospital event"}
+          loading="lazy"
+          onError={() => setFailed(true)}
+          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
+        />
+      ) : (
+        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#E4F4F4] to-[#D5E7F0]">
+          <HeartPulse size={48} strokeWidth={1.2} className="text-[#087F8C]" />
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* =========================================================
+   EVENT CARD
+========================================================= */
+
+function EventCard({ event, index }) {
+  const date = getDateParts(getEventDate(event));
+  const status = getEventStatus(event);
+  const href = `/events/${event.slug || event.id}`;
+
+  return (
+    <motion.article
+      layout
+      initial={{ opacity: 0, y: 22 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 14 }}
+      transition={{
+        duration: 0.4,
+        delay: Math.min(index * 0.055, 0.22),
+      }}
+      className="group relative flex h-full flex-col overflow-hidden rounded-[22px] border border-[#E3E9EC] bg-white transition-all duration-300 hover:-translate-y-1.5 hover:border-[#B6DADC] hover:shadow-[0_22px_50px_-24px_rgba(5,65,83,0.28)]"
+    >
+      {/* Image */}
+      <div className="relative">
+        <Link href={href} className="block">
+          <EventImage event={event} className="h-[215px] sm:h-[225px]" />
+        </Link>
+
+        <div className="absolute inset-0 bg-gradient-to-t from-[#082E40]/65 via-transparent to-[#082E40]/5 pointer-events-none" />
+
+        {/* Category */}
+        <div className="absolute left-4 top-4">
+          <span className="inline-flex rounded-full border border-white/40 bg-white/90 px-3 py-1.5 text-[11px] font-bold tracking-wide text-[#07566B] shadow-sm backdrop-blur-md">
+            {event.category || "Hospital Event"}
+          </span>
+        </div>
+
+        {/* Date badge */}
+        <div className="absolute bottom-4 left-4 flex min-w-[62px] flex-col items-center rounded-xl border border-white/70 bg-white px-3 py-2 shadow-lg">
+          <span className="text-[24px] font-bold leading-7 tracking-tight text-[#073B53]">
+            {date.day}
+          </span>
+          <span className="mt-0.5 text-[10px] font-extrabold uppercase tracking-[0.15em] text-[#07838D]">
+            {date.month}
+          </span>
+        </div>
+
+        {isFeatured(event) && (
+          <div className="absolute bottom-5 right-4 flex items-center gap-1.5 rounded-full bg-[#F7D98A] px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wider text-[#624710]">
+            <Sparkles size={12} />
+            Featured
+          </div>
+        )}
+      </div>
+
+      {/* Content */}
+      <div className="flex flex-1 flex-col px-5 pb-5 pt-5 sm:px-6">
+        <div className="mb-2 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.13em] text-[#08818A]">
+          <span className="h-1.5 w-1.5 rounded-full bg-[#0B9AA2]" />
+          {formatDate(getEventDate(event))}
+        </div>
+
+        <Link href={href}>
+          <h3 className="line-clamp-2 min-h-[56px] text-[18px] font-bold leading-7 tracking-[-0.025em] text-[#183744] transition-colors duration-200 group-hover:text-[#07818A]">
+            {event.title || "Hospital Event"}
+          </h3>
+        </Link>
+
+        <p className="mt-2 line-clamp-2 min-h-[44px] text-[13px] leading-[22px] text-slate-500">
+          {getEventDescription(event)}
+        </p>
+
+        <div className="my-4 h-px bg-gradient-to-r from-[#D9E9EA] via-slate-100 to-transparent" />
+
+        <div className="space-y-3">
+          <div className="flex items-center gap-3 text-[12px] text-slate-600">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#EDF7F7] text-[#087F8C]">
+              <Clock3 size={15} />
+            </span>
+            <span className="line-clamp-1">
+              {event.event_time || event.time || "Time to be announced"}
+            </span>
+          </div>
+
+          <div className="flex items-start gap-3 text-[12px] text-slate-600">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#EDF7F7] text-[#087F8C]">
+              <MapPin size={15} />
+            </span>
+            <span className="line-clamp-2 pt-1.5 leading-5">
+              {event.location || "Hospital premises"}
+            </span>
+          </div>
+        </div>
+
+        <div className="mt-auto pt-5">
+          <Link
+            href={href}
+            className="group/link flex items-center justify-between rounded-xl bg-[#F0F7F8] px-4 py-3.5 text-[13px] font-bold text-[#07566B] transition-all duration-300 hover:bg-[#07566B] hover:text-white"
+          >
+            <span>Explore Event</span>
+            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-white text-[#07566B] transition-transform duration-300 group-hover/link:translate-x-0.5 group-hover/link:bg-white/15 group-hover/link:text-white">
+              <ArrowUpRight size={16} />
+            </span>
+          </Link>
+        </div>
+      </div>
+    </motion.article>
+  );
+}
+
+/* =========================================================
+   LOADING CARD
+========================================================= */
+
+function LoadingCard() {
+  return (
+    <div className="overflow-hidden rounded-[22px] border border-slate-200 bg-white">
+      <div className="h-[215px] animate-pulse bg-slate-100" />
+      <div className="space-y-4 p-5">
+        <div className="h-3 w-24 animate-pulse rounded bg-slate-100" />
+        <div className="h-5 w-4/5 animate-pulse rounded bg-slate-100" />
+        <div className="h-3 w-full animate-pulse rounded bg-slate-100" />
+        <div className="h-3 w-2/3 animate-pulse rounded bg-slate-100" />
+        <div className="h-10 animate-pulse rounded-xl bg-slate-100" />
+      </div>
+    </div>
+  );
+}
+
+/* =========================================================
+   MAIN PAGE
+========================================================= */
+
+export default function EventsPage() {
+  const [search, setSearch] = useState("");
+  const [activeCategory, setActiveCategory] = useState("All Events");
+  const [activeStatus, setActiveStatus] = useState("all");
+
+  const { data, error, isLoading, mutate } = useSWR(
+    "events",
+    ApiService.get
+  );
+
+  const events = Array.isArray(data?.data) ? data.data : [];
+
+  const categories = useMemo(() => {
+    return [
+      "All Events",
+      ...new Set(events.map((event) => event.category).filter(Boolean)),
+    ];
+  }, [events]);
+
+  const featuredEvent = useMemo(
+    () => events.find(isFeatured) || events[0] || null,
+    [events]
+  );
+
+  const filteredEvents = useMemo(() => {
+    const query = search.trim().toLowerCase();
+
+    return events
+      .filter((event) => {
+        const text = [
+          event.title,
+          event.category,
+          event.location,
+          event.short_description,
+          event.description,
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
+
+        const matchesSearch = !query || text.includes(query);
+
+        const matchesCategory =
+          activeCategory === "All Events" ||
+          event.category === activeCategory;
+
+        const status = getEventStatus(event);
+
+        const matchesStatus =
+          activeStatus === "all" ||
+          (activeStatus === "upcoming" &&
+            !["completed", "past", "cancelled"].includes(status)) ||
+          (activeStatus === "completed" &&
+            ["completed", "past"].includes(status));
+
+        return matchesSearch && matchesCategory && matchesStatus;
+      })
+      .sort((a, b) => {
+        const dateA = getEventDate(a)
+          ? moment.utc(getEventDate(a)).valueOf()
+          : Number.MAX_SAFE_INTEGER;
+
+        const dateB = getEventDate(b)
+          ? moment.utc(getEventDate(b)).valueOf()
+          : Number.MAX_SAFE_INTEGER;
+
+        return dateA - dateB;
+      });
+  }, [events, search, activeCategory, activeStatus]);
+
+  const clearFilters = () => {
+    setSearch("");
+    setActiveCategory("All Events");
+    setActiveStatus("all");
+  };
+
+  return (
+    <main className="min-h-screen overflow-hidden bg-[#F7F9FA] text-[#183744]">
+
+      {/* =====================================================
+          PREMIUM HERO
+      ===================================================== */}
+
+      <section className="relative isolate overflow-hidden bg-[#062F46] text-white">
+        {/* Ambient background */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div className="absolute -right-32 -top-52 h-[550px] w-[550px] rounded-full border border-white/[0.07]" />
+          <div className="absolute -right-20 -top-40 h-[400px] w-[400px] rounded-full border border-white/[0.08]" />
+          <div className="absolute -bottom-48 left-[22%] h-[380px] w-[580px] rounded-full bg-[#087F8C]/20 blur-[90px]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_10%_10%,rgba(21,145,157,0.18),transparent_45%)]" />
+        </div>
+
+        <div className="relative mx-auto grid max-w-6xl items-center gap-8 px-4 py-10 sm:px-6 sm:py-14 lg:grid-cols-[1.08fr_0.92fr] lg:gap-12 lg:py-[68px]">
+          <motion.div
+            initial={{ opacity: 0, y: 22 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, ease: "easeOut" }}
+          >
+            <div className="mb-5 inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/[0.07] px-3.5 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-[#B9E7E8] backdrop-blur-sm">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#70D7CF] shadow-[0_0_12px_rgba(112,215,207,0.8)]" />
+              Baderia Metroprime Hospital
+            </div>
+
+            <h1 className="max-w-[580px] text-[34px] font-semibold leading-[1.12] tracking-[-0.045em] sm:text-[44px] lg:text-[53px]">
+              Bringing Health
+              <br />
+              <span className="font-light italic text-[#8DDEDA]">
+                & Community
+              </span>{" "}
+              Together.
+            </h1>
+
+            <p className="mt-5 max-w-[460px] text-[14px] leading-7 text-slate-300 sm:text-[15px]">
+              Discover our health camps, medical awareness programs and
+              community initiatives — created to bring better healthcare
+              closer to everyone.
+            </p>
+
+            <div className="mt-7 flex flex-wrap items-center gap-3">
+              <a
+                href="#events-list"
+                className="group inline-flex items-center gap-3 rounded-xl bg-[#C3F0E9] px-5 py-3.5 text-[13px] font-bold text-[#073B4C] transition duration-300 hover:bg-white"
+              >
+                Discover Events
+                <ArrowRight
+                  size={16}
+                  className="transition-transform group-hover:translate-x-1"
+                />
+              </a>
+
+              <div className="flex items-center gap-2.5 px-2 py-2 text-[12px] text-slate-300">
+                <ShieldCheck size={17} className="text-[#8DDEDA]" />
+                Compassionate care, always
+              </div>
+            </div>
+
+            <div className="mt-8 flex flex-wrap gap-x-7 gap-y-3 border-t border-white/10 pt-5">
+              <div className="flex items-center gap-2 text-[11px] text-slate-300">
+                <HeartPulse size={15} className="text-[#8DDEDA]" />
+                Community Wellness
+              </div>
+              <div className="flex items-center gap-2 text-[11px] text-slate-300">
+                <Stethoscope size={15} className="text-[#8DDEDA]" />
+                Medical Expertise
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Visual feature panel */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96, x: 16 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            transition={{ duration: 0.7, delay: 0.12 }}
+            className="relative mx-auto w-full max-w-[460px] lg:ml-auto"
+          >
+            <div className="relative overflow-hidden rounded-[28px] border border-white/15 bg-white/[0.06] p-3 shadow-2xl shadow-black/20 backdrop-blur-sm">
+              <div className="relative h-[250px] overflow-hidden rounded-[21px] sm:h-[290px]">
+                {featuredEvent?.image ? (
+                  <img
+                    src={featuredEvent.image}
+                    alt={featuredEvent.title || "Hospital event"}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <div className="flex h-full items-center justify-center bg-gradient-to-br from-[#0B6678] to-[#0B344B]">
+                    <HeartPulse
+                      size={82}
+                      strokeWidth={1}
+                      className="text-[#B9E7E8]"
+                    />
+                  </div>
+                )}
+
+                <div className="absolute inset-0 bg-gradient-to-t from-[#041F30]/95 via-[#041F30]/15 to-transparent" />
+
+                <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full border border-white/20 bg-[#062F46]/50 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-white backdrop-blur-md">
+                  <Sparkles size={12} className="text-[#B9E7E8]" />
+                  In Focus
+                </div>
+
+                <div className="absolute bottom-5 left-5 right-5">
+                  <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.2em] text-[#9AE2DC]">
+                    {featuredEvent?.category || "Healthcare Initiatives"}
+                  </p>
+
+                  <h2 className="max-w-[350px] text-2xl font-semibold leading-tight tracking-[-0.03em] text-white sm:text-[27px]">
+                    {featuredEvent?.title || "Care That Reaches Everyone"}
+                  </h2>
+
+                  <div className="mt-4 flex items-center justify-between gap-3 border-t border-white/20 pt-4">
+                    <div className="flex items-center gap-2 text-xs text-slate-200">
+                      <CalendarDays size={15} className="text-[#9AE2DC]" />
+                      {featuredEvent
+                        ? formatDate(getEventDate(featuredEvent))
+                        : "Community health programs"}
+                    </div>
+
+                    {featuredEvent && (
+                      <Link
+                        href={`/events/${featuredEvent.slug || featuredEvent.id}`}
+                        aria-label="Explore featured event"
+                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#C3F0E9] text-[#073B4C] transition hover:rotate-45 hover:bg-white"
+                      >
+                        <ArrowUpRight size={18} />
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 p-2 pt-4">
+                <div className="flex items-center gap-3 rounded-2xl bg-white/[0.06] p-3.5">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#8DDEDA]/10 text-[#8DDEDA]">
+                    <CalendarDays size={19} />
+                  </div>
+                  <div>
+                    <p className="text-xl font-semibold leading-none">
+                      {events.length}
+                    </p>
+                    <p className="mt-1.5 text-[10px] text-slate-300">
+                      Listed events
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 rounded-2xl bg-white/[0.06] p-3.5">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#8DDEDA]/10 text-[#8DDEDA]">
+                    <Activity size={19} />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold">Wellness</p>
+                    <p className="mt-1.5 text-[10px] text-slate-300">
+                      For every community
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="absolute -bottom-3 -right-2 -z-10 h-36 w-36 rounded-full bg-[#12A4A5]/20 blur-3xl" />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* =====================================================
+          MAIN EVENTS SECTION
+      ===================================================== */}
+
+      <section
+        id="events-list"
+        className="mx-auto max-w-6xl scroll-mt-6 px-4 py-12 sm:px-6 sm:py-14"
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.15 }}
+          transition={{ duration: 0.45 }}
+          className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end"
+        >
+          <div>
+            <div className="flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#07818A]">
+              <span className="h-px w-7 bg-[#07818A]" />
+              Our Initiatives
+            </div>
+
+            <h2 className="mt-3 text-[29px] font-semibold tracking-[-0.04em] text-[#153847] sm:text-[35px]">
+              Moments That Matter<span className="text-[#0C9298]">.</span>
+            </h2>
+
+            <p className="mt-2 max-w-lg text-[13px] leading-6 text-slate-500 sm:text-sm">
+              From preventive health camps to awareness programs, explore
+              how we are making a difference in our community.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3 self-start rounded-2xl border border-[#E2E9EB] bg-white px-4 py-3 shadow-[0_4px_14px_rgba(10,50,65,0.03)] md:self-auto">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EAF6F5] text-[#07818A]">
+              <CalendarDays size={19} />
+            </div>
+            <div>
+              <p className="text-xl font-bold leading-none text-[#153847]">
+                {events.length.toString().padStart(2, "0")}
+              </p>
+              <p className="mt-1 text-[10px] font-medium text-slate-500">
+                Total events
+              </p>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* FEATURED EVENT BANNER */}
+
+        {!isLoading && !error && featuredEvent && (
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.12 }}
+            transition={{ duration: 0.5 }}
+            className="group relative mb-10 overflow-hidden rounded-[25px] border border-[#D9E8EA] bg-white shadow-[0_8px_30px_rgba(7,58,75,0.045)]"
+          >
+            <div className="grid lg:grid-cols-[0.88fr_1.12fr]">
+              <div className="relative min-h-[235px] overflow-hidden sm:min-h-[280px]">
+                <EventImage
+                  event={featuredEvent}
+                  className="absolute inset-0 h-full w-full"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#052F46]/50 to-transparent" />
+
+                <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full border border-white/40 bg-white/90 px-3.5 py-2 text-[10px] font-extrabold uppercase tracking-[0.12em] text-[#07566B] shadow-sm backdrop-blur">
+                  <Sparkles size={13} />
+                  Editor&apos;s Highlight
+                </div>
+              </div>
+
+              <div className="flex flex-col justify-center p-5 sm:p-7 lg:p-9">
+                <div className="mb-4 flex flex-wrap items-center gap-2.5">
+                  <span className="rounded-full bg-[#E8F5F4] px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wider text-[#087F8C]">
+                    {featuredEvent.category || "Hospital Event"}
+                  </span>
+                  <span className="text-xs text-slate-400">
+                    {formatDate(getEventDate(featuredEvent))}
+                  </span>
+                </div>
+
+                <h3 className="max-w-xl text-[24px] font-semibold leading-tight tracking-[-0.035em] text-[#153847] sm:text-[30px]">
+                  {featuredEvent.title || "Featured Hospital Event"}
+                </h3>
+
+                <p className="mt-3 max-w-xl text-[13px] leading-7 text-slate-500 sm:text-sm">
+                  {getEventDescription(featuredEvent)}
+                </p>
+
+                <div className="mt-5 flex flex-wrap gap-x-6 gap-y-3">
+                  <div className="flex items-center gap-2 text-xs text-slate-600">
+                    <Clock3 size={15} className="text-[#07818A]" />
+                    {featuredEvent.event_time ||
+                      featuredEvent.time ||
+                      "Time to be announced"}
+                  </div>
+
+                  <div className="flex items-center gap-2 text-xs text-slate-600">
+                    <MapPin size={15} className="text-[#07818A]" />
+                    <span className="line-clamp-1 max-w-[250px]">
+                      {featuredEvent.location || "Hospital premises"}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="mt-6">
+                  <Link
+                    href={`/events/${featuredEvent.slug || featuredEvent.id}`}
+                    className="group/button inline-flex items-center gap-3 rounded-xl bg-[#073D53] px-5 py-3.5 text-[12px] font-bold text-white transition-all duration-300 hover:bg-[#087F8C]"
+                  >
+                    Discover This Event
+                    <ArrowRight
+                      size={15}
+                      className="transition-transform group-hover/button:translate-x-1"
+                    />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* SEARCH & FILTERS */}
+
+        <div className="mb-7 rounded-[20px] border border-[#E1E9EB] bg-white p-3 shadow-[0_6px_22px_rgba(10,50,65,0.035)] sm:p-4">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
+            <div className="relative flex-1">
+              <Search
+                size={17}
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-[#07818A]"
+              />
+
+              <input
+                type="search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search by event, category or location..."
+                aria-label="Search events"
+                className="h-12 w-full rounded-xl border border-transparent bg-[#F5F8F9] pl-11 pr-10 text-[13px] text-[#183744] outline-none transition-all placeholder:text-slate-400 focus:border-[#9FD4D7] focus:bg-white focus:ring-4 focus:ring-[#07818A]/[0.07]"
+              />
+
+              {search && (
+                <button
+                  type="button"
+                  aria-label="Clear search"
+                  onClick={() => setSearch("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-1.5 text-slate-400 hover:bg-slate-100"
+                >
+                  <X size={15} />
+                </button>
+              )}
+            </div>
+
+            <div className="flex flex-wrap gap-1.5 rounded-xl bg-[#F5F8F9] p-1.5">
+              {[
+                { label: "All Events", value: "all" },
+                { label: "Upcoming", value: "upcoming" },
+                { label: "Completed", value: "completed" },
+              ].map((item) => (
+                <button
+                  key={item.value}
+                  type="button"
+                  onClick={() => setActiveStatus(item.value)}
+                  className={`rounded-lg px-3.5 py-2.5 text-[11px] font-bold transition-all duration-200 ${
+                    activeStatus === item.value
+                      ? "bg-[#073D53] text-white shadow-sm"
+                      : "text-slate-500 hover:bg-white hover:text-[#07566B]"
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {categories.length > 1 && (
+            <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-[#EDF1F2] px-1 pt-3">
+              <span className="mr-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                Categories
+              </span>
+
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  type="button"
+                  onClick={() => setActiveCategory(category)}
+                  className={`rounded-full border px-3 py-1.5 text-[11px] font-semibold transition-all ${
+                    activeCategory === category
+                      ? "border-[#B8DEDF] bg-[#EAF6F5] text-[#07566B]"
+                      : "border-transparent bg-[#F6F8F9] text-slate-500 hover:border-slate-200 hover:bg-white"
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* GRID HEADING */}
+
+        <div className="mb-5 flex items-end justify-between gap-3">
+          <div>
+            <h3 className="text-[20px] font-semibold tracking-[-0.025em] text-[#153847]">
+              {activeStatus === "upcoming"
+                ? "Upcoming Events"
+                : activeStatus === "completed"
+                  ? "Past Events"
+                  : "All Events"}
+            </h3>
+
+            <p className="mt-1 text-[11px] text-slate-500">
+              {isLoading
+                ? "Finding the latest events..."
+                : `${filteredEvents.length} ${
+                    filteredEvents.length === 1 ? "event" : "events"
+                  } to explore`}
+            </p>
+          </div>
+
+          {(search ||
+            activeCategory !== "All Events" ||
+            activeStatus !== "all") && (
+            <button
+              type="button"
+              onClick={clearFilters}
+              className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-[11px] font-bold text-[#087F8C] transition hover:bg-[#EAF6F5]"
+            >
+              <X size={13} />
+              Reset
+            </button>
+          )}
+        </div>
+
+        {/* LOADING STATE */}
+
+        {isLoading && (
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <LoadingCard key={index} />
+            ))}
+          </div>
+        )}
+
+        {/* ERROR STATE */}
+
+        {error && !isLoading && (
+          <div className="rounded-[22px] border border-rose-100 bg-white px-6 py-12 text-center shadow-sm">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-rose-50 text-rose-600">
+              <RefreshCw size={24} />
+            </div>
+
+            <h3 className="mt-4 text-lg font-bold text-[#153847]">
+              Events could not be loaded
+            </h3>
+
+            <p className="mx-auto mt-2 max-w-lg text-sm leading-6 text-slate-500">
+              {error.message || "Please try again in a moment."}
+            </p>
+
+            <button
+              type="button"
+              onClick={() => mutate()}
+              className="mt-5 inline-flex items-center gap-2 rounded-xl bg-[#073D53] px-5 py-3 text-xs font-bold text-white transition hover:bg-[#087F8C]"
+            >
+              <RefreshCw size={15} />
+              Try Again
+            </button>
+          </div>
+        )}
+
+        {/* EVENTS GRID */}
+
+        {!isLoading && !error && filteredEvents.length > 0 && (
+          <motion.div
+            layout
+            className="grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3"
+          >
+            <AnimatePresence mode="popLayout">
+              {filteredEvents.map((event, index) => (
+                <EventCard
+                  key={event.id || event.slug || `${event.title}-${index}`}
+                  event={event}
+                  index={index}
+                />
+              ))}
+            </AnimatePresence>
+          </motion.div>
+        )}
+
+        {/* EMPTY STATE */}
+
+        {!isLoading && !error && filteredEvents.length === 0 && (
+          <div className="rounded-[22px] border border-dashed border-[#CBDADD] bg-white px-5 py-14 text-center">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#EAF6F5] text-[#087F8C]">
+              <Search size={23} />
+            </div>
+
+            <h3 className="mt-4 text-lg font-bold text-[#153847]">
+              Nothing here just yet
+            </h3>
+
+            <p className="mt-2 text-sm text-slate-500">
+              Try another search or clear your filters to see all events.
+            </p>
+
+            <button
+              type="button"
+              onClick={clearFilters}
+              className="mt-5 inline-flex items-center gap-2 rounded-xl border border-[#D8E5E7] px-4 py-2.5 text-xs font-bold text-[#07566B] transition hover:bg-[#EDF7F7]"
+            >
+              Clear filters
+              <ArrowRight size={14} />
+            </button>
+          </div>
+        )}
+      </section>
+
+      {/* =====================================================
+          PREMIUM CTA
+      ===================================================== */}
+
+      <section className="px-4 pb-12 sm:px-6 sm:pb-16">
+        <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[26px] bg-[#062F46]">
+          <div className="pointer-events-none absolute -right-20 -top-36 h-[330px] w-[330px] rounded-full border border-white/[0.08]" />
+          <div className="pointer-events-none absolute -right-8 -top-24 h-[240px] w-[240px] rounded-full border border-white/[0.08]" />
+          <div className="pointer-events-none absolute -bottom-28 left-[35%] h-56 w-56 rounded-full bg-[#087F8C]/20 blur-3xl" />
+
+          <div className="relative flex flex-col justify-between gap-7 px-6 py-8 sm:px-9 sm:py-10 md:flex-row md:items-center">
+            <div className="max-w-[650px]">
+              <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-[#9AE2DC]">
+                <HeartPulse size={15} />
+                Healthcare With Heart
+              </div>
+
+              <h2 className="text-[25px] font-semibold leading-tight tracking-[-0.035em] text-white sm:text-[32px]">
+                A healthier community starts together.
+              </h2>
+
+              <p className="mt-3 max-w-xl text-[13px] leading-6 text-slate-300">
+                Connect with our team to learn more about our health
+                initiatives, medical programs and upcoming activities.
+              </p>
+            </div>
+
+            <Link
+              href="/contact"
+              className="group inline-flex shrink-0 items-center justify-center gap-3 self-start rounded-xl bg-[#C3F0E9] px-5 py-3.5 text-[12px] font-bold text-[#073B4C] transition duration-300 hover:bg-white md:self-center"
+            >
+              Get In Touch
+              <MoveUpRight
+                size={16}
+                className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              />
+            </Link>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}

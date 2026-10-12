@@ -604,7 +604,7 @@ export default function DoctorsPage() {
             }}
                 className="
                   group relative overflow-hidden rounded-[22px]
-                  bg-[#021F31]
+                  bg-[#fff]
                   shadow-[0_10px_30px_rgba(15,23,42,.10)]
                   transition-all duration-500
                   hover:shadow-[0_22px_45px_rgba(3,47,73,.20)]
@@ -613,13 +613,24 @@ export default function DoctorsPage() {
                 {/* IMAGE */}
                 <div className="relative aspect-[0.82/1] overflow-hidden">
 
-                  <img
-                    // src="assets/images/doctor.png"
+                  {/* <img
+                    // src="assets/images/doctor_01.png"
                     src={doctor.image_url}
                     alt={doctor.name}
                     loading="lazy"
                     className="
                       h-full w-full object-cover
+                      transition duration-700 ease-out
+                      group-hover:scale-105
+                    "
+                  /> */}
+
+                  <img
+                    src={doctor.image_url || "assets/images/doctor_01.png"}
+                    alt={doctor.name}
+                    loading="lazy"
+                    className="
+                      w-full object-cover
                       transition duration-700 ease-out
                       group-hover:scale-105
                     "

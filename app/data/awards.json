@@ -1,0 +1,68 @@
+[
+  {
+    "id": 1,
+    "year": "2025",
+    "title": "Best Multi-Speciality Hospital",
+    "organization": "National Healthcare Excellence Awards",
+    "category": "Hospital Excellence",
+    "description": "Recognized for delivering high-quality multi-speciality healthcare with advanced medical infrastructure and patient-focused care.",
+    "image": "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=1200&q=85",
+    "icon": "Trophy",
+    "featured": true
+  },
+  {
+    "id": 2,
+    "year": "2025",
+    "title": "Excellence in Patient Care",
+    "organization": "Healthcare Leadership Awards",
+    "category": "Patient Care",
+    "description": "Honored for maintaining high standards of compassionate, safe and patient-centric healthcare services.",
+    "image": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=85",
+    "icon": "HeartPulse",
+    "featured": false
+  },
+  {
+    "id": 3,
+    "year": "2024",
+    "title": "Outstanding Clinical Services",
+    "organization": "Indian Healthcare Awards",
+    "category": "Clinical Excellence",
+    "description": "Recognized for excellence in clinical services, advanced treatment capabilities and multidisciplinary medical care.",
+    "image": "https://images.unsplash.com/photo-1538108149393-fbbd81895907?auto=format&fit=crop&w=1200&q=85",
+    "icon": "Medal",
+    "featured": false
+  },
+  {
+    "id": 4,
+    "year": "2024",
+    "title": "Excellence in Emergency Care",
+    "organization": "Healthcare Excellence Forum",
+    "category": "Emergency Care",
+    "description": "Awarded for providing responsive and reliable emergency medical services with a strong focus on patient safety.",
+    "image": "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200&q=85",
+    "icon": "ShieldCheck",
+    "featured": false
+  },
+  {
+    "id": 5,
+    "year": "2023",
+    "title": "Trusted Healthcare Provider",
+    "organization": "India Health & Wellness Awards",
+    "category": "Healthcare",
+    "description": "Recognized as a trusted healthcare provider for quality medical services, experienced professionals and modern facilities.",
+    "image": "https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&w=1200&q=85",
+    "icon": "Award",
+    "featured": false
+  },
+  {
+    "id": 6,
+    "year": "2023",
+    "title": "Excellence in Medical Infrastructure",
+    "organization": "Healthcare Infrastructure Awards",
+    "category": "Infrastructure",
+    "description": "Recognized for developing modern healthcare infrastructure designed around patient comfort, safety and clinical efficiency.",
+    "image": "https://images.unsplash.com/photo-1584982751601-97dcc096659c?auto=format&fit=crop&w=1200&q=85",
+    "icon": "Star",
+    "featured": false
+  }
+]

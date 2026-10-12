@@ -1,5 +1,846 @@
 
 
+// "use client";
+
+// import { useState, useEffect } from "react";
+// import Link from "next/link";
+// import { usePathname } from "next/navigation";
+// import { motion, AnimatePresence } from "framer-motion";
+
+// import {
+//   Menu,
+//   X,
+//   ChevronDown,
+//   ArrowRight,
+//   Stethoscope,
+//   HeartPulse,
+//   Brain,
+//   Bone,
+//   Baby,
+//   Phone,
+//   Clock3,
+//   MapPin,
+//   LogIn,
+//   icons,
+//   Activity,
+//   Eye,
+//   Heart,
+//   Syringe,
+//   Hospital,
+// } from "lucide-react";
+
+// import {
+//   FaFacebookF,
+//   FaInstagram,
+//   FaYoutube,
+// } from "react-icons/fa6";
+// import ApiService from "../src/services/Apiservices";
+// import useSWR from 'swr'
+// import LanguageSwitcher from '../components/LanguageSwitcher'
+// import Image from "next/image";
+
+// const iconMap = {
+//   activity: Activity,
+//   heartpulse: HeartPulse,
+//   stethoscope: Stethoscope,
+//   brain: Brain,
+//   bone: Bone,
+//   baby: Baby,
+//   eye: Eye,
+//   heart: Heart,
+//   syringe: Syringe,
+//   hospital: Hospital,
+// };
+
+// const getDepartmentIcon = (iconName) => {
+//   if (!iconName) return Activity;
+
+//   const key = iconName.toLowerCase().replace(/[\s_-]/g, "");
+
+//   return iconMap[key] || Activity;
+// };
+
+// /* =========================================================
+//    SERVICES
+// ========================================================= */
+
+
+
+// /* =========================================================
+//    NAVIGATION
+// ========================================================= */
+
+// // const navItems = [
+// //   {
+// //     name: "Home",
+// //     href: "/",
+// //   },
+// //   {
+// //     name: "About",
+// //     href: "/about",
+// //   },
+// //   {
+// //     name: "Department",
+// //     href: "/department",
+// //     dropdown: true,
+// //   },
+// //   {
+// //     name: "Doctors",
+// //     href: "/doctors",
+// //   },
+// //   {
+// //     name: "Blogs",
+// //     href: "/blogs",
+// //   },
+ 
+// //   {
+// //     name: "Contact Us",
+// //     href: "/contact",
+// //   },
+// //    {
+// //     name: "Career",
+// //     href: "/career",
+// //   },
+// //   {
+// //     name: "Emergency",
+// //     href: "/emergency",
+// //   },
+// // ];
+
+
+// const navItems = [
+//   {
+//     name: "Home",
+//     href: "/",
+//   },
+//   {
+//     name: "About",
+//     href: "/about",
+//   },
+//   {
+//     name: "Departments",
+//     href: "/department",
+//     dropdown: true,
+//   },
+//   {
+//     name: "Doctors",
+//     href: "/doctors",
+//   },
+//   {
+//     name: "Discover",
+//     href: "#",
+//     dropdown: true,
+//     children: [
+//       {
+//         name: "Events",
+//         href: "/events",
+//       },
+//       {
+//         name: "Awards & Achievements",
+//         href: "/awards",
+//       },
+//       {
+//         name: "Facilities",
+//         href: "/facilities",
+//       },
+//       {
+//         name: "Gallery",
+//         href: "/gallery",
+//       },
+//     ],
+//   },
+//   {
+//     name: "Blogs",
+//     href: "/blogs",
+//   },
+//   {
+//     name: "Career",
+//     href: "/career",
+//   },
+//   {
+//     name: "Contact Us",
+//     href: "/contact",
+//   },
+//   {
+//     name: "Emergency",
+//     href: "/emergency",
+//   },
+// ];
+// /* =========================================================
+//    NAVBAR
+// ========================================================= */
+
+// export default function Navbar() {
+//   const pathname = usePathname();
+
+//   const [isScrolled, setIsScrolled] = useState(false);
+//   const [mobileMenu, setMobileMenu] = useState(false);
+//   const [servicesOpen, setServicesOpen] = useState(false);
+//   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+
+//   /* =======================================================
+//      SCROLL
+//   ======================================================= */
+
+//   useEffect(() => {
+//     const handleScroll = () => {
+//       setIsScrolled(window.scrollY > 20);
+//     };
+
+//     handleScroll();
+
+//     window.addEventListener("scroll", handleScroll);
+
+//     return () => {
+//       window.removeEventListener("scroll", handleScroll);
+//     };
+//   }, []);
+
+//   /* =======================================================
+//      CLOSE MENU ON ROUTE CHANGE
+//   ======================================================= */
+
+//   useEffect(() => {
+//     setMobileMenu(false);
+//     setServicesOpen(false);
+//     setMobileServicesOpen(false);
+//   }, [pathname]);
+
+//   /* =======================================================
+//      ACTIVE SERVICE
+//   ======================================================= */
+
+//   const isServiceActive = pathname.startsWith("/services");
+
+//   const {data,error,isLoading} = useSWR('departments',ApiService.get)
+//   const departments = data?.data || []
+
+//   return (
+//     <header className="fixed left-0 top-0 z-50 w-full">
+
+//       {/* ===================================================
+//           TOP INFO BAR
+//       =================================================== */}
+
+//       {/* <div className="hidden border-b border-white/10 bg-[#063B5C] text-white lg:block"> */}
+//       <div className="hidden border-b border-white/10 bg-gradient-to-r from-[#063B5C] to-[#0A7A78] text-white lg:block">
+//         <div className="mx-auto flex h-8 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+
+//           {/* LEFT INFO */}
+//           <div className="flex h-full items-center">
+
+//             {/* Emergency */}
+//             <Link
+//               href="tel:+91 9575300110"
+//               className="group flex h-full items-center gap-1.5 border-r border-white/15 pr-4 text-[12px] font-medium transition hover:text-[#4DD4C6]"
+//             >
+//               <span className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500/15 text-red-300 transition group-hover:bg-red-500 group-hover:text-white">
+//                 <Phone className="h-3 w-3" />
+//               </span>
+
+//               <span>
+//                 Emergency:
+//                 <strong className="ml-1 font-semibold text-white">
+//                   +91 9575300110
+//                 </strong>
+//               </span>
+//             </Link>
+
+//             {/* Open 24x7 */}
+//             <div className="flex h-full items-center gap-1.5 border-r border-white/15 px-4 text-[12px] font-medium text-white/85">
+//               <Clock3 className="h-3.5 w-3.5 text-[#4DD4C6]" />
+
+//               <span>Open 24 × 7</span>
+//             </div>
+
+//             {/* Location */}
+//             <div className="flex h-full items-center gap-1.5 pl-4 text-[12px] font-medium text-white/85">
+//               <MapPin className="h-3.5 w-3.5 text-[#4DD4C6]" />
+
+//               <span>
+//                 Baderia Metroprime Multi Speciality Hospital Jabalpur
+//               </span>
+//             </div>
+//           </div>
+
+//           {/* SOCIAL */}
+//           {/* <div className="flex items-center gap-0.5">
+
+//             <Link
+//               href="#"
+//               aria-label="Facebook"
+//               className="flex h-6 w-6 items-center justify-center rounded-full text-white/75 transition hover:bg-white/10 hover:text-[#4DD4C6]"
+//             >
+//               <FaFacebookF className="h-3 w-3" />
+//             </Link>
+
+//             <Link
+//               href="#"
+//               aria-label="Instagram"
+//               className="flex h-6 w-6 items-center justify-center rounded-full text-white/75 transition hover:bg-white/10 hover:text-[#4DD4C6]"
+//             >
+//               <FaInstagram className="h-3.5 w-3.5" />
+//             </Link>
+
+//             <Link
+//               href="#"
+//               aria-label="YouTube"
+//               className="flex h-6 w-6 items-center justify-center rounded-full text-white/75 transition hover:bg-white/10 hover:text-[#4DD4C6]"
+//             >
+//               <FaYoutube className="h-3.5 w-3.5" />
+//             </Link>
+
+//           </div> */}
+//         </div>
+//       </div>
+
+//       {/* ===================================================
+//           MAIN NAVBAR
+//       =================================================== */}
+
+//       <motion.nav
+//         initial={{
+//           y: -80,
+//           opacity: 0,
+//         }}
+//         animate={{
+//           y: 0,
+//           opacity: 1,
+//         }}
+//         transition={{
+//           duration: 0.6,
+//           ease: "easeOut",
+//         }}
+//         className={`transition-all duration-300 ${
+//           isScrolled
+//             ? "border-b border-slate-200/70 bg-white/95 shadow-lg shadow-slate-900/5 backdrop-blur-xl"
+//             : "border-b border-slate-100 bg-white"
+//         }`}
+//       >
+
+//         <div className="mx-auto flex h-[62px]  items-center justify-between px-4 sm:px-6 lg:px-8">
+//         {/* <div className="mx-auto flex h-[62px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8"> */}
+
+//           {/* =================================================
+//               LOGO
+//           ================================================= */}
+
+         
+
+//           {/* <Link
+//             href="/"
+//             className="group flex items-center"
+//             onClick={() => setMobileMenu(false)}
+//           >
+//             <div className="relative h-14 w-56 transition duration-300 group-hover:scale-[1.02]">
+//               <Image
+//                 src="/assets/images/HospitalLogo.png"
+//                 alt="Baderia MetroPrime Hospital"
+//                 fill
+//                 priority
+//                 className="object-contain object-left"
+//               />
+//             </div>
+//           </Link> */}
+//         <Link
+//             href="/"
+//             className="group flex items-center"
+//             onClick={() => setMobileMenu(false)}
+//           >
+//           <div className="relative h-12 w-54 shrink-0">
+//             <Image
+//               // src="/assets/images/Logo.png"
+//               src="/assets/images/HospitalLogo.png"
+//               alt="Baderia MetroPrime Hospital"
+//               fill
+//               priority
+//               className="object-contain object-left"
+//             />
+//           </div>
+//           </Link>
+
+//           {/* =================================================
+//               DESKTOP MENU
+//           ================================================= */}
+
+//           <div className="hidden items-center gap-0.5 lg:flex">
+
+//             {navItems.map((item) => {
+
+//               const isActive = item.dropdown
+//                 ? isServiceActive
+//                 : pathname === item.href;
+
+//               /* =============================================
+//                  SERVICES
+//               ============================================= */
+
+//               if (item.dropdown) {
+//                 return (
+//                   <div
+//                     key={item.name}
+//                     className="relative"
+//                     onMouseEnter={() => setServicesOpen(true)}
+//                     onMouseLeave={() => setServicesOpen(false)}
+//                   >
+
+//                     {/* Services Link */}
+//                     <Link
+//                       href={item.href}
+//                       className={`group relative flex items-center gap-0.5 px-3 py-2 text-[14px] font-semibold transition-colors ${
+//                         isActive
+//                           ? "text-[#0A7A78]"
+//                           : "text-slate-600 hover:text-[#0A7A78]"
+//                       }`}
+//                     >
+
+//                       {item.name}
+
+//                       <ChevronDown
+//                         className={`h-3.5 w-3.5 transition-transform duration-300 ${
+//                           servicesOpen
+//                             ? "rotate-180"
+//                             : ""
+//                         }`}
+//                       />
+
+//                       {/* Active Line */}
+//                       <span
+//                         className={`absolute bottom-0.5 left-3 right-3 h-[2px] origin-left rounded-full bg-[#0A7A78] transition-transform duration-300 ${
+//                           isActive
+//                             ? "scale-x-100"
+//                             : "scale-x-0 group-hover:scale-x-100"
+//                         }`}
+//                       />
+
+//                     </Link>
+
+//                     {/* =======================================
+//                         SERVICES DROPDOWN
+//                     ======================================= */}
+
+//                     <AnimatePresence>
+//                       {servicesOpen && (
+//                         <motion.div
+//                           initial={{
+//                             opacity: 0,
+//                             y: 10,
+//                           }}
+//                           animate={{
+//                             opacity: 1,
+//                             y: 0,
+//                           }}
+//                           exit={{
+//                             opacity: 0,
+//                             y: 6,
+//                           }}
+//                           transition={{
+//                             duration: 0.2,
+//                           }}
+//                           className="absolute left-0 top-full mt-1 w-[320px] overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl shadow-slate-900/10"
+//                         >
+
+//                           {/* Dropdown Header */}
+//                           <div className="border-b border-slate-100 px-3 py-2.5">
+
+//                             <p className="text-[13px] font-bold text-[#063B5C]">
+//                               Our Departments
+//                             </p>
+
+//                             <p className="mt-1 text-[12px] text-slate-500">
+//                               Specialized healthcare services
+//                             </p>
+
+//                           </div>
+
+//                           {/* Services */}
+                          
+//                            <div className="py-1.5">
+//                             {departments.slice(0, 4).map((department) => {
+//                               const Icon = getDepartmentIcon(department.icon);
+
+//                               return (
+//                                 <Link
+//                                   key={department.id || department.name}
+//                                   href={`/department/${department.id}`}
+//                                   className="group/item flex items-center gap-3 rounded-xl p-2.5 transition hover:bg-teal-50"
+//                                 >
+//                                   {/* Icon */}
+//                                   <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-teal-50 text-[#0A7A78] transition group-hover/item:bg-[#0A7A78] group-hover/item:text-white">
+//                                     <Icon className="h-4 w-4" />
+//                                   </div>
+
+//                                   {/* Text */}
+//                                   <div>
+//                                     <p className="text-[14px] font-semibold text-slate-800">
+//                                       {department.name}
+//                                     </p>
+//                                   </div>
+//                                 </Link>
+//                               );
+//                             })}
+//                           </div>
+
+//                           {/* View All */}
+//                           <Link
+//                             href="/department"
+//                             className="group flex items-center justify-between rounded-lg bg-[#063B5C] px-3.5 py-2.5 text-[12px] font-semibold text-white transition hover:bg-[#0A7A78]"
+//                           >
+
+//                             <span>
+//                               View All Department
+//                             </span>
+
+//                             <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+
+//                           </Link>
+
+//                         </motion.div>
+//                       )}
+//                     </AnimatePresence>
+
+//                   </div>
+//                 );
+//               }
+
+//               /* =============================================
+//                  NORMAL MENU ITEM
+//               ============================================= */
+
+//               return (
+//                 <Link
+//                   key={item.name}
+//                   href={item.href}
+//                   className={`group relative px-3 py-2 text-[14px] font-semibold transition-colors ${
+//                     isActive
+//                       ? "text-[#0A7A78]"
+//                       : "text-slate-600 hover:text-[#0A7A78]"
+//                   }`}
+//                 >
+
+//                   {item.name}
+
+//                   {/* Active Line */}
+//                   <span
+//                     className={`absolute bottom-0.5 left-3 right-3 h-[2px] origin-left rounded-full bg-[#0A7A78] transition-transform duration-300 ${
+//                       isActive
+//                         ? "scale-x-100"
+//                         : "scale-x-0 group-hover:scale-x-100"
+//                     }`}
+//                   />
+
+//                 </Link>
+//               );
+//             })}
+
+//           </div>
+
+//           {/* =================================================
+//               DESKTOP ACTION BUTTONS
+//           ================================================= */}
+
+//           <div className="hidden items-center gap-2 lg:flex">
+
+//             {/* Book Appointment */}
+//             <Link
+//               href="/appointment"
+//               className="group flex items-center gap-1.5 rounded-lg bg-[#0A7A78] px-4 py-2.5 text-[14px] font-semibold text-white shadow-md shadow-teal-900/10 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#086663] hover:shadow-lg"
+//             >
+
+//               <span>
+//                 Book Appointment
+//               </span>
+
+//               <ArrowRight
+//                 className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1"
+//               />
+
+//             </Link>
+
+//             {/* Login */}
+//             {/* <Link
+//               href="/login"
+//               className="group flex items-center gap-1.5 rounded-lg border border-[#0A7A78]/20 bg-white px-3.5 py-2.5 text-[12px] font-semibold text-[#063B5C] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#0A7A78] hover:bg-teal-50 hover:text-[#0A7A78]"
+//             >
+
+//               <LogIn
+//                 className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5"
+//               />
+
+//               <span>
+//                 Admin Login
+//               </span>
+
+//             </Link> */}
+//             <LanguageSwitcher/>
+
+//           </div>
+
+//           {/* =================================================
+//               MOBILE MENU BUTTON
+//           ================================================= */}
+
+//           <button
+//             type="button"
+//             onClick={() => setMobileMenu(!mobileMenu)}
+//             className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-[#063B5C] transition hover:border-teal-200 hover:bg-teal-50 hover:text-[#0A7A78] lg:hidden"
+//             aria-label="Toggle menu"
+//             aria-expanded={mobileMenu}
+//           >
+
+//             <AnimatePresence
+//               mode="wait"
+//               initial={false}
+//             >
+
+//               {mobileMenu ? (
+//                 <motion.div
+//                   key="close"
+//                   initial={{
+//                     rotate: -90,
+//                     opacity: 0,
+//                   }}
+//                   animate={{
+//                     rotate: 0,
+//                     opacity: 1,
+//                   }}
+//                   exit={{
+//                     rotate: 90,
+//                     opacity: 0,
+//                   }}
+//                 >
+//                   <X className="h-5 w-5" />
+//                 </motion.div>
+//               ) : (
+//                 <motion.div
+//                   key="menu"
+//                   initial={{
+//                     rotate: 90,
+//                     opacity: 0,
+//                   }}
+//                   animate={{
+//                     rotate: 0,
+//                     opacity: 1,
+//                   }}
+//                   exit={{
+//                     rotate: -90,
+//                     opacity: 0,
+//                   }}
+//                 >
+//                   <Menu className="h-5 w-5" />
+//                 </motion.div>
+//               )}
+
+//             </AnimatePresence>
+
+//           </button>
+
+//         </div>
+
+//         {/* =================================================
+//             MOBILE MENU
+//         ================================================= */}
+
+//         <AnimatePresence>
+
+//           {mobileMenu && (
+//             <motion.div
+//               initial={{
+//                 height: 0,
+//                 opacity: 0,
+//               }}
+//               animate={{
+//                 height: "auto",
+//                 opacity: 1,
+//               }}
+//               exit={{
+//                 height: 0,
+//                 opacity: 0,
+//               }}
+//               transition={{
+//                 duration: 0.3,
+//               }}
+//               className="overflow-hidden border-t border-slate-100 bg-white lg:hidden"
+//             >
+
+//               <div className="space-y-1 px-4 py-3">
+
+//                 {navItems.map((item) => {
+
+//                   const isActive = item.dropdown
+//                     ? isServiceActive
+//                     : pathname === item.href;
+
+//                   /* =========================================
+//                      MOBILE SERVICES
+//                   ========================================= */
+
+//                   if (item.dropdown) {
+//                     return (
+//                       <div key={item.name}>
+
+//                         <button
+//                           type="button"
+//                           onClick={() =>
+//                             setMobileServicesOpen(
+//                               !mobileServicesOpen
+//                             )
+//                           }
+//                           className={`flex w-full items-center justify-between rounded-lg px-3.5 py-2.5 text-left text-[13px] font-semibold transition ${
+//                             isActive
+//                               ? "bg-teal-50 text-[#0A7A78]"
+//                               : "text-slate-700 hover:bg-slate-50"
+//                           }`}
+//                         >
+
+//                           <span>
+//                             {item.name}
+//                           </span>
+
+//                           <ChevronDown
+//                             className={`h-4 w-4 transition-transform duration-300 ${
+//                               mobileServicesOpen
+//                                 ? "rotate-180"
+//                                 : ""
+//                             }`}
+//                           />
+
+//                         </button>
+
+//                         {/* Services */}
+//                         <AnimatePresence>
+
+//                           {mobileServicesOpen && (
+//                             <motion.div
+//                               initial={{
+//                                 height: 0,
+//                                 opacity: 0,
+//                               }}
+//                               animate={{
+//                                 height: "auto",
+//                                 opacity: 1,
+//                               }}
+//                               exit={{
+//                                 height: 0,
+//                                 opacity: 0,
+//                               }}
+//                               transition={{
+//                                 duration: 0.25,
+//                               }}
+//                               className="overflow-hidden"
+//                             >
+
+//                               <div className="ml-3 mt-1 space-y-1 border-l-2 border-teal-100 py-1.5 pl-3">
+
+//                                  {departments.slice(0, 4).map((department) => (
+//                                   <Link
+//                                    key={department.id || department.name}
+//                                     href={`/department/${department.id}`}
+//                                     className="block rounded-lg px-3 py-2 text-[12px] font-medium text-slate-600 transition hover:bg-teal-50 hover:text-[#0A7A78]"
+//                                     onClick={() =>
+//                                       setMobileMenu(false)
+//                                     }
+//                                   >
+//                                     {department.name}
+//                                   </Link>
+//                                 ))}
+
+//                                 <Link
+//                                   href="/department"
+//                                   className="block rounded-lg px-3 py-2 text-[12px] font-bold text-[#0A7A78]"
+//                                   onClick={() =>
+//                                     setMobileMenu(false)
+//                                   }
+//                                 >
+//                                   View All Services →
+//                                 </Link>
+
+//                               </div>
+
+//                             </motion.div>
+//                           )}
+
+//                         </AnimatePresence>
+
+//                       </div>
+//                     );
+//                   }
+
+//                   /* =========================================
+//                      NORMAL MOBILE ITEM
+//                   ========================================= */
+
+//                   return (
+//                     <Link
+//                       key={item.name}
+//                       href={item.href}
+//                       onClick={() =>
+//                         setMobileMenu(false)
+//                       }
+//                       className={`block rounded-lg px-3.5 py-2.5 text-[13px] font-semibold transition ${
+//                         isActive
+//                           ? "bg-teal-50 text-[#0A7A78]"
+//                           : "text-slate-700 hover:bg-slate-50 hover:text-[#0A7A78]"
+//                       }`}
+//                     >
+//                       {item.name}
+//                     </Link>
+//                   );
+//                 })}
+
+//                 {/* =========================================
+//                     MOBILE APPOINTMENT
+//                 ========================================= */}
+
+//                 <Link
+//                   href="/appointment"
+//                   onClick={() =>
+//                     setMobileMenu(false)
+//                   }
+//                   className="mt-3 flex items-center justify-center gap-2 rounded-lg bg-[#0A7A78] px-4 py-3 text-[13px] font-semibold text-white transition hover:bg-[#086663]"
+//                 >
+
+//                   <span>
+//                     Book Appointment
+//                   </span>
+
+//                   <ArrowRight className="h-4 w-4" />
+
+//                 </Link>
+
+//                 {/* =========================================
+//                     MOBILE LOGIN
+//                 ========================================= */}
+
+//                 {/* <Link
+//                   href="/login"
+//                   onClick={() =>
+//                     setMobileMenu(false)
+//                   }
+//                   className="flex items-center justify-center gap-2 rounded-lg border border-[#0A7A78]/20 bg-white px-4 py-3 text-[13px] font-semibold text-[#063B5C] transition hover:border-[#0A7A78] hover:bg-teal-50 hover:text-[#0A7A78]"
+//                 >
+
+//                   <LogIn className="h-4 w-4" />
+
+//                   <span>
+//                     Admin Login
+//                   </span>
+
+//                 </Link> */}
+
+//               </div>
+
+//             </motion.div>
+//           )}
+
+//         </AnimatePresence>
+
+//       </motion.nav>
+//     </header>
+//   );
+// }
+
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -20,24 +861,24 @@ import {
   Phone,
   Clock3,
   MapPin,
-  LogIn,
-  icons,
   Activity,
   Eye,
   Heart,
   Syringe,
   Hospital,
+  CalendarDays,
+  Award,
+  Images,
 } from "lucide-react";
 
-import {
-  FaFacebookF,
-  FaInstagram,
-  FaYoutube,
-} from "react-icons/fa6";
 import ApiService from "../src/services/Apiservices";
-import useSWR from 'swr'
-import LanguageSwitcher from '../components/LanguageSwitcher'
+import useSWR from "swr";
+import LanguageSwitcher from "../components/LanguageSwitcher";
 import Image from "next/image";
+
+/* =========================================================
+   DEPARTMENT ICON MAP
+========================================================= */
 
 const iconMap = {
   activity: Activity,
@@ -52,6 +893,10 @@ const iconMap = {
   hospital: Hospital,
 };
 
+/* =========================================================
+   GET DEPARTMENT ICON
+========================================================= */
+
 const getDepartmentIcon = (iconName) => {
   if (!iconName) return Activity;
 
@@ -61,51 +906,27 @@ const getDepartmentIcon = (iconName) => {
 };
 
 /* =========================================================
-   SERVICES
+   DISCOVER ITEMS
 ========================================================= */
 
-const servicesold = [
+const discoverItems = [
   {
-    name: "Cardiology",
-    description: "Complete heart care",
-    icon: HeartPulse,
-    href: "/services/cardiology",
+    name: "Events",
+    description: "Hospital events & health camps",
+    href: "/discover/events",
+    icon: CalendarDays,
   },
   {
-    name: "Neurology",
-    description: "Advanced brain care",
-    icon: Brain,
-    href: "/services/neurology",
+    name: "Awards & Achievements",
+    description: "Our recognitions & achievements",
+    href: "/discover/awards",
+    icon: Award,
   },
   {
-    name: "Orthopedics",
-    description: "Bone & joint care",
-    icon: Bone,
-    href: "/services/orthopedics",
-  },
-  {
-    name: "Pediatrics",
-    description: "Specialized child care",
-    icon: Baby,
-    href: "/services/pediatrics",
-  },
-  {
-    name: "Pediatrics",
-    description: "Specialized child care",
-    icon: Baby,
-    href: "/services/pediatrics",
-  },
-  {
-    name: "Pediatrics",
-    description: "Specialized child care",
-    icon: Baby,
-    href: "/services/pediatrics",
-  },
-  {
-    name: "Pediatrics",
-    description: "Specialized child care",
-    icon: Baby,
-    href: "/services/pediatrics",
+    name: "Gallery",
+    description: "Hospital photos & moments",
+    href: "/discover/gallery",
+    icon: Images,
   },
 ];
 
@@ -123,26 +944,30 @@ const navItems = [
     href: "/about",
   },
   {
-    name: "Department",
+    name: "Departments",
     href: "/department",
-    dropdown: true,
+    dropdown: "departments",
   },
   {
     name: "Doctors",
     href: "/doctors",
   },
   {
+    name: "Discover",
+    href: "#",
+    dropdown: "discover",
+  },
+  {
     name: "Blogs",
     href: "/blogs",
   },
- 
+  {
+    name: "Career",
+    href: "/career",
+  },
   {
     name: "Contact Us",
     href: "/contact",
-  },
-   {
-    name: "Career",
-    href: "/career",
   },
   {
     name: "Emergency",
@@ -157,10 +982,17 @@ const navItems = [
 export default function Navbar() {
   const pathname = usePathname();
 
+  /* =======================================================
+     STATES
+  ======================================================= */
+
   const [isScrolled, setIsScrolled] = useState(false);
+
   const [mobileMenu, setMobileMenu] = useState(false);
-  const [servicesOpen, setServicesOpen] = useState(false);
-  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+
+  const [openDropdown, setOpenDropdown] = useState(null);
+
+  const [mobileDropdown, setMobileDropdown] = useState(null);
 
   /* =======================================================
      SCROLL
@@ -181,23 +1013,57 @@ export default function Navbar() {
   }, []);
 
   /* =======================================================
-     CLOSE MENU ON ROUTE CHANGE
+     CLOSE MENUS ON ROUTE CHANGE
   ======================================================= */
 
   useEffect(() => {
     setMobileMenu(false);
-    setServicesOpen(false);
-    setMobileServicesOpen(false);
+    setOpenDropdown(null);
+    setMobileDropdown(null);
   }, [pathname]);
 
   /* =======================================================
-     ACTIVE SERVICE
+     API
   ======================================================= */
 
-  const isServiceActive = pathname.startsWith("/services");
+  const { data, error, isLoading } = useSWR(
+    "departments",
+    ApiService.get
+  );
 
-  const {data,error,isLoading} = useSWR('departments',ApiService.get)
-  const departments = data?.data || []
+  const departments = data?.data || [];
+
+  /* =======================================================
+     ACTIVE STATES
+  ======================================================= */
+
+  const isDepartmentActive =
+    pathname.startsWith("/department");
+
+  const isDiscoverActive =
+    pathname.startsWith("/events") ||
+    pathname.startsWith("/awards") ||
+    pathname.startsWith("/gallery");
+
+  /* =======================================================
+     GET ACTIVE STATE
+  ======================================================= */
+
+  const getItemActiveState = (item) => {
+    if (item.dropdown === "departments") {
+      return isDepartmentActive;
+    }
+
+    if (item.dropdown === "discover") {
+      return isDiscoverActive;
+    }
+
+    return pathname === item.href;
+  };
+
+  /* =======================================================
+     RENDER
+  ======================================================= */
 
   return (
     <header className="fixed left-0 top-0 z-50 w-full">
@@ -206,16 +1072,18 @@ export default function Navbar() {
           TOP INFO BAR
       =================================================== */}
 
-      {/* <div className="hidden border-b border-white/10 bg-[#063B5C] text-white lg:block"> */}
       <div className="hidden border-b border-white/10 bg-gradient-to-r from-[#063B5C] to-[#0A7A78] text-white lg:block">
-        <div className="mx-auto flex h-8 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+
+        <div className="mx-auto flex h-8 items-center justify-between px-4 sm:px-6 lg:px-8">
 
           {/* LEFT INFO */}
+
           <div className="flex h-full items-center">
 
             {/* Emergency */}
+
             <Link
-              href="tel:+91 9575300110"
+              href="tel:+919575300110"
               className="group flex h-full items-center gap-1.5 border-r border-white/15 pr-4 text-[12px] font-medium transition hover:text-[#4DD4C6]"
             >
               <span className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500/15 text-red-300 transition group-hover:bg-red-500 group-hover:text-white">
@@ -224,6 +1092,7 @@ export default function Navbar() {
 
               <span>
                 Emergency:
+
                 <strong className="ml-1 font-semibold text-white">
                   +91 9575300110
                 </strong>
@@ -231,51 +1100,33 @@ export default function Navbar() {
             </Link>
 
             {/* Open 24x7 */}
+
             <div className="flex h-full items-center gap-1.5 border-r border-white/15 px-4 text-[12px] font-medium text-white/85">
+
               <Clock3 className="h-3.5 w-3.5 text-[#4DD4C6]" />
 
-              <span>Open 24 × 7</span>
+              <span>
+                Open 24 × 7
+              </span>
+
             </div>
 
             {/* Location */}
+
             <div className="flex h-full items-center gap-1.5 pl-4 text-[12px] font-medium text-white/85">
+
               <MapPin className="h-3.5 w-3.5 text-[#4DD4C6]" />
 
               <span>
                 Baderia Metroprime Multi Speciality Hospital Jabalpur
               </span>
+
             </div>
+
           </div>
 
-          {/* SOCIAL */}
-          {/* <div className="flex items-center gap-0.5">
-
-            <Link
-              href="#"
-              aria-label="Facebook"
-              className="flex h-6 w-6 items-center justify-center rounded-full text-white/75 transition hover:bg-white/10 hover:text-[#4DD4C6]"
-            >
-              <FaFacebookF className="h-3 w-3" />
-            </Link>
-
-            <Link
-              href="#"
-              aria-label="Instagram"
-              className="flex h-6 w-6 items-center justify-center rounded-full text-white/75 transition hover:bg-white/10 hover:text-[#4DD4C6]"
-            >
-              <FaInstagram className="h-3.5 w-3.5" />
-            </Link>
-
-            <Link
-              href="#"
-              aria-label="YouTube"
-              className="flex h-6 w-6 items-center justify-center rounded-full text-white/75 transition hover:bg-white/10 hover:text-[#4DD4C6]"
-            >
-              <FaYoutube className="h-3.5 w-3.5" />
-            </Link>
-
-          </div> */}
         </div>
+
       </div>
 
       {/* ===================================================
@@ -302,21 +1153,20 @@ export default function Navbar() {
         }`}
       >
 
-        <div className="mx-auto flex h-[62px]  items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* <div className="mx-auto flex h-[62px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8"> */}
+        <div className="mx-auto flex h-[62px] items-center justify-between px-4 sm:px-6 lg:px-8">
 
           {/* =================================================
               LOGO
           ================================================= */}
 
-         
-
-          {/* <Link
+          <Link
             href="/"
             className="group flex items-center"
             onClick={() => setMobileMenu(false)}
           >
-            <div className="relative h-14 w-56 transition duration-300 group-hover:scale-[1.02]">
+
+            {/* <div className="relative h-12 w-54 shrink-0">
+
               <Image
                 src="/assets/images/HospitalLogo.png"
                 alt="Baderia MetroPrime Hospital"
@@ -324,23 +1174,20 @@ export default function Navbar() {
                 priority
                 className="object-contain object-left"
               />
-            </div>
-          </Link> */}
-        <Link
-            href="/"
-            className="group flex items-center"
-            onClick={() => setMobileMenu(false)}
-          >
-          <div className="relative h-12 w-54 shrink-0">
+
+            </div> */}
+
+            <div className="relative h-12 w-54 shrink-0">
             <Image
-              // src="/assets/images/Logo.png"
               src="/assets/images/HospitalLogo.png"
               alt="Baderia MetroPrime Hospital"
               fill
               priority
+              sizes="216px"
               className="object-contain object-left"
             />
           </div>
+
           </Link>
 
           {/* =================================================
@@ -351,27 +1198,48 @@ export default function Navbar() {
 
             {navItems.map((item) => {
 
-              const isActive = item.dropdown
-                ? isServiceActive
-                : pathname === item.href;
+              const isActive =
+                getItemActiveState(item);
 
               /* =============================================
-                 SERVICES
+                 DROPDOWN ITEMS
               ============================================= */
 
               if (item.dropdown) {
+
+                const isOpen =
+                  openDropdown === item.dropdown;
+
+                const isDepartments =
+                  item.dropdown === "departments";
+
+                const isDiscover =
+                  item.dropdown === "discover";
+
                 return (
                   <div
                     key={item.name}
                     className="relative"
-                    onMouseEnter={() => setServicesOpen(true)}
-                    onMouseLeave={() => setServicesOpen(false)}
+                    onMouseEnter={() =>
+                      setOpenDropdown(item.dropdown)
+                    }
+                    onMouseLeave={() =>
+                      setOpenDropdown(null)
+                    }
                   >
 
-                    {/* Services Link */}
-                    <Link
-                      href={item.href}
-                      className={`group relative flex items-center gap-0.5 px-3 py-2 text-[14px] font-semibold transition-colors ${
+                    {/* DROPDOWN BUTTON */}
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setOpenDropdown(
+                          isOpen
+                            ? null
+                            : item.dropdown
+                        );
+                      }}
+                      className={`group relative flex items-center gap-1 px-3 py-2 text-[14px] font-semibold transition-colors ${
                         isActive
                           ? "text-[#0A7A78]"
                           : "text-slate-600 hover:text-[#0A7A78]"
@@ -382,13 +1250,14 @@ export default function Navbar() {
 
                       <ChevronDown
                         className={`h-3.5 w-3.5 transition-transform duration-300 ${
-                          servicesOpen
+                          isOpen
                             ? "rotate-180"
                             : ""
                         }`}
                       />
 
-                      {/* Active Line */}
+                      {/* ACTIVE LINE */}
+
                       <span
                         className={`absolute bottom-0.5 left-3 right-3 h-[2px] origin-left rounded-full bg-[#0A7A78] transition-transform duration-300 ${
                           isActive
@@ -397,90 +1266,220 @@ export default function Navbar() {
                         }`}
                       />
 
-                    </Link>
+                    </button>
 
                     {/* =======================================
-                        SERVICES DROPDOWN
+                        DROPDOWN
                     ======================================= */}
 
                     <AnimatePresence>
-                      {servicesOpen && (
+
+                      {isOpen && (
+
                         <motion.div
                           initial={{
                             opacity: 0,
                             y: 10,
+                            scale: 0.98,
                           }}
                           animate={{
                             opacity: 1,
                             y: 0,
+                            scale: 1,
                           }}
                           exit={{
                             opacity: 0,
                             y: 6,
+                            scale: 0.98,
                           }}
                           transition={{
                             duration: 0.2,
+                            ease: "easeOut",
                           }}
-                          className="absolute left-0 top-full mt-1 w-[320px] overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl shadow-slate-900/10"
+                          className="absolute left-0 top-full mt-2 w-[320px] overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl shadow-slate-900/10"
                         >
 
-                          {/* Dropdown Header */}
-                          <div className="border-b border-slate-100 px-3 py-2.5">
+                          {/* =================================
+                              DEPARTMENTS
+                          ================================= */}
 
-                            <p className="text-[13px] font-bold text-[#063B5C]">
-                              Our Departments
-                            </p>
+                          {isDepartments && (
+                            <>
 
-                            <p className="mt-1 text-[12px] text-slate-500">
-                              Specialized healthcare services
-                            </p>
+                              <div className="border-b border-slate-100 px-3 py-2.5">
 
-                          </div>
+                                <p className="text-[13px] font-bold text-[#063B5C]">
+                                  Our Departments
+                                </p>
 
-                          {/* Services */}
-                          
-                           <div className="py-1.5">
-                            {departments.slice(0, 4).map((department) => {
-                              const Icon = getDepartmentIcon(department.icon);
+                                <p className="mt-1 text-[12px] text-slate-500">
+                                  Specialized healthcare services
+                                </p>
 
-                              return (
-                                <Link
-                                  key={department.id || department.name}
-                                  href={`/department/${department.id}`}
-                                  className="group/item flex items-center gap-3 rounded-xl p-2.5 transition hover:bg-teal-50"
-                                >
-                                  {/* Icon */}
-                                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-teal-50 text-[#0A7A78] transition group-hover/item:bg-[#0A7A78] group-hover/item:text-white">
-                                    <Icon className="h-4 w-4" />
-                                  </div>
+                              </div>
 
-                                  {/* Text */}
-                                  <div>
-                                    <p className="text-[14px] font-semibold text-slate-800">
-                                      {department.name}
-                                    </p>
-                                  </div>
-                                </Link>
-                              );
-                            })}
-                          </div>
+                              <div className="py-1.5">
 
-                          {/* View All */}
-                          <Link
-                            href="/department"
-                            className="group flex items-center justify-between rounded-lg bg-[#063B5C] px-3.5 py-2.5 text-[12px] font-semibold text-white transition hover:bg-[#0A7A78]"
-                          >
+                                {departments
+                                  .slice(0, 4)
+                                  .map((department) => {
 
-                            <span>
-                              View All Department
-                            </span>
+                                    const Icon =
+                                      getDepartmentIcon(
+                                        department.icon
+                                      );
 
-                            <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+                                    return (
 
-                          </Link>
+                                      <Link
+                                        key={
+                                          department.id ||
+                                          department.name
+                                        }
+                                        href={`/department/${department.id}`}
+                                        className="group/item flex items-center gap-3 rounded-xl p-2.5 transition hover:bg-teal-50"
+                                      >
+
+                                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-teal-50 text-[#0A7A78] transition group-hover/item:bg-[#0A7A78] group-hover/item:text-white">
+
+                                          <Icon className="h-4 w-4" />
+
+                                        </div>
+
+                                        <div>
+
+                                          <p className="text-[14px] font-semibold text-slate-800">
+                                            {department.name}
+                                          </p>
+
+                                        </div>
+
+                                        <ArrowRight
+                                          className="ml-auto h-3.5 w-3.5 text-slate-300 opacity-0 transition-all duration-300 group-hover/item:translate-x-0.5 group-hover/item:text-[#0A7A78] group-hover/item:opacity-100"
+                                        />
+
+                                      </Link>
+
+                                    );
+
+                                  })}
+
+                              </div>
+
+                              <Link
+                                href="/department"
+                                className="group flex items-center justify-between rounded-lg bg-[#063B5C] px-3.5 py-2.5 text-[12px] font-semibold text-white transition hover:bg-[#0A7A78]"
+                              >
+
+                                <span>
+                                  View All Departments
+                                </span>
+
+                                <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+
+                              </Link>
+
+                            </>
+                          )}
+
+                          {/* =================================
+                              DISCOVER
+                          ================================= */}
+
+                          {isDiscover && (
+                            <>
+
+                              <div className="border-b border-slate-100 px-3 py-2.5">
+
+                                <p className="text-[13px] font-bold text-[#063B5C]">
+                                  Discover
+                                </p>
+
+                                <p className="mt-1 text-[12px] text-slate-500">
+                                  Explore our hospital
+                                </p>
+
+                              </div>
+
+                              <div className="py-1.5">
+
+                                {discoverItems.map(
+                                  (child) => {
+
+                                    const Icon =
+                                      child.icon;
+
+                                    const childActive =
+                                      pathname.startsWith(
+                                        child.href
+                                      );
+
+                                    return (
+
+                                      <Link
+                                        key={child.name}
+                                        href={child.href}
+                                        className={`group/item flex items-center gap-3 rounded-xl p-2.5 transition ${
+                                          childActive
+                                            ? "bg-teal-50"
+                                            : "hover:bg-teal-50"
+                                        }`}
+                                      >
+
+                                        <div
+                                          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg transition ${
+                                            childActive
+                                              ? "bg-[#0A7A78] text-white"
+                                              : "bg-teal-50 text-[#0A7A78] group-hover/item:bg-[#0A7A78] group-hover/item:text-white"
+                                          }`}
+                                        >
+
+                                          <Icon className="h-4 w-4" />
+
+                                        </div>
+
+                                        <div className="min-w-0 flex-1">
+
+                                          <p
+                                            className={`text-[14px] font-semibold ${
+                                              childActive
+                                                ? "text-[#0A7A78]"
+                                                : "text-slate-800 group-hover/item:text-[#0A7A78]"
+                                            }`}
+                                          >
+                                            {child.name}
+                                          </p>
+
+                                          <p className="mt-0.5 text-[11px] text-slate-500">
+                                            {child.description}
+                                          </p>
+
+                                        </div>
+
+                                        <ArrowRight
+                                          className={`h-3.5 w-3.5 shrink-0 transition-all duration-300 ${
+                                            childActive
+                                              ? "translate-x-0 text-[#0A7A78] opacity-100"
+                                              : "-translate-x-1 text-slate-300 opacity-0 group-hover/item:translate-x-0 group-hover/item:text-[#0A7A78] group-hover/item:opacity-100"
+                                          }`}
+                                        />
+
+                                      </Link>
+
+                                    );
+
+                                  }
+                                )}
+
+                              </div>
+
+                            </>
+                          )}
 
                         </motion.div>
+
                       )}
+
                     </AnimatePresence>
 
                   </div>
@@ -492,6 +1491,7 @@ export default function Navbar() {
               ============================================= */
 
               return (
+
                 <Link
                   key={item.name}
                   href={item.href}
@@ -504,7 +1504,8 @@ export default function Navbar() {
 
                   {item.name}
 
-                  {/* Active Line */}
+                  {/* ACTIVE LINE */}
+
                   <span
                     className={`absolute bottom-0.5 left-3 right-3 h-[2px] origin-left rounded-full bg-[#0A7A78] transition-transform duration-300 ${
                       isActive
@@ -514,18 +1515,21 @@ export default function Navbar() {
                   />
 
                 </Link>
+
               );
+
             })}
 
           </div>
 
           {/* =================================================
-              DESKTOP ACTION BUTTONS
+              DESKTOP ACTIONS
           ================================================= */}
 
           <div className="hidden items-center gap-2 lg:flex">
 
-            {/* Book Appointment */}
+            {/* BOOK APPOINTMENT */}
+
             <Link
               href="/appointment"
               className="group flex items-center gap-1.5 rounded-lg bg-[#0A7A78] px-4 py-2.5 text-[14px] font-semibold text-white shadow-md shadow-teal-900/10 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#086663] hover:shadow-lg"
@@ -541,32 +1545,19 @@ export default function Navbar() {
 
             </Link>
 
-            {/* Login */}
-            {/* <Link
-              href="/login"
-              className="group flex items-center gap-1.5 rounded-lg border border-[#0A7A78]/20 bg-white px-3.5 py-2.5 text-[12px] font-semibold text-[#063B5C] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#0A7A78] hover:bg-teal-50 hover:text-[#0A7A78]"
-            >
-
-              <LogIn
-                className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5"
-              />
-
-              <span>
-                Admin Login
-              </span>
-
-            </Link> */}
-            <LanguageSwitcher/>
+            <LanguageSwitcher />
 
           </div>
 
           {/* =================================================
-              MOBILE MENU BUTTON
+              MOBILE BUTTON
           ================================================= */}
 
           <button
             type="button"
-            onClick={() => setMobileMenu(!mobileMenu)}
+            onClick={() =>
+              setMobileMenu(!mobileMenu)
+            }
             className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-[#063B5C] transition hover:border-teal-200 hover:bg-teal-50 hover:text-[#0A7A78] lg:hidden"
             aria-label="Toggle menu"
             aria-expanded={mobileMenu}
@@ -578,6 +1569,7 @@ export default function Navbar() {
             >
 
               {mobileMenu ? (
+
                 <motion.div
                   key="close"
                   initial={{
@@ -593,9 +1585,13 @@ export default function Navbar() {
                     opacity: 0,
                   }}
                 >
+
                   <X className="h-5 w-5" />
+
                 </motion.div>
+
               ) : (
+
                 <motion.div
                   key="menu"
                   initial={{
@@ -611,8 +1607,11 @@ export default function Navbar() {
                     opacity: 0,
                   }}
                 >
+
                   <Menu className="h-5 w-5" />
+
                 </motion.div>
+
               )}
 
             </AnimatePresence>
@@ -621,13 +1620,14 @@ export default function Navbar() {
 
         </div>
 
-        {/* =================================================
+        {/* ===================================================
             MOBILE MENU
-        ================================================= */}
+        =================================================== */}
 
         <AnimatePresence>
 
           {mobileMenu && (
+
             <motion.div
               initial={{
                 height: 0,
@@ -651,23 +1651,38 @@ export default function Navbar() {
 
                 {navItems.map((item) => {
 
-                  const isActive = item.dropdown
-                    ? isServiceActive
-                    : pathname === item.href;
+                  const isActive =
+                    getItemActiveState(item);
 
                   /* =========================================
-                     MOBILE SERVICES
+                     MOBILE DROPDOWN
                   ========================================= */
 
                   if (item.dropdown) {
+
+                    const isOpen =
+                      mobileDropdown ===
+                      item.dropdown;
+
+                    const isDepartments =
+                      item.dropdown ===
+                      "departments";
+
+                    const isDiscover =
+                      item.dropdown ===
+                      "discover";
+
                     return (
+
                       <div key={item.name}>
 
                         <button
                           type="button"
                           onClick={() =>
-                            setMobileServicesOpen(
-                              !mobileServicesOpen
+                            setMobileDropdown(
+                              isOpen
+                                ? null
+                                : item.dropdown
                             )
                           }
                           className={`flex w-full items-center justify-between rounded-lg px-3.5 py-2.5 text-left text-[13px] font-semibold transition ${
@@ -683,7 +1698,7 @@ export default function Navbar() {
 
                           <ChevronDown
                             className={`h-4 w-4 transition-transform duration-300 ${
-                              mobileServicesOpen
+                              isOpen
                                 ? "rotate-180"
                                 : ""
                             }`}
@@ -691,10 +1706,10 @@ export default function Navbar() {
 
                         </button>
 
-                        {/* Services */}
                         <AnimatePresence>
 
-                          {mobileServicesOpen && (
+                          {isOpen && (
+
                             <motion.div
                               initial={{
                                 height: 0,
@@ -716,45 +1731,158 @@ export default function Navbar() {
 
                               <div className="ml-3 mt-1 space-y-1 border-l-2 border-teal-100 py-1.5 pl-3">
 
-                                 {departments.slice(0, 4).map((department) => (
-                                  <Link
-                                   key={department.id || department.name}
-                                    href={`/department/${department.id}`}
-                                    className="block rounded-lg px-3 py-2 text-[12px] font-medium text-slate-600 transition hover:bg-teal-50 hover:text-[#0A7A78]"
-                                    onClick={() =>
-                                      setMobileMenu(false)
-                                    }
-                                  >
-                                    {department.name}
-                                  </Link>
-                                ))}
+                                {/* =================================
+                                    MOBILE DEPARTMENTS
+                                ================================= */}
 
-                                <Link
-                                  href="/department"
-                                  className="block rounded-lg px-3 py-2 text-[12px] font-bold text-[#0A7A78]"
-                                  onClick={() =>
-                                    setMobileMenu(false)
-                                  }
-                                >
-                                  View All Services →
-                                </Link>
+                                {isDepartments && (
+                                  <>
+
+                                    {departments
+                                      .slice(0, 4)
+                                      .map(
+                                        (
+                                          department
+                                        ) => (
+
+                                          <Link
+                                            key={
+                                              department.id ||
+                                              department.name
+                                            }
+                                            href={`/department/${department.id}`}
+                                            onClick={() =>
+                                              setMobileMenu(
+                                                false
+                                              )
+                                            }
+                                            className="flex items-center rounded-lg px-3 py-2 text-[12px] font-medium text-slate-600 transition hover:bg-teal-50 hover:text-[#0A7A78]"
+                                          >
+
+                                            <span>
+                                              {
+                                                department.name
+                                              }
+                                            </span>
+
+                                          </Link>
+
+                                        )
+                                      )}
+
+                                    <Link
+                                      href="/department"
+                                      onClick={() =>
+                                        setMobileMenu(
+                                          false
+                                        )
+                                      }
+                                      className="block rounded-lg px-3 py-2 text-[12px] font-bold text-[#0A7A78]"
+                                    >
+                                      View All Departments →
+                                    </Link>
+
+                                  </>
+                                )}
+
+                                {/* =================================
+                                    MOBILE DISCOVER
+                                ================================= */}
+
+                                {isDiscover && (
+                                  <>
+
+                                    {discoverItems.map(
+                                      (child) => {
+
+                                        const Icon =
+                                          child.icon;
+
+                                        const childActive =
+                                          pathname.startsWith(
+                                            child.href
+                                          );
+
+                                        return (
+
+                                          <Link
+                                            key={
+                                              child.name
+                                            }
+                                            href={
+                                              child.href
+                                            }
+                                            onClick={() =>
+                                              setMobileMenu(
+                                                false
+                                              )
+                                            }
+                                            className={`group flex items-center gap-3 rounded-lg px-3 py-2.5 transition ${
+                                              childActive
+                                                ? "bg-teal-50 text-[#0A7A78]"
+                                                : "text-slate-600 hover:bg-teal-50 hover:text-[#0A7A78]"
+                                            }`}
+                                          >
+
+                                            <div
+                                              className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition ${
+                                                childActive
+                                                  ? "bg-[#0A7A78] text-white"
+                                                  : "bg-teal-50 text-[#0A7A78]"
+                                              }`}
+                                            >
+
+                                              <Icon className="h-4 w-4" />
+
+                                            </div>
+
+                                            <div className="flex-1">
+
+                                              <p className="text-[12px] font-semibold">
+                                                {
+                                                  child.name
+                                                }
+                                              </p>
+
+                                              <p className="text-[10px] text-slate-400">
+                                                {
+                                                  child.description
+                                                }
+                                              </p>
+
+                                            </div>
+
+                                            <ArrowRight className="h-3.5 w-3.5 opacity-50" />
+
+                                          </Link>
+
+                                        );
+
+                                      }
+                                    )}
+
+                                  </>
+                                )}
 
                               </div>
 
                             </motion.div>
+
                           )}
 
                         </AnimatePresence>
 
                       </div>
+
                     );
                   }
 
                   /* =========================================
-                     NORMAL MOBILE ITEM
+                     MOBILE NORMAL ITEM
                   ========================================= */
 
                   return (
+
                     <Link
                       key={item.name}
                       href={item.href}
@@ -767,9 +1895,13 @@ export default function Navbar() {
                           : "text-slate-700 hover:bg-slate-50 hover:text-[#0A7A78]"
                       }`}
                     >
+
                       {item.name}
+
                     </Link>
+
                   );
+
                 })}
 
                 {/* =========================================
@@ -793,33 +1925,25 @@ export default function Navbar() {
                 </Link>
 
                 {/* =========================================
-                    MOBILE LOGIN
+                    MOBILE LANGUAGE
                 ========================================= */}
 
-                {/* <Link
-                  href="/login"
-                  onClick={() =>
-                    setMobileMenu(false)
-                  }
-                  className="flex items-center justify-center gap-2 rounded-lg border border-[#0A7A78]/20 bg-white px-4 py-3 text-[13px] font-semibold text-[#063B5C] transition hover:border-[#0A7A78] hover:bg-teal-50 hover:text-[#0A7A78]"
-                >
+                <div className="flex justify-center pt-2">
 
-                  <LogIn className="h-4 w-4" />
+                  <LanguageSwitcher />
 
-                  <span>
-                    Admin Login
-                  </span>
-
-                </Link> */}
+                </div>
 
               </div>
 
             </motion.div>
+
           )}
 
         </AnimatePresence>
 
       </motion.nav>
+
     </header>
   );
 }
