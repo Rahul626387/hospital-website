@@ -21,6 +21,7 @@ import {
   FiTrash2,
   FiMoreVertical,
 } from "react-icons/fi";
+import AuthService from "../../src/services/Authservices";
 
 const Departmentpage = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -32,7 +33,8 @@ const Departmentpage = () => {
   const [status, setStatus] = useState("");
 
   // Apne auth/user context ke according replace karein
-  const userId = 1;
+  const userId = AuthService.getUserId()
+  // console.log(userId)
 
   const { data, error, isLoading, mutate } = useSWR(
     "departments",
