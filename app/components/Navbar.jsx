@@ -922,12 +922,12 @@ const discoverItems = [
     href: "/discover/awards",
     icon: Award,
   },
-  {
-    name: "Gallery",
-    description: "Hospital photos & moments",
-    href: "/discover/gallery",
-    icon: Images,
-  },
+  // {
+  //   name: "Gallery",
+  //   description: "Hospital photos & moments",
+  //   href: "/discover/gallery",
+  //   icon: Images,
+  // },
 ];
 
 /* =========================================================
