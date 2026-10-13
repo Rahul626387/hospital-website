@@ -475,65 +475,151 @@ export default function EventForm({
     return true;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
 
-    if (saving) return;
+  //   if (saving) return;
 
-    if (!validateForm()) return;
+  //   if (!validateForm()) return;
 
-    if (typeof onSubmit !== "function") {
-      toast.error("Event submit handler is not configured.");
-      return;
+  //   if (typeof onSubmit !== "function") {
+  //     toast.error("Event submit handler is not configured.");
+  //     return;
+  //   }
+
+  //   try {
+  //     setSaving(true);
+
+  //     const payload = new FormData();
+
+  //     payload.append("userId","2");
+  //     payload.append("slug", formData.slug || createSlug(formData.title));
+  //     payload.append("title", formData.title.trim());
+  //     payload.append("category", formData.category);
+  //     payload.append("event_date", formData.event_date);
+  //     payload.append("end_date", formData.end_date || "");
+  //     payload.append("event_time", formData.event_time);
+  //     payload.append("location", formData.location.trim());
+  //     payload.append("short_description", formData.short_description.trim());
+  //     payload.append("description", formData.description.trim());
+  //     payload.append("organizer", formData.organizer.trim());
+  //     payload.append("contact", formData.contact.trim());
+  //     payload.append("highlights", JSON.stringify(formData.highlights));
+  //     payload.append("status", formData.status ? "1" : "0");
+  //     payload.append("featured", formData.featured ? "1" : "0");
+
+  //     // Only append a new file when the user selects one.
+  //     // For edits, retain the existing image URL in the parent/API logic.
+  //     if (formData.image) {
+  //       payload.append("image", formData.image);
+  //     }
+
+  //     // Existing URL helps the API retain the current image on edit.
+  //     payload.append("existing_image", formData.image_url || "");
+  //     console.log("Payload Data:", payload);
+  //     console.log("Payload Fields:", Object.keys(payload));
+
+  //     await onSubmit(payload);
+
+  //     toast.success(
+  //       initialData?.id
+  //         ? "Event updated successfully!"
+  //         : "Event created successfully!"
+  //     );
+  //   } catch (error) {
+  //     console.error("Event form submit error:", error);
+
+  //     toast.error(
+  //       error?.message || "Failed to save event. Please try again."
+  //     );
+  //   } finally {
+  //     setSaving(false);
+  //   }
+  // };
+
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  if (saving) return;
+
+  if (!validateForm()) return;
+
+  if (typeof onSubmit !== "function") {
+    toast.error("Event submit handler is not configured.");
+    return;
+  }
+
+  try {
+    setSaving(true);
+
+    const payload = new FormData();
+
+    payload.append("userId", "2");
+    payload.append("slug", formData.slug || createSlug(formData.title));
+    payload.append("title", formData.title.trim());
+    payload.append("category", formData.category);
+    payload.append("event_date", formData.event_date);
+    payload.append("end_date", formData.end_date || "");
+    payload.append("event_time", formData.event_time);
+    payload.append("location", formData.location.trim());
+    payload.append("short_description", formData.short_description.trim());
+    payload.append("description", formData.description.trim());
+    payload.append("organizer", formData.organizer.trim());
+    payload.append("contact", formData.contact.trim());
+    payload.append("highlights", JSON.stringify(formData.highlights));
+    payload.append("status", formData.status ? "1" : "0");
+    payload.append("featured", formData.featured ? "1" : "0");
+
+    // Add image only when a new file is selected
+    if (formData.image instanceof File) {
+      payload.append("image", formData.image);
     }
 
-    try {
-      setSaving(true);
+    // Existing image URL
+    payload.append("existing_image", formData.image_url || "");
 
-      const payload = new FormData();
+    // Log all payload fields and values
+    console.log("Payload Data:");
 
-      payload.append("userId", String(formData.userId || ""));
-      payload.append("slug", formData.slug || createSlug(formData.title));
-      payload.append("title", formData.title.trim());
-      payload.append("category", formData.category);
-      payload.append("event_date", formData.event_date);
-      payload.append("end_date", formData.end_date || "");
-      payload.append("event_time", formData.event_time);
-      payload.append("location", formData.location.trim());
-      payload.append("short_description", formData.short_description.trim());
-      payload.append("description", formData.description.trim());
-      payload.append("organizer", formData.organizer.trim());
-      payload.append("contact", formData.contact.trim());
-      payload.append("highlights", JSON.stringify(formData.highlights));
-      payload.append("status", formData.status ? "1" : "0");
-      payload.append("featured", formData.featured ? "1" : "0");
-
-      // Only append a new file when the user selects one.
-      // For edits, retain the existing image URL in the parent/API logic.
-      if (formData.image) {
-        payload.append("image", formData.image);
-      }
-
-      // Existing URL helps the API retain the current image on edit.
-      payload.append("existing_image", formData.image_url || "");
-
-      await onSubmit(payload);
-
-      toast.success(
-        initialData?.id
-          ? "Event updated successfully!"
-          : "Event created successfully!"
+    for (const [key, value] of payload.entries()) {
+      console.log(
+        key,
+        value instanceof File
+          ? {
+              name: value.name,
+              type: value.type,
+              size: value.size,
+            }
+          : value
       );
-    } catch (error) {
-      console.error("Event form submit error:", error);
-
-      toast.error(
-        error?.message || "Failed to save event. Please try again."
-      );
-    } finally {
-      setSaving(false);
     }
-  };
+
+    // Log field names only
+    console.log(
+      "Payload Fields:",
+      Array.from(payload.keys())
+    );
+
+    await onSubmit(payload);
+
+    toast.success(
+      initialData?.id
+        ? "Event updated successfully!"
+        : "Event created successfully!"
+    );
+  } catch (error) {
+    console.error("Event form submit error:", error);
+
+    toast.error(
+      error?.response?.data?.message ||
+      error?.message ||
+      "Failed to save event. Please try again."
+    );
+  } finally {
+    setSaving(false);
+  }
+};
 
   return (
     <motion.form

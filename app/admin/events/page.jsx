@@ -767,6 +767,7 @@ import {
 import ApiService from "../../src/services/Apiservices";
 import EventForm from "../../components/admin/EventForm";
 import ModalComponent from "../../components/admin/ModelComponent";
+import AuthService from "../../src/services/Authservices";
 
 
 const Eventpage = () => {
@@ -782,7 +783,7 @@ const Eventpage = () => {
   const [pageError, setPageError] = useState("");
 
   // Apne authentication system se actual userId lein.
-  const userId = "";
+   const userId = AuthService.getUserId();
 
   const {
     data,
@@ -871,49 +872,121 @@ const Eventpage = () => {
 
   // FormData is passed by EventForm.
   // Ensure ApiService methods and API routes match your project.
-  const handleSave = async (formData) => {
-    setSaving(true);
-    setPageError("");
+  // const handleSave = async (formData) => {
+  //   console.log(formData)
+  //   return                                                                   
+  //   setSaving(true);
+  //   setPageError("");
 
-    try {
-      if (selectedEvent?.id) {
-        if (typeof ApiService.put !== "function") {
-          throw new Error(
-            "ApiService.put() is not available. Configure your update API method."
-          );
-        }
+  //   try {
+  //     if (selectedEvent?.id) {
+  //       if (typeof ApiService.put !== "function") {
+  //         throw new Error(
+  //           "ApiService.put() is not available. Configure your update API method."
+  //         );
+  //       }
 
-        await ApiService.put(
-          `/events/${selectedEvent.id}`,
-          formData
-        );
-      } else {
-        if (typeof ApiService.post !== "function") {
-          throw new Error(
-            "ApiService.post() is not available. Configure your create API method."
-          );
-        }
+  //       await ApiService.put(
+  //         `/events/${selectedEvent.id}`,
+  //         formData
+  //       );
+  //     } else {
+  //       if (typeof ApiService.post !== "function") {
+  //         throw new Error(
+  //           "ApiService.post() is not available. Configure your create API method."
+  //         );
+  //       }
 
-        await ApiService.post("/events", formData);
-      }
+  //       await ApiService.post("/events", formData);
+  //     }
 
-      await mutate();
-      setModalOpen(false);
-      setSelectedEvent(null);
-    } catch (err) {
-      console.error("Save event error:", err);
+  //     await mutate();
+  //     setModalOpen(false);
+  //     setSelectedEvent(null);
+  //   } catch (err) {
+  //     console.error("Save event error:", err);
 
-      const message =
-        err?.response?.data?.message ||
-        err?.message ||
-        "Unable to save event. Please try again.";
+  //     const message =
+  //       err?.response?.data?.message ||
+  //       err?.message ||
+  //       "Unable to save event. Please try again.";
 
-      setPageError(message);
-      throw err;
-    } finally {
-      setSaving(false);
+  //     setPageError(message);
+  //     throw err;
+  //   } finally {
+  //     setSaving(false);
+  //   }
+  // };
+
+//   const handleSave = async (formData) => {
+//   console.log(formData);
+
+//   setSaving(true);
+//   setPageError("");
+
+//   try {
+//     await ApiService.post("/events", formData);
+
+//     await mutate();
+
+//     setModalOpen(false);
+//     setSelectedEvent(null);
+//   } catch (err) {
+//     console.error("Save event error:", err);
+
+//     const message =
+//       err?.response?.data?.message ||
+//       err?.message ||
+//       "Unable to save event. Please try again.";
+
+//     setPageError(message);
+//     throw err;
+//   } finally {
+//     setSaving(false);
+//   }
+// };
+
+
+
+const handleSave = async (formData) => {
+  setSaving(true);
+  setPageError("");
+
+  try {
+    console.log("Event FormData:", [...formData.entries()]);
+
+    if (selectedEvent?.id) {
+      // Update existing event
+      await ApiService.put(
+        `/events/${selectedEvent.id}`,
+        formData
+      );
+    } else {
+      // Create new event
+      await ApiService.post("/events", formData);
     }
-  };
+
+    // Refresh event list
+    await mutate();
+
+    // Close modal and reset selection
+    setModalOpen(false);
+    setSelectedEvent(null);
+  } catch (err) {
+    console.error("Save event error:", err);
+
+    const message =
+      err?.response?.data?.message ||
+      err?.message ||
+      "Unable to save event. Please try again.";
+
+    setPageError(message);
+    throw err;
+  } finally {
+    setSaving(false);
+  }
+};
+
 
   const handleSort = (field) => {
     if (sortField === field) {
@@ -1091,7 +1164,7 @@ const Eventpage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-3 sm:p-5">
+    <div className="min-h-screen bg-gray-50 p-3 sm:p-2">
       <div className="mx-auto max-w-[1600px]">
         {/* Header */}
         <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">

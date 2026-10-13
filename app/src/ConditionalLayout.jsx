@@ -430,13 +430,13 @@ export default function ConditionalLayout({ children }) {
     const checkAdminUser = () => {
       const adminUser = window.localStorage.getItem("adminUser");
 
-      console.log("ADMIN AUTH CHECK:", adminUser);
+      // console.log("ADMIN AUTH CHECK:", adminUser);
 
       // adminUser remove/delete ho gaya
       if (!adminUser) {
-        console.log(
-          "ADMIN USER NOT FOUND → REDIRECTING TO LOGIN"
-        );
+        // console.log(
+        //   "ADMIN USER NOT FOUND → REDIRECTING TO LOGIN"
+        // );
 
         setAuthenticated(false);
 

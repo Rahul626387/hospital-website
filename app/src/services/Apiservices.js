@@ -150,28 +150,28 @@ class ApiService {
   }
 }
 
-  static async put(url, payload = {}) {
-    try {
-      const { data } = await axios.put(
-        `${base_url}${url}`,
-        payload,
-        {
-          headers: {
-            "x-api-key": secretkey,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+  // static async put(url, payload = {}) {
+  //   try {
+  //     const { data } = await axios.put(
+  //       `${base_url}${url}`,
+  //       payload,
+  //       {
+  //         headers: {
+  //           "x-api-key": secretkey,
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
 
-      return data;
-    } catch (error) {
-      console.error(
-        "PUT Error:",
-        error.response?.data || error.message
-      );
-      throw error;
-    }
-  }
+  //     return data;
+  //   } catch (error) {
+  //     console.error(
+  //       "PUT Error:",
+  //       error.response?.data || error.message
+  //     );
+  //     throw error;
+  //   }
+  // }
 
   // static async delete(url,payload = {}) {
   //   try {
@@ -195,6 +195,42 @@ class ApiService {
   //     throw error;
   //   }
   // }
+
+
+  
+static async put(url, payload = {}) {
+  try {
+    const isFormData =
+      typeof FormData !== "undefined" &&
+      payload instanceof FormData;
+
+    const { data } = await axios.put(
+      `${base_url}${url}`,
+      payload,
+      {
+        headers: {
+          "x-api-key": secretkey,
+
+          ...(isFormData
+            ? {}
+            : {
+                "Content-Type": "application/json",
+              }),
+        },
+      }
+    );
+
+    return data;
+  } catch (error) {
+    console.error(
+      "PUT Error:",
+      error.response?.data || error.message
+    );
+
+    throw error;
+  }
+}
+
 
 
   static async delete(url, payload = {}) {

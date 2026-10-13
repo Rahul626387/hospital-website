@@ -75,7 +75,7 @@ const AdminLayout = ({ children }) => {
         <div className="p-4 sm:p-3">
            {/* <Breadcrumb/> */}
           {children}
-            <Toaster position="top-right" />
+            {/* <Toaster position="top-right" /> */}
         </div>
       </main>
 

@@ -3670,6 +3670,1549 @@
 
 
 
+// "use client";
+
+// import React, { useRef, useState, useEffect } from "react";
+// import { motion } from "framer-motion";
+// import useSWR from "swr";
+// import toast from "react-hot-toast";
+
+// import {
+//   FiActivity,
+//   FiAward,
+//   FiBriefcase,
+//   FiCheck,
+//   FiChevronDown,
+//   FiFileText,
+//   FiImage,
+//   FiMail,
+//   FiPlus,
+//   FiSave,
+//   FiShield,
+//   FiStar,
+//   FiTrash2,
+//   FiUploadCloud,
+//   FiUser,
+//   FiX,
+//   FiPhone,
+//   FiBookOpen,
+//   FiCalendar,
+// } from "react-icons/fi";
+
+// import ApiService from "./../../src/services/Apiservices";
+
+// const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
+
+// const ALLOWED_IMAGE_TYPES = [
+//   "image/jpeg",
+//   "image/png",
+//   "image/webp",
+// ];
+
+// const SectionTitle = ({
+//   icon: Icon,
+//   title,
+//   description,
+//   iconClass = "bg-teal-50 text-[#087f8c]",
+// }) => (
+//   <div className="mb-4 flex items-start gap-3">
+//     <div
+//       className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${iconClass}`}
+//     >
+//       <Icon size={18} />
+//     </div>
+
+//     <div>
+//       <h2 className="text-[16px] font-bold tracking-tight text-slate-900">
+//         {title}
+//       </h2>
+
+//       {description && (
+//         <p className="mt-0.5 text-[12px] leading-5 text-slate-500">
+//           {description}
+//         </p>
+//       )}
+//     </div>
+//   </div>
+// );
+
+// const FieldLabel = ({ children, required = false }) => (
+//   <label className="mb-1.5 block text-[13px] font-semibold text-slate-700">
+//     {children}
+//     {required && <span className="ml-1 text-red-500">*</span>}
+//   </label>
+// );
+
+// const InlineError = ({ message }) => {
+//   if (!message) return null;
+
+//   return (
+//     <p className="mt-1.5 flex items-start gap-1.5 text-[11px] font-medium leading-4 text-red-600">
+//       <FiX size={13} className="mt-0.5 shrink-0" />
+//       <span>{message}</span>
+//     </p>
+//   );
+// };
+
+// const Input = ({
+//   icon: Icon,
+//   className = "",
+//   error = false,
+//   ...props
+// }) => (
+//   <div className="relative">
+//     {Icon && (
+//       <Icon
+//         size={16}
+//         className={`pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 ${
+//           error ? "text-red-400" : "text-slate-400"
+//         }`}
+//       />
+//     )}
+
+//     <input
+//       {...props}
+//       aria-invalid={error}
+//       className={`h-11 w-full rounded-xl border bg-white ${
+//         error
+//           ? "border-red-400 bg-red-50/40 focus:border-red-500 focus:ring-4 focus:ring-red-100"
+//           : "border-slate-200 hover:border-slate-300 focus:border-[#087f8c] focus:ring-4 focus:ring-[#087f8c]/10"
+//       } ${
+//         Icon ? "pl-10" : "px-3.5"
+//       } pr-3.5 text-[13px] font-medium text-slate-800 outline-none transition placeholder:text-[13px] placeholder:font-normal placeholder:text-slate-400 disabled:cursor-not-allowed disabled:bg-slate-50 ${className}`}
+//     />
+//   </div>
+// );
+
+// const Textarea = ({ error = false, ...props }) => (
+//   <textarea
+//     {...props}
+//     aria-invalid={error}
+//     className={`min-h-[115px] w-full resize-y rounded-xl border bg-white px-3.5 py-3 text-[13px] font-medium leading-5 text-slate-800 outline-none transition placeholder:text-[13px] placeholder:font-normal placeholder:text-slate-400 ${
+//       error
+//         ? "border-red-400 bg-red-50/40 focus:border-red-500 focus:ring-4 focus:ring-red-100"
+//         : "border-slate-200 hover:border-slate-300 focus:border-[#087f8c] focus:ring-4 focus:ring-[#087f8c]/10"
+//     }`}
+//   />
+// );
+
+// const Select = ({
+//   children,
+//   error = false,
+//   ...props
+// }) => (
+//   <div className="relative">
+//     <select
+//       {...props}
+//       aria-invalid={error}
+//       className={`h-11 w-full appearance-none rounded-xl border bg-white px-3.5 pr-10 text-[13px] font-medium text-slate-800 outline-none transition ${
+//         error
+//           ? "border-red-400 bg-red-50/40 focus:border-red-500 focus:ring-4 focus:ring-red-100"
+//           : "border-slate-200 hover:border-slate-300 focus:border-[#087f8c] focus:ring-4 focus:ring-[#087f8c]/10"
+//       }`}
+//     >
+//       {children}
+//     </select>
+
+//     <FiChevronDown
+//       size={16}
+//       className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+//     />
+//   </div>
+// );
+
+// const Toggle = ({ enabled, onChange, label, description }) => (
+//   <button
+//     type="button"
+//     onClick={() => onChange(!enabled)}
+//     className="flex w-full items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white p-3 text-left transition hover:border-slate-300"
+//   >
+//     <div>
+//       <p className="text-[13px] font-semibold text-slate-800">
+//         {label}
+//       </p>
+
+//       {description && (
+//         <p className="mt-0.5 text-[11px] leading-4 text-slate-500">
+//           {description}
+//         </p>
+//       )}
+//     </div>
+
+//     <span
+//       className={`relative h-5 w-9 shrink-0 rounded-full transition-colors ${
+//         enabled ? "bg-[#087f8c]" : "bg-slate-300"
+//       }`}
+//     >
+//       <span
+//         className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-transform ${
+//           enabled ? "translate-x-[18px]" : "translate-x-0.5"
+//         }`}
+//       />
+//     </span>
+//   </button>
+// );
+
+// export default function DoctorForm({
+//   onSubmit,
+//   onClose,
+//   userId,
+//   initialData = null,
+// }) {
+//   const imageInputRef = useRef(null);
+//   const certificateInputRefs = useRef({});
+//   const imagePreviewRef = useRef(null);
+
+//   const { data: deptData, isLoading: deptLoading } = useSWR(
+//     "departments",
+//     ApiService.get
+//   );
+
+//   const { data: specData, isLoading: specLoading } = useSWR(
+//     "specialties",
+//     ApiService.get
+//   );
+
+//   const departments = deptData?.data || [];
+//   const specialties = specData?.data || [];
+
+//   const [formData, setFormData] = useState({
+//     created_by: initialData?.created_by ?? userId ?? "",
+//     department_id: initialData?.department_id ?? "",
+//     specialty_id: initialData?.specialty_id ?? "",
+//     name: initialData?.name ?? "",
+//     contact_no: initialData?.contact_no ?? "",
+//     email: initialData?.email ?? "",
+//     qualification: initialData?.qualification ?? "",
+//     experience_years: initialData?.experience_years ?? "",
+//     image_url: initialData?.image_url ?? "",
+//     web_heading: initialData?.web_heading ?? "Senior Consultant",
+//     web_bio: initialData?.web_bio ?? "",
+//     web_experience: initialData?.web_experience ?? "",
+//     web_specilization: Array.isArray(initialData?.web_specilization)
+//       ? initialData.web_specilization
+//       : [],
+//     web_certificat: Array.isArray(initialData?.web_certificat)
+//       ? initialData.web_certificat
+//       : [],
+//     web_awards: Array.isArray(initialData?.web_awards)
+//       ? initialData.web_awards
+//       : [],
+//     available: initialData?.available ?? true,
+//     status: initialData?.status ?? true,
+//   });
+
+//   const [specializationInput, setSpecializationInput] = useState("");
+//   const [imagePreview, setImagePreview] = useState(
+//     initialData?.image_url || ""
+//   );
+//   const [saving, setSaving] = useState(false);
+//   const [errors, setErrors] = useState({});
+
+//   useEffect(() => {
+//     return () => {
+//       if (imagePreviewRef.current) {
+//         URL.revokeObjectURL(imagePreviewRef.current);
+//       }
+//     };
+//   }, []);
+
+//   const handleChange = (e) => {
+//     const { name, value } = e.target;
+
+//     setFormData((prev) => ({
+//       ...prev,
+//       [name]: value,
+//     }));
+
+//     setErrors((prev) => ({
+//       ...prev,
+//       [name]: "",
+//     }));
+//   };
+
+//   const validateForm = () => {
+//     const newErrors = {};
+
+//     if (!formData.name.trim()) {
+//       newErrors.name = "Please enter the doctor's full name.";
+//     } else if (formData.name.trim().length < 3) {
+//       newErrors.name = "Doctor name must contain at least 3 characters.";
+//     }
+
+//     if (!formData.email.trim()) {
+//       newErrors.email = "Please enter the doctor's email address.";
+//     } else if (
+//       !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())
+//     ) {
+//       newErrors.email =
+//         "Enter a valid email address, e.g. doctor@example.com.";
+//     }
+
+//     if (!formData.contact_no.trim()) {
+//       newErrors.contact_no = "Please enter the contact number.";
+//     } else {
+//       const digits = formData.contact_no.replace(/\D/g, "");
+
+//       if (digits.length < 7 || digits.length > 15) {
+//         newErrors.contact_no =
+//           "Contact number must contain 7 to 15 digits.";
+//       }
+//     }
+
+//     if (!formData.qualification.trim()) {
+//       newErrors.qualification =
+//         "Please enter qualification, e.g. MBBS, MD or MS.";
+//     }
+
+//     if (!formData.department_id) {
+//       newErrors.department_id = "Please select a department.";
+//     }
+
+//     if (!formData.specialty_id) {
+//       newErrors.specialty_id = "Please select a specialty.";
+//     }
+
+//     if (
+//       formData.experience_years !== "" &&
+//       (
+//         !Number.isFinite(Number(formData.experience_years)) ||
+//         Number(formData.experience_years) < 0 ||
+//         Number(formData.experience_years) > 80
+//       )
+//     ) {
+//       newErrors.experience_years =
+//         "Experience must be between 0 and 80 years.";
+//     }
+
+//     if (formData.web_heading.trim().length > 150) {
+//       newErrors.web_heading =
+//         "Profile heading cannot exceed 150 characters.";
+//     }
+
+//     if (formData.web_bio.length > 2000) {
+//       newErrors.web_bio =
+//         "Biography cannot exceed 2000 characters.";
+//     }
+
+//     if (
+//       formData.image_file &&
+//       !ALLOWED_IMAGE_TYPES.includes(formData.image_file.type)
+//     ) {
+//       newErrors.image_file =
+//         "Only JPG, PNG and WebP images are allowed.";
+//     }
+
+//     if (
+//       formData.image_file &&
+//       formData.image_file.size > MAX_IMAGE_SIZE
+//     ) {
+//       newErrors.image_file =
+//         "Doctor image must not exceed 5 MB.";
+//     }
+
+//     formData.web_certificat.forEach((certificate, index) => {
+//       if (certificate.file && certificate.file.size > MAX_IMAGE_SIZE) {
+//         newErrors[`certificate_${index}`] =
+//           `Certificate ${index + 1} must not exceed 5 MB.`;
+//       }
+//     });
+
+//     setErrors(newErrors);
+
+//     if (Object.keys(newErrors).length > 0) {
+//       toast.error("Please correct the highlighted fields.");
+
+//       const firstError = Object.keys(newErrors)[0];
+
+//       requestAnimationFrame(() => {
+//         const element = document.querySelector(
+//           `[name="${firstError}"]`
+//         );
+
+//         element?.scrollIntoView({
+//           behavior: "smooth",
+//           block: "center",
+//         });
+
+//         element?.focus?.();
+//       });
+
+//       return false;
+//     }
+
+//     return true;
+//   };
+
+//   // IMAGE VALIDATION
+//   const handleImageChange = (e) => {
+//     const file = e.target.files?.[0];
+
+//     if (!file) return;
+
+//     if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+//       setErrors((prev) => ({
+//         ...prev,
+//         image_file: "Only JPG, PNG and WebP images are allowed.",
+//       }));
+
+//       toast.error("Only JPG, PNG and WebP images are allowed.");
+//       e.target.value = "";
+//       return;
+//     }
+
+//     if (file.size > MAX_IMAGE_SIZE) {
+//       setErrors((prev) => ({
+//         ...prev,
+//         image_file: "Doctor image must not exceed 5 MB.",
+//       }));
+
+//       toast.error("Doctor image must not exceed 5 MB.");
+//       e.target.value = "";
+//       return;
+//     }
+
+//     if (imagePreviewRef.current) {
+//       URL.revokeObjectURL(imagePreviewRef.current);
+//     }
+
+//     const preview = URL.createObjectURL(file);
+
+//     imagePreviewRef.current = preview;
+//     setImagePreview(preview);
+
+//     setFormData((prev) => ({
+//       ...prev,
+//       image_url: file,
+//       image_file: file,
+//     }));
+
+//     setErrors((prev) => ({
+//       ...prev,
+//       image_file: "",
+//     }));
+
+//     toast.success("Doctor image selected successfully.");
+//   };
+
+//   // SPECIALIZATIONS
+//   const addSpecialization = () => {
+//     const value = specializationInput.trim();
+
+//     if (!value) {
+//       toast.error("Please enter a specialization.");
+//       return;
+//     }
+
+//     const exists = formData.web_specilization.some(
+//       (item) => item.toLowerCase() === value.toLowerCase()
+//     );
+
+//     if (exists) {
+//       toast.error("This specialization already exists.");
+//       return;
+//     }
+
+//     setFormData((prev) => ({
+//       ...prev,
+//       web_specilization: [...prev.web_specilization, value],
+//     }));
+
+//     setSpecializationInput("");
+//     toast.success("Specialization added.");
+//   };
+
+//   const handleSpecializationKeyDown = (e) => {
+//     if (e.key === "Enter" || e.key === ",") {
+//       e.preventDefault();
+//       addSpecialization();
+//     }
+//   };
+
+//   const removeSpecialization = (index) => {
+//     setFormData((prev) => ({
+//       ...prev,
+//       web_specilization: prev.web_specilization.filter(
+//         (_, i) => i !== index
+//       ),
+//     }));
+
+//     toast.success("Specialization removed.");
+//   };
+
+//   // CERTIFICATES
+//   const addCertificate = () => {
+//     setFormData((prev) => ({
+//       ...prev,
+//       web_certificat: [
+//         ...prev.web_certificat,
+//         {
+//           title: "",
+//           organization: "",
+//           year: "",
+//           file_url: "",
+//         },
+//       ],
+//     }));
+//   };
+
+//   const updateCertificate = (index, field, value) => {
+//     setFormData((prev) => {
+//       const certificates = [...prev.web_certificat];
+
+//       certificates[index] = {
+//         ...certificates[index],
+//         [field]: value,
+//       };
+
+//       return {
+//         ...prev,
+//         web_certificat: certificates,
+//       };
+//     });
+
+//     setErrors((prev) => ({
+//       ...prev,
+//       [`certificate_${index}`]: "",
+//     }));
+//   };
+
+//   const removeCertificate = (index) => {
+//     setFormData((prev) => ({
+//       ...prev,
+//       web_certificat: prev.web_certificat.filter(
+//         (_, i) => i !== index
+//       ),
+//     }));
+
+//     setErrors((prev) => {
+//       const next = { ...prev };
+//       delete next[`certificate_${index}`];
+//       return next;
+//     });
+
+//     toast.success("Certificate removed.");
+//   };
+
+//   const handleCertificateFile = (index, file) => {
+//     if (!file) return;
+
+//     const allowed = [
+//       "application/pdf",
+//       "image/jpeg",
+//       "image/png",
+//     ];
+
+//     if (!allowed.includes(file.type)) {
+//       setErrors((prev) => ({
+//         ...prev,
+//         [`certificate_${index}`]:
+//           "Certificate must be a PDF, JPG or PNG file.",
+//       }));
+
+//       toast.error("Certificate must be a PDF, JPG or PNG file.");
+
+//       if (certificateInputRefs.current[index]) {
+//         certificateInputRefs.current[index].value = "";
+//       }
+
+//       return;
+//     }
+
+//     if (file.size > MAX_IMAGE_SIZE) {
+//       setErrors((prev) => ({
+//         ...prev,
+//         [`certificate_${index}`]:
+//           "Certificate file must not exceed 5 MB.",
+//       }));
+
+//       toast.error("Certificate file must not exceed 5 MB.");
+
+//       if (certificateInputRefs.current[index]) {
+//         certificateInputRefs.current[index].value = "";
+//       }
+
+//       return;
+//     }
+
+//     setFormData((prev) => {
+//       const certificates = [...prev.web_certificat];
+
+//       certificates[index] = {
+//         ...certificates[index],
+//         file,
+//       };
+
+//       return {
+//         ...prev,
+//         web_certificat: certificates,
+//       };
+//     });
+
+//     setErrors((prev) => ({
+//       ...prev,
+//       [`certificate_${index}`]: "",
+//     }));
+
+//     toast.success("Certificate file selected.");
+//   };
+
+//   // AWARDS
+//   const addAward = () => {
+//     setFormData((prev) => ({
+//       ...prev,
+//       web_awards: [
+//         ...prev.web_awards,
+//         { title: "", organization: "", year: "" },
+//       ],
+//     }));
+//   };
+
+//   const updateAward = (index, field, value) => {
+//     setFormData((prev) => {
+//       const awards = [...prev.web_awards];
+
+//       awards[index] = {
+//         ...awards[index],
+//         [field]: value,
+//       };
+
+//       return {
+//         ...prev,
+//         web_awards: awards,
+//       };
+//     });
+//   };
+
+//   const removeAward = (index) => {
+//     setFormData((prev) => ({
+//       ...prev,
+//       web_awards: prev.web_awards.filter(
+//         (_, i) => i !== index
+//       ),
+//     }));
+
+//     toast.success("Award removed.");
+//   };
+
+//   const useExperienceText = () => {
+//     if (formData.experience_years === "") {
+//       setErrors((prev) => ({
+//         ...prev,
+//         experience_years: "Please enter experience in years first.",
+//       }));
+
+//       toast.error("Please enter experience in years first.");
+//       return;
+//     }
+
+//     setFormData((prev) => ({
+//       ...prev,
+//       web_experience: `${prev.experience_years}+ Years of Experience`,
+//     }));
+
+//     toast.success("Experience text generated.");
+//   };
+
+//   // SUBMIT
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+
+//     if (saving) return;
+
+//     if (!validateForm()) return;
+
+//     if (typeof onSubmit !== "function") {
+//       toast.error("Submit handler is not configured.");
+//       return;
+//     }
+
+//     try {
+//       setSaving(true);
+
+//       const payload = new FormData();
+
+//       payload.append("created_by", formData.created_by || "");
+//       payload.append("department_id", String(formData.department_id));
+//       payload.append("specialty_id", String(formData.specialty_id));
+//       payload.append("name", formData.name.trim());
+//       payload.append("contact_no", formData.contact_no.trim());
+//       payload.append("email", formData.email.trim());
+//       payload.append("qualification", formData.qualification.trim());
+
+//       payload.append(
+//         "experience_years",
+//         formData.experience_years !== ""
+//           ? String(formData.experience_years)
+//           : "0"
+//       );
+
+//       payload.append("web_experience", formData.web_experience || "");
+//       payload.append("web_bio", formData.web_bio || "");
+//       payload.append("web_heading", formData.web_heading || "");
+
+//       payload.append(
+//         "web_specilization",
+//         JSON.stringify(formData.web_specilization || [])
+//       );
+
+//       const certificates = formData.web_certificat.map(
+//         (certificate, index) => {
+//           if (certificate.file) {
+//             payload.append(
+//               `certificate_file_${index}`,
+//               certificate.file
+//             );
+//           }
+
+//           const { file, ...metadata } = certificate;
+
+//           return metadata;
+//         }
+//       );
+
+//       payload.append(
+//         "web_certificat",
+//         JSON.stringify(certificates)
+//       );
+
+//       payload.append(
+//         "web_awards",
+//         JSON.stringify(formData.web_awards || [])
+//       );
+
+//       payload.append("available", formData.available ? "1" : "0");
+//       payload.append("status", formData.status ? "1" : "0");
+
+//       if (formData.image_file) {
+//         payload.append("image", formData.image_file);
+//       }
+
+//       await onSubmit(payload);
+
+//       toast.success(
+//         initialData?.id
+//           ? "Doctor profile updated successfully!"
+//           : "Doctor profile saved successfully!"
+//       );
+//     } catch (error) {
+//       console.error("Doctor submit error:", error);
+
+//       toast.error(
+//         error?.message ||
+//           "Failed to save doctor profile. Please try again."
+//       );
+//     } finally {
+//       setSaving(false);
+//     }
+//   };
+
+//   const containerVariants = {
+//     hidden: { opacity: 0, y: 8 },
+//     visible: {
+//       opacity: 1,
+//       y: 0,
+//       transition: {
+//         duration: 0.35,
+//         staggerChildren: 0.04,
+//       },
+//     },
+//   };
+
+//   const itemVariants = {
+//     hidden: { opacity: 0, y: 8 },
+//     visible: {
+//       opacity: 1,
+//       y: 0,
+//       transition: { duration: 0.3 },
+//     },
+//   };
+
+//   return (
+//     <motion.form
+//       onSubmit={handleSubmit}
+//       variants={containerVariants}
+//       initial="hidden"
+//       animate="visible"
+//       className="w-full"
+//       noValidate
+//     >
+//       <div className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_320px]">
+//         <div className="space-y-4">
+
+//           {/* BASIC INFORMATION */}
+//           <motion.section
+//             variants={itemVariants}
+//             className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5"
+//           >
+//             <SectionTitle
+//               icon={FiUser}
+//               title="Basic Information"
+//               description="Enter doctor's personal and contact details."
+//             />
+
+//             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+//               <div className="md:col-span-2">
+//                 <FieldLabel required>Doctor Name</FieldLabel>
+
+//                 <Input
+//                   name="name"
+//                   value={formData.name}
+//                   onChange={handleChange}
+//                   placeholder="Enter doctor full name"
+//                   icon={FiUser}
+//                   error={Boolean(errors.name)}
+//                 />
+
+//                 <InlineError message={errors.name} />
+//               </div>
+
+//               <div>
+//                 <FieldLabel required>Email Address</FieldLabel>
+
+//                 <Input
+//                   name="email"
+//                   type="email"
+//                   value={formData.email}
+//                   onChange={handleChange}
+//                   placeholder="doctor@example.com"
+//                   icon={FiMail}
+//                   error={Boolean(errors.email)}
+//                 />
+
+//                 <InlineError message={errors.email} />
+//               </div>
+
+//               <div>
+//                 <FieldLabel required>Contact Number</FieldLabel>
+
+//                 <Input
+//                   name="contact_no"
+//                   type="tel"
+//                   value={formData.contact_no}
+//                   onChange={handleChange}
+//                   placeholder="+91 98765 43210"
+//                   icon={FiPhone}
+//                   error={Boolean(errors.contact_no)}
+//                 />
+
+//                 <InlineError message={errors.contact_no} />
+//               </div>
+
+//               <div className="md:col-span-2">
+//                 <FieldLabel required>Qualification</FieldLabel>
+
+//                 <Input
+//                   name="qualification"
+//                   value={formData.qualification}
+//                   onChange={handleChange}
+//                   placeholder="MBBS, MD (Medicine), DM (Cardiology)"
+//                   icon={FiBookOpen}
+//                   error={Boolean(errors.qualification)}
+//                 />
+
+//                 <InlineError message={errors.qualification} />
+//               </div>
+//             </div>
+//           </motion.section>
+
+//           {/* PROFESSIONAL INFORMATION */}
+//           <motion.section
+//             variants={itemVariants}
+//             className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5"
+//           >
+//             <SectionTitle
+//               icon={FiBriefcase}
+//               title="Professional Information"
+//               description="Configure department, specialty and experience."
+//               iconClass="bg-blue-50 text-blue-600"
+//             />
+
+//             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+//               <div>
+//                 <FieldLabel required>Department</FieldLabel>
+
+//                 <Select
+//                   name="department_id"
+//                   value={formData.department_id}
+//                   onChange={handleChange}
+//                   disabled={deptLoading}
+//                   error={Boolean(errors.department_id)}
+//                 >
+//                   <option value="">
+//                     {deptLoading
+//                       ? "Loading departments..."
+//                       : "Select Department"}
+//                   </option>
+
+//                   {departments.map((department) => (
+//                     <option key={department.id} value={department.id}>
+//                       {department.name}
+//                     </option>
+//                   ))}
+//                 </Select>
+
+//                 <InlineError message={errors.department_id} />
+//               </div>
+
+//               <div>
+//                 <FieldLabel required>Specialty</FieldLabel>
+
+//                 <Select
+//                   name="specialty_id"
+//                   value={formData.specialty_id}
+//                   onChange={handleChange}
+//                   disabled={specLoading}
+//                   error={Boolean(errors.specialty_id)}
+//                 >
+//                   <option value="">
+//                     {specLoading
+//                       ? "Loading specialties..."
+//                       : "Select Specialty"}
+//                   </option>
+
+//                   {specialties.map((specialty) => (
+//                     <option key={specialty.id} value={specialty.id}>
+//                       {specialty.name}
+//                     </option>
+//                   ))}
+//                 </Select>
+
+//                 <InlineError message={errors.specialty_id} />
+//               </div>
+
+//               <div>
+//                 <FieldLabel>Experience (Years)</FieldLabel>
+
+//                 <Input
+//                   name="experience_years"
+//                   type="number"
+//                   min="0"
+//                   max="80"
+//                   value={formData.experience_years}
+//                   onChange={handleChange}
+//                   placeholder="18"
+//                   icon={FiCalendar}
+//                   error={Boolean(errors.experience_years)}
+//                 />
+
+//                 <InlineError message={errors.experience_years} />
+//               </div>
+
+//               <div>
+//                 <FieldLabel>Website Experience</FieldLabel>
+
+//                 <div className="flex gap-2">
+//                   <div className="min-w-0 flex-1">
+//                     <Input
+//                       name="web_experience"
+//                       value={formData.web_experience}
+//                       onChange={handleChange}
+//                       placeholder="18+ Years of Experience"
+//                     />
+//                   </div>
+
+//                   <button
+//                     type="button"
+//                     onClick={useExperienceText}
+//                     className="h-11 shrink-0 rounded-xl border border-[#087f8c]/20 bg-[#087f8c]/5 px-3 text-[12px] font-semibold text-[#087f8c] hover:bg-[#087f8c]/10"
+//                   >
+//                     Auto
+//                   </button>
+//                 </div>
+//               </div>
+//             </div>
+//           </motion.section>
+
+//           {/* WEBSITE PROFILE */}
+//           <motion.section
+//             variants={itemVariants}
+//             className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5"
+//           >
+//             <SectionTitle
+//               icon={FiFileText}
+//               title="Website Profile"
+//               description="Content displayed on public doctor profile."
+//               iconClass="bg-purple-50 text-purple-600"
+//             />
+
+//             <div className="space-y-4">
+//               <div>
+//                 <FieldLabel>Profile Heading</FieldLabel>
+
+//                 <Input
+//                   name="web_heading"
+//                   value={formData.web_heading}
+//                   onChange={handleChange}
+//                   placeholder="Senior Consultant Cardiologist"
+//                   error={Boolean(errors.web_heading)}
+//                 />
+
+//                 <InlineError message={errors.web_heading} />
+//               </div>
+
+//               <div>
+//                 <FieldLabel>Doctor Biography</FieldLabel>
+
+//                 <Textarea
+//                   name="web_bio"
+//                   value={formData.web_bio}
+//                   onChange={handleChange}
+//                   placeholder="Write a professional biography about the doctor..."
+//                   error={Boolean(errors.web_bio)}
+//                 />
+
+//                 <div className="mt-1.5 flex items-start justify-between gap-2">
+//                   <InlineError message={errors.web_bio} />
+
+//                   <p className="shrink-0 text-[11px] text-slate-400">
+//                     {formData.web_bio.length}/2000
+//                   </p>
+//                 </div>
+//               </div>
+//             </div>
+//           </motion.section>
+
+//           {/* SPECIALIZATIONS */}
+//           <motion.section
+//             variants={itemVariants}
+//             className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5"
+//           >
+//             <SectionTitle
+//               icon={FiActivity}
+//               title="Specializations"
+//               description="Add doctor's areas of expertise."
+//               iconClass="bg-emerald-50 text-emerald-600"
+//             />
+
+//             <FieldLabel>Areas of Specialization</FieldLabel>
+
+//             <div className="flex gap-2">
+//               <input
+//                 value={specializationInput}
+//                 onChange={(e) => setSpecializationInput(e.target.value)}
+//                 onKeyDown={handleSpecializationKeyDown}
+//                 placeholder="e.g. Interventional Cardiology"
+//                 className="h-11 min-w-0 flex-1 rounded-xl border border-slate-200 bg-white px-3.5 text-[13px] outline-none focus:border-[#087f8c] focus:ring-4 focus:ring-[#087f8c]/10"
+//               />
+
+//               <button
+//                 type="button"
+//                 onClick={addSpecialization}
+//                 className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#087f8c] text-white hover:bg-[#066c77]"
+//               >
+//                 <FiPlus size={18} />
+//               </button>
+//             </div>
+
+//             <p className="mt-1.5 text-[11px] text-slate-400">
+//               Press Enter or click + to add.
+//             </p>
+
+//             {formData.web_specilization.length > 0 && (
+//               <div className="mt-3 flex flex-wrap gap-2">
+//                 {formData.web_specilization.map((item, index) => (
+//                   <div
+//                     key={`${item}-${index}`}
+//                     className="inline-flex items-center gap-1.5 rounded-full border border-teal-100 bg-teal-50 px-2.5 py-1.5 text-[12px] font-semibold text-[#087f8c]"
+//                   >
+//                     <FiCheck size={12} />
+//                     <span>{item}</span>
+
+//                     <button
+//                       type="button"
+//                       onClick={() => removeSpecialization(index)}
+//                       className="rounded-full p-0.5 hover:bg-white"
+//                       aria-label={`Remove ${item}`}
+//                     >
+//                       <FiX size={12} />
+//                     </button>
+//                   </div>
+//                 ))}
+//               </div>
+//             )}
+//           </motion.section>
+
+//           {/* CERTIFICATES */}
+//           <motion.section
+//             variants={itemVariants}
+//             className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5"
+//           >
+//             <div className="flex items-start justify-between gap-3">
+//               <SectionTitle
+//                 icon={FiShield}
+//                 title="Certificates"
+//                 description="Add professional certifications."
+//                 iconClass="bg-amber-50 text-amber-600"
+//               />
+
+//               <button
+//                 type="button"
+//                 onClick={addCertificate}
+//                 className="flex shrink-0 items-center gap-1.5 rounded-xl bg-[#087f8c] px-3 py-2 text-[12px] font-semibold text-white hover:bg-[#066c77]"
+//               >
+//                 <FiPlus size={14} />
+//                 <span className="hidden sm:inline">Add Certificate</span>
+//               </button>
+//             </div>
+
+//             {formData.web_certificat.length === 0 ? (
+//               <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-8 text-center">
+//                 <FiShield size={24} className="mx-auto text-slate-400" />
+
+//                 <p className="mt-2 text-[13px] font-semibold text-slate-700">
+//                   No certificates added
+//                 </p>
+
+//                 <p className="mt-0.5 text-[11px] text-slate-400">
+//                   Add certifications to display on profile.
+//                 </p>
+//               </div>
+//             ) : (
+//               <div className="space-y-3">
+//                 {formData.web_certificat.map((certificate, index) => (
+//                   <motion.div
+//                     key={index}
+//                     initial={{ opacity: 0, y: 8 }}
+//                     animate={{ opacity: 1, y: 0 }}
+//                     className="rounded-xl border border-slate-200 bg-slate-50/70 p-3.5"
+//                   >
+//                     <div className="mb-3 flex items-center justify-between">
+//                       <div className="flex items-center gap-2">
+//                         <FiAward className="text-amber-600" size={18} />
+
+//                         <p className="text-[12px] font-bold text-slate-800">
+//                           Certificate #{index + 1}
+//                         </p>
+//                       </div>
+
+//                       <button
+//                         type="button"
+//                         onClick={() => removeCertificate(index)}
+//                         className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-50 text-red-500 hover:bg-red-100"
+//                         aria-label="Remove certificate"
+//                       >
+//                         <FiTrash2 size={14} />
+//                       </button>
+//                     </div>
+
+//                     <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+//                       <div>
+//                         <FieldLabel>Certificate Title</FieldLabel>
+
+//                         <Input
+//                           value={certificate.title || ""}
+//                           onChange={(e) =>
+//                             updateCertificate(index, "title", e.target.value)
+//                           }
+//                           placeholder="Advanced Cardiac Life Support"
+//                         />
+//                       </div>
+
+//                       <div>
+//                         <FieldLabel>Organization</FieldLabel>
+
+//                         <Input
+//                           value={certificate.organization || ""}
+//                           onChange={(e) =>
+//                             updateCertificate(
+//                               index,
+//                               "organization",
+//                               e.target.value
+//                             )
+//                           }
+//                           placeholder="American Heart Association"
+//                         />
+//                       </div>
+
+//                       <div>
+//                         <FieldLabel>Year</FieldLabel>
+
+//                         <Input
+//                           type="number"
+//                           value={certificate.year || ""}
+//                           onChange={(e) =>
+//                             updateCertificate(index, "year", e.target.value)
+//                           }
+//                           placeholder="2024"
+//                           icon={FiCalendar}
+//                         />
+//                       </div>
+
+//                       <div>
+//                         <FieldLabel>Certificate File</FieldLabel>
+
+//                         <input
+//                           type="file"
+//                           accept=".pdf,.jpg,.jpeg,.png"
+//                           ref={(element) => {
+//                             certificateInputRefs.current[index] = element;
+//                           }}
+//                           onChange={(e) =>
+//                             handleCertificateFile(
+//                               index,
+//                               e.target.files?.[0]
+//                             )
+//                           }
+//                           className="hidden"
+//                         />
+
+//                         <button
+//                           type="button"
+//                           onClick={() =>
+//                             certificateInputRefs.current[index]?.click()
+//                           }
+//                           className={`flex h-11 w-full items-center gap-2 rounded-xl border border-dashed bg-white px-3.5 text-left hover:border-[#087f8c] ${
+//                             errors[`certificate_${index}`]
+//                               ? "border-red-400"
+//                               : "border-slate-300"
+//                           }`}
+//                         >
+//                           <FiUploadCloud
+//                             size={16}
+//                             className="shrink-0 text-[#087f8c]"
+//                           />
+
+//                           <span className="min-w-0 truncate text-[12px] text-slate-600">
+//                             {certificate.file?.name ||
+//                               certificate.file_url ||
+//                               "Upload certificate"}
+//                           </span>
+//                         </button>
+
+//                         <InlineError
+//                           message={errors[`certificate_${index}`]}
+//                         />
+//                       </div>
+//                     </div>
+//                   </motion.div>
+//                 ))}
+//               </div>
+//             )}
+//           </motion.section>
+
+//           {/* AWARDS */}
+//           <motion.section
+//             variants={itemVariants}
+//             className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5"
+//           >
+//             <div className="flex items-start justify-between gap-3">
+//               <SectionTitle
+//                 icon={FiStar}
+//                 title="Awards & Recognition"
+//                 description="Showcase professional recognition."
+//                 iconClass="bg-rose-50 text-rose-600"
+//               />
+
+//               <button
+//                 type="button"
+//                 onClick={addAward}
+//                 className="flex shrink-0 items-center gap-1.5 rounded-xl bg-[#087f8c] px-3 py-2 text-[12px] font-semibold text-white hover:bg-[#066c77]"
+//               >
+//                 <FiPlus size={14} />
+//                 <span className="hidden sm:inline">Add Award</span>
+//               </button>
+//             </div>
+
+//             {formData.web_awards.length === 0 ? (
+//               <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-8 text-center">
+//                 <FiStar size={24} className="mx-auto text-slate-400" />
+
+//                 <p className="mt-2 text-[13px] font-semibold text-slate-700">
+//                   No awards added
+//                 </p>
+
+//                 <p className="mt-0.5 text-[11px] text-slate-400">
+//                   Add awards and recognition received by doctor.
+//                 </p>
+//               </div>
+//             ) : (
+//               <div className="space-y-3">
+//                 {formData.web_awards.map((award, index) => (
+//                   <motion.div
+//                     key={index}
+//                     initial={{ opacity: 0, y: 8 }}
+//                     animate={{ opacity: 1, y: 0 }}
+//                     className="rounded-xl border border-slate-200 bg-slate-50/70 p-3.5"
+//                   >
+//                     <div className="mb-3 flex items-center justify-between">
+//                       <div className="flex items-center gap-2">
+//                         <FiStar size={17} className="text-rose-600" />
+
+//                         <p className="text-[12px] font-bold text-slate-800">
+//                           Award #{index + 1}
+//                         </p>
+//                       </div>
+
+//                       <button
+//                         type="button"
+//                         onClick={() => removeAward(index)}
+//                         className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-50 text-red-500 hover:bg-red-100"
+//                         aria-label="Remove award"
+//                       >
+//                         <FiTrash2 size={14} />
+//                       </button>
+//                     </div>
+
+//                     <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+//                       <div>
+//                         <FieldLabel>Award Title</FieldLabel>
+
+//                         <Input
+//                           value={award.title || ""}
+//                           onChange={(e) =>
+//                             updateAward(index, "title", e.target.value)
+//                           }
+//                           placeholder="Best Cardiologist Award"
+//                         />
+//                       </div>
+
+//                       <div>
+//                         <FieldLabel>Organization</FieldLabel>
+
+//                         <Input
+//                           value={award.organization || ""}
+//                           onChange={(e) =>
+//                             updateAward(
+//                               index,
+//                               "organization",
+//                               e.target.value
+//                             )
+//                           }
+//                           placeholder="Healthcare Excellence Foundation"
+//                         />
+//                       </div>
+
+//                       <div>
+//                         <FieldLabel>Year</FieldLabel>
+
+//                         <Input
+//                           type="number"
+//                           value={award.year || ""}
+//                           onChange={(e) =>
+//                             updateAward(index, "year", e.target.value)
+//                           }
+//                           placeholder="2024"
+//                           icon={FiCalendar}
+//                         />
+//                       </div>
+//                     </div>
+//                   </motion.div>
+//                 ))}
+//               </div>
+//             )}
+//           </motion.section>
+//         </div>
+
+//         {/* RIGHT SIDE */}
+//         <div className="space-y-4 xl:sticky xl:top-4 xl:self-start">
+
+//           {/* DOCTOR PHOTO */}
+//           <motion.section
+//             variants={itemVariants}
+//             className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
+//           >
+//             <div className="border-b border-slate-100 p-4 sm:p-5">
+//               <SectionTitle
+//                 icon={FiImage}
+//                 title="Doctor Photo"
+//                 description="Upload professional profile photo."
+//                 iconClass="bg-cyan-50 text-cyan-600"
+//               />
+
+//               <div className="flex flex-col items-center">
+//                 <div className="relative flex h-36 w-36 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-slate-100 shadow-lg">
+//                   {imagePreview ? (
+//                     <img
+//                       src={imagePreview}
+//                       alt="Doctor preview"
+//                       className="h-full w-full object-cover"
+//                     />
+//                   ) : (
+//                     <div className="text-center">
+//                       <FiUser
+//                         size={32}
+//                         className="mx-auto text-slate-300"
+//                       />
+
+//                       <p className="mt-1 text-[10px] text-slate-400">
+//                         No Photo
+//                       </p>
+//                     </div>
+//                   )}
+//                 </div>
+
+//                 <input
+//                   ref={imageInputRef}
+//                   type="file"
+//                   accept="image/jpeg,image/png,image/webp"
+//                   onChange={handleImageChange}
+//                   className="hidden"
+//                 />
+
+//                 <button
+//                   type="button"
+//                   onClick={() => imageInputRef.current?.click()}
+//                   className="mt-4 flex items-center gap-2 rounded-xl border border-[#087f8c]/20 bg-[#087f8c]/5 px-3.5 py-2 text-[12px] font-semibold text-[#087f8c] hover:bg-[#087f8c]/10"
+//                 >
+//                   <FiUploadCloud size={15} />
+//                   {imagePreview ? "Change Photo" : "Upload Photo"}
+//                 </button>
+
+//                 <p className="mt-2 text-center text-[10px] leading-4 text-slate-400">
+//                   JPG, PNG or WebP
+//                   <br />
+//                   Maximum size: 5 MB
+//                 </p>
+
+//                 <InlineError message={errors.image_file} />
+//               </div>
+//             </div>
+
+//             {/* STATUS */}
+//             <div className="space-y-2.5 p-4 sm:p-5">
+//               <FieldLabel>Doctor Status</FieldLabel>
+
+//               <Toggle
+//                 enabled={Boolean(Number(formData.status))}
+//                 onChange={(value) =>
+//                   setFormData((prev) => ({
+//                     ...prev,
+//                     status: value,
+//                   }))
+//                 }
+//                 label="Active Doctor"
+//                 description="Profile is visible in the system."
+//               />
+
+//               <Toggle
+//                 enabled={Boolean(Number(formData.available))}
+//                 onChange={(value) =>
+//                   setFormData((prev) => ({
+//                     ...prev,
+//                     available: value,
+//                   }))
+//                 }
+//                 label="Available for Appointment"
+//                 description="Allow patients to book appointments."
+//               />
+//             </div>
+//           </motion.section>
+
+//           {/* PROFILE SUMMARY */}
+//           <motion.section
+//             variants={itemVariants}
+//             className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
+//           >
+//             <div className="mb-3 flex items-center gap-2.5">
+//               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
+//                 <FiActivity size={16} />
+//               </div>
+
+//               <div>
+//                 <h3 className="text-[14px] font-bold text-slate-900">
+//                   Profile Summary
+//                 </h3>
+
+//                 <p className="text-[10px] text-slate-400">
+//                   Current form information
+//                 </p>
+//               </div>
+//             </div>
+
+//             <div className="space-y-1.5">
+//               {[
+//                 {
+//                   label: "Specializations",
+//                   value: formData.web_specilization.length,
+//                 },
+//                 {
+//                   label: "Certificates",
+//                   value: formData.web_certificat.length,
+//                 },
+//                 {
+//                   label: "Awards",
+//                   value: formData.web_awards.length,
+//                 },
+//                 {
+//                   label: "Experience",
+//                   value:
+//                     formData.experience_years !== ""
+//                       ? `${formData.experience_years} Years`
+//                       : "—",
+//                 },
+//               ].map((item) => (
+//                 <div
+//                   key={item.label}
+//                   className="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2"
+//                 >
+//                   <span className="text-[11px] font-medium text-slate-500">
+//                     {item.label}
+//                   </span>
+
+//                   <span className="text-[12px] font-bold text-slate-800">
+//                     {item.value}
+//                   </span>
+//                 </div>
+//               ))}
+//             </div>
+//           </motion.section>
+//         </div>
+//       </div>
+
+//       {/* FOOTER */}
+//       <motion.div
+//         variants={itemVariants}
+//         className="mt-4 flex flex-col-reverse gap-3 rounded-2xl border border-slate-200 bg-white p-3.5 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-4"
+//       >
+//         <div>
+//           <p className="text-[12px] font-semibold text-slate-700">
+//             Ready to save doctor profile?
+//           </p>
+
+//           <p className="mt-0.5 text-[10px] text-slate-400">
+//             Make sure all required information is completed.
+//           </p>
+//         </div>
+
+//         <div className="flex w-full gap-2 sm:w-auto">
+//           {onClose && (
+//             <button
+//               type="button"
+//               onClick={onClose}
+//               disabled={saving}
+//               className="flex h-10 flex-1 items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 text-[12px] font-semibold text-slate-600 hover:bg-slate-50 disabled:opacity-50 sm:flex-none"
+//             >
+//               <FiX size={15} />
+//               Cancel
+//             </button>
+//           )}
+
+//           <button
+//             type="submit"
+//             disabled={saving}
+//             className="flex h-10 flex-1 items-center justify-center gap-1.5 rounded-xl bg-[#087f8c] px-5 text-[12px] font-semibold text-white shadow-sm transition hover:bg-[#066c77] disabled:cursor-not-allowed disabled:opacity-60 sm:flex-none"
+//           >
+//             {saving ? (
+//               <>
+//                 <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+//                 Saving...
+//               </>
+//             ) : (
+//               <>
+//                 <FiSave size={15} />
+//                 {initialData?.id ? "Update Doctor" : "Save Doctor"}
+//               </>
+//             )}
+//           </button>
+//         </div>
+//       </motion.div>
+//     </motion.form>
+//   );
+// }
+
+
+
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
@@ -3708,6 +5251,39 @@ const ALLOWED_IMAGE_TYPES = [
   "image/png",
   "image/webp",
 ];
+
+// JSON string ya array ko array mein convert karega
+const parseArray = (value) => {
+  if (Array.isArray(value)) return value;
+
+  if (typeof value === "string" && value.trim()) {
+    try {
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+
+  return [];
+};
+
+// Database se 0, 1, "0", "1", true, false handle karega
+const toBoolean = (value, defaultValue = true) => {
+  if (value === null || value === undefined || value === "") {
+    return defaultValue;
+  }
+
+  if (value === false || value === 0 || value === "0") {
+    return false;
+  }
+
+  if (value === true || value === 1 || value === "1") {
+    return true;
+  }
+
+  return Boolean(value);
+};
 
 const SectionTitle = ({
   icon: Icon,
@@ -3796,11 +5372,7 @@ const Textarea = ({ error = false, ...props }) => (
   />
 );
 
-const Select = ({
-  children,
-  error = false,
-  ...props
-}) => (
+const Select = ({ children, error = false, ...props }) => (
   <div className="relative">
     <select
       {...props}
@@ -3828,9 +5400,7 @@ const Toggle = ({ enabled, onChange, label, description }) => (
     className="flex w-full items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white p-3 text-left transition hover:border-slate-300"
   >
     <div>
-      <p className="text-[13px] font-semibold text-slate-800">
-        {label}
-      </p>
+      <p className="text-[13px] font-semibold text-slate-800">{label}</p>
 
       {description && (
         <p className="mt-0.5 text-[11px] leading-4 text-slate-500">
@@ -3852,6 +5422,27 @@ const Toggle = ({ enabled, onChange, label, description }) => (
     </span>
   </button>
 );
+
+const getInitialFormData = (data, userId) => ({
+  created_by: data?.created_by ?? userId ?? "",
+  department_id: data?.department_id ?? "",
+  specialty_id: data?.specialty_id ?? "",
+  name: data?.name ?? "",
+  contact_no: data?.contact_no ?? "",
+  email: data?.email ?? "",
+  qualification: data?.qualification ?? "",
+  experience_years: data?.experience_years ?? "",
+  image_url: data?.image_url ?? "",
+  image_file: null,
+  web_heading: data?.web_heading ?? "Senior Consultant",
+  web_bio: data?.web_bio ?? "",
+  web_experience: data?.web_experience ?? "",
+  web_specilization: parseArray(data?.web_specilization),
+  web_certificat: parseArray(data?.web_certificat),
+  web_awards: parseArray(data?.web_awards),
+  available: toBoolean(data?.available, true),
+  status: toBoolean(data?.status, true),
+});
 
 export default function DoctorForm({
   onSubmit,
@@ -3876,46 +5467,44 @@ export default function DoctorForm({
   const departments = deptData?.data || [];
   const specialties = specData?.data || [];
 
-  const [formData, setFormData] = useState({
-    created_by: initialData?.created_by ?? userId ?? "",
-    department_id: initialData?.department_id ?? "",
-    specialty_id: initialData?.specialty_id ?? "",
-    name: initialData?.name ?? "",
-    contact_no: initialData?.contact_no ?? "",
-    email: initialData?.email ?? "",
-    qualification: initialData?.qualification ?? "",
-    experience_years: initialData?.experience_years ?? "",
-    image_url: initialData?.image_url ?? "",
-    web_heading: initialData?.web_heading ?? "Senior Consultant",
-    web_bio: initialData?.web_bio ?? "",
-    web_experience: initialData?.web_experience ?? "",
-    web_specilization: Array.isArray(initialData?.web_specilization)
-      ? initialData.web_specilization
-      : [],
-    web_certificat: Array.isArray(initialData?.web_certificat)
-      ? initialData.web_certificat
-      : [],
-    web_awards: Array.isArray(initialData?.web_awards)
-      ? initialData.web_awards
-      : [],
-    available: initialData?.available ?? true,
-    status: initialData?.status ?? true,
-  });
+  const [formData, setFormData] = useState(() =>
+    getInitialFormData(initialData, userId)
+  );
 
   const [specializationInput, setSpecializationInput] = useState("");
+
   const [imagePreview, setImagePreview] = useState(
     initialData?.image_url || ""
   );
+
+  const [removeImage, setRemoveImage] = useState(false);
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState({});
 
+  // Edit mode mein selected doctor ka data reload karein
   useEffect(() => {
+    if (imagePreviewRef.current) {
+      URL.revokeObjectURL(imagePreviewRef.current);
+      imagePreviewRef.current = null;
+    }
+
+    setFormData(getInitialFormData(initialData, userId));
+    setImagePreview(initialData?.image_url || "");
+    setRemoveImage(false);
+    setSpecializationInput("");
+    setErrors({});
+
+    if (imageInputRef.current) {
+      imageInputRef.current.value = "";
+    }
+
     return () => {
       if (imagePreviewRef.current) {
         URL.revokeObjectURL(imagePreviewRef.current);
+        imagePreviewRef.current = null;
       }
     };
-  }, []);
+  }, [initialData, userId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -3975,11 +5564,9 @@ export default function DoctorForm({
 
     if (
       formData.experience_years !== "" &&
-      (
-        !Number.isFinite(Number(formData.experience_years)) ||
+      (!Number.isFinite(Number(formData.experience_years)) ||
         Number(formData.experience_years) < 0 ||
-        Number(formData.experience_years) > 80
-      )
+        Number(formData.experience_years) > 80)
     ) {
       newErrors.experience_years =
         "Experience must be between 0 and 80 years.";
@@ -3991,8 +5578,7 @@ export default function DoctorForm({
     }
 
     if (formData.web_bio.length > 2000) {
-      newErrors.web_bio =
-        "Biography cannot exceed 2000 characters.";
+      newErrors.web_bio = "Biography cannot exceed 2000 characters.";
     }
 
     if (
@@ -4007,8 +5593,7 @@ export default function DoctorForm({
       formData.image_file &&
       formData.image_file.size > MAX_IMAGE_SIZE
     ) {
-      newErrors.image_file =
-        "Doctor image must not exceed 5 MB.";
+      newErrors.image_file = "Doctor image must not exceed 5 MB.";
     }
 
     formData.web_certificat.forEach((certificate, index) => {
@@ -4044,7 +5629,7 @@ export default function DoctorForm({
     return true;
   };
 
-  // IMAGE VALIDATION
+  // IMAGE UPLOAD
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
 
@@ -4079,11 +5664,12 @@ export default function DoctorForm({
     const preview = URL.createObjectURL(file);
 
     imagePreviewRef.current = preview;
+
     setImagePreview(preview);
+    setRemoveImage(false);
 
     setFormData((prev) => ({
       ...prev,
-      image_url: file,
       image_file: file,
     }));
 
@@ -4093,6 +5679,32 @@ export default function DoctorForm({
     }));
 
     toast.success("Doctor image selected successfully.");
+  };
+
+  // REMOVE CURRENT OR NEW IMAGE
+  const handleRemoveImage = () => {
+    if (imagePreviewRef.current) {
+      URL.revokeObjectURL(imagePreviewRef.current);
+      imagePreviewRef.current = null;
+    }
+
+    setImagePreview("");
+    setRemoveImage(true);
+
+    setFormData((prev) => ({
+      ...prev,
+      image_url: "",
+      image_file: null,
+    }));
+
+    if (imageInputRef.current) {
+      imageInputRef.current.value = "";
+    }
+
+    setErrors((prev) => ({
+      ...prev,
+      image_file: "",
+    }));
   };
 
   // SPECIALIZATIONS
@@ -4105,7 +5717,8 @@ export default function DoctorForm({
     }
 
     const exists = formData.web_specilization.some(
-      (item) => item.toLowerCase() === value.toLowerCase()
+      (item) =>
+        String(item).toLowerCase() === value.toLowerCase()
     );
 
     if (exists) {
@@ -4263,7 +5876,11 @@ export default function DoctorForm({
       ...prev,
       web_awards: [
         ...prev.web_awards,
-        { title: "", organization: "", year: "" },
+        {
+          title: "",
+          organization: "",
+          year: "",
+        },
       ],
     }));
   };
@@ -4287,9 +5904,7 @@ export default function DoctorForm({
   const removeAward = (index) => {
     setFormData((prev) => ({
       ...prev,
-      web_awards: prev.web_awards.filter(
-        (_, i) => i !== index
-      ),
+      web_awards: prev.web_awards.filter((_, i) => i !== index),
     }));
 
     toast.success("Award removed.");
@@ -4299,7 +5914,8 @@ export default function DoctorForm({
     if (formData.experience_years === "") {
       setErrors((prev) => ({
         ...prev,
-        experience_years: "Please enter experience in years first.",
+        experience_years:
+          "Please enter experience in years first.",
       }));
 
       toast.error("Please enter experience in years first.");
@@ -4319,7 +5935,6 @@ export default function DoctorForm({
     e.preventDefault();
 
     if (saving) return;
-
     if (!validateForm()) return;
 
     if (typeof onSubmit !== "function") {
@@ -4358,7 +5973,7 @@ export default function DoctorForm({
 
       const certificates = formData.web_certificat.map(
         (certificate, index) => {
-          if (certificate.file) {
+          if (certificate.file instanceof File) {
             payload.append(
               `certificate_file_${index}`,
               certificate.file
@@ -4366,7 +5981,6 @@ export default function DoctorForm({
           }
 
           const { file, ...metadata } = certificate;
-
           return metadata;
         }
       );
@@ -4381,25 +5995,35 @@ export default function DoctorForm({
         JSON.stringify(formData.web_awards || [])
       );
 
-      payload.append("available", formData.available ? "1" : "0");
-      payload.append("status", formData.status ? "1" : "0");
+      payload.append(
+        "available",
+        formData.available ? "1" : "0"
+      );
 
-      if (formData.image_file) {
+      payload.append(
+        "status",
+        formData.status ? "1" : "0"
+      );
+
+      if (formData.image_file instanceof File) {
         payload.append("image", formData.image_file);
       }
 
-      await onSubmit(payload);
-
-      toast.success(
-        initialData?.id
-          ? "Doctor profile updated successfully!"
-          : "Doctor profile saved successfully!"
+      // Existing image untouched: false
+      // Remove image: true
+      // New image selected: false, because new image takes priority
+      payload.append(
+        "remove_image",
+        removeImage && !formData.image_file ? "true" : "false"
       );
+
+      await onSubmit(payload);
     } catch (error) {
       console.error("Doctor submit error:", error);
 
       toast.error(
-        error?.message ||
+        error?.response?.data?.message ||
+          error?.message ||
           "Failed to save doctor profile. Please try again."
       );
     } finally {
@@ -4439,7 +6063,6 @@ export default function DoctorForm({
     >
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_320px]">
         <div className="space-y-4">
-
           {/* BASIC INFORMATION */}
           <motion.section
             variants={itemVariants}
@@ -4709,7 +6332,7 @@ export default function DoctorForm({
               Press Enter or click + to add.
             </p>
 
-            {formData.web_specilization.length > 0 && (
+            {formData.web_specilization.length > 0 ? (
               <div className="mt-3 flex flex-wrap gap-2">
                 {formData.web_specilization.map((item, index) => (
                   <div
@@ -4730,6 +6353,10 @@ export default function DoctorForm({
                   </div>
                 ))}
               </div>
+            ) : (
+              <p className="mt-3 text-[11px] text-slate-400">
+                No specializations added.
+              </p>
             )}
           </motion.section>
 
@@ -5006,7 +6633,6 @@ export default function DoctorForm({
 
         {/* RIGHT SIDE */}
         <div className="space-y-4 xl:sticky xl:top-4 xl:self-start">
-
           {/* DOCTOR PHOTO */}
           <motion.section
             variants={itemVariants}
@@ -5059,6 +6685,24 @@ export default function DoctorForm({
                   {imagePreview ? "Change Photo" : "Upload Photo"}
                 </button>
 
+                {/* NEW REMOVE PHOTO BUTTON */}
+                {imagePreview && (
+                  <button
+                    type="button"
+                    onClick={handleRemoveImage}
+                    className="mt-2 flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 px-3.5 py-2 text-[12px] font-semibold text-red-600 transition hover:bg-red-100"
+                  >
+                    <FiTrash2 size={15} />
+                    Remove Photo
+                  </button>
+                )}
+
+                {removeImage && !imagePreview && (
+                  <p className="mt-2 text-center text-[11px] font-medium text-red-600">
+                    Photo will be removed when you save.
+                  </p>
+                )}
+
                 <p className="mt-2 text-center text-[10px] leading-4 text-slate-400">
                   JPG, PNG or WebP
                   <br />
@@ -5074,7 +6718,7 @@ export default function DoctorForm({
               <FieldLabel>Doctor Status</FieldLabel>
 
               <Toggle
-                enabled={Boolean(Number(formData.status))}
+                enabled={formData.status}
                 onChange={(value) =>
                   setFormData((prev) => ({
                     ...prev,
@@ -5086,7 +6730,7 @@ export default function DoctorForm({
               />
 
               <Toggle
-                enabled={Boolean(Number(formData.available))}
+                enabled={formData.available}
                 onChange={(value) =>
                   setFormData((prev) => ({
                     ...prev,
