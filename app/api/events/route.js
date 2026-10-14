@@ -597,7 +597,7 @@ export async function POST(request) {
       const fileName = `events/${crypto.randomUUID()}${allowedTypes[image.type]}`;
 
       const blob = await put(fileName, image, {
-        access: "public",
+        access: "private",
         token: process.env.BLOB_READ_WRITE_TOKEN,
       });
 
