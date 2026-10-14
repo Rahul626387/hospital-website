@@ -108,11 +108,11 @@ const menuItems = [
       icon: FiAward,
       path: "/admin/awards",
     },
-    {
-      title: "Gallery",
-      icon: FiImage,
-      path: "/admin/gallery",
-    },
+    // {
+    //   title: "Gallery",
+    //   icon: FiImage,
+    //   path: "/admin/gallery",
+    // },
   ],
 },
 
