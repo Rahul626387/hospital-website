@@ -1116,14 +1116,14 @@ const DoctorsPage = ({ onAddDoctor }) => {
                         <FiEdit2 size={13} />
                       </button>
 
-                      <button
+                      {/* <button
                         type="button"
                         title="Delete Doctor"
                         onClick={() => handleDelete(doctor)}
                         className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-400 transition hover:bg-red-50 hover:text-red-500"
                       >
                         <FiTrash2 size={13} />
-                      </button>
+                      </button> */}
 
                       {/* <button
                         type="button"

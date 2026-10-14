@@ -70,6 +70,7 @@ import { ThemeProvider } from "next-themes";
 import Smoothscrollview from "./components/Smoothscrollview";
 import { Toaster } from "react-hot-toast";
 import HospitalAIAgent from "./components/HospitalAIAgent";
+import DisableInspect from "./components/DisableInspect";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -98,6 +99,7 @@ export default function RootLayout({ children }) {
         <ConditionalLayout>
           {/* <AnimatedCursor/> */}
           {/* <SocialMediaLine/> */}
+           {/* <DisableInspect /> */}
           {children}
           <Toaster
             position="top-center"

@@ -717,19 +717,19 @@ const Page = () => {
   };
 
   // VIEW
-  const handleView = (job) => {
-    const details = [
-      `Title: ${job.title || "-"}`,
-      `Location: ${job.location || "-"}`,
-      `Experience: ${job.experience || "-"}`,
-      `Qualification: ${job.qualification || "-"}`,
-      `Employment: ${job.employment_type || "-"}`,
-      `Vacancies: ${job.vacancies ?? 0}`,
-      `Status: ${Number(job.is_active) === 1 ? "Active" : "Inactive"}`,
-    ].join("\n");
+  // const handleView = (job) => {
+  //   const details = [
+  //     `Title: ${job.title || "-"}`,
+  //     `Location: ${job.location || "-"}`,
+  //     `Experience: ${job.experience || "-"}`,
+  //     `Qualification: ${job.qualification || "-"}`,
+  //     `Employment: ${job.employment_type || "-"}`,
+  //     `Vacancies: ${job.vacancies ?? 0}`,
+  //     `Status: ${Number(job.is_active) === 1 ? "Active" : "Inactive"}`,
+  //   ].join("\n");
 
-    window.alert(details);
-  };
+  //   window.alert(details);
+  // };
 
   return (
     <div className="w-full overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">

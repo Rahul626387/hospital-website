@@ -1543,7 +1543,7 @@ const Departmentpage = () => {
 
                   </button>
 
-                  <button
+                  {/* <button
 
                     type="button"
 
@@ -1557,7 +1557,7 @@ const Departmentpage = () => {
 
                     <FiTrash2 size={13} />
 
-                  </button>
+                  </button> */}
 
                   {/* <button
 
