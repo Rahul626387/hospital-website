@@ -958,12 +958,12 @@ const handleSave = async (formData) => {
     if (selectedEvent?.id) {
       // Update existing event
       await ApiService.put(
-        `/events/${selectedEvent.id}`,
+        `events/${selectedEvent.id}`,
         formData
       );
     } else {
       // Create new event
-      await ApiService.post("/events", formData);
+      await ApiService.post("events", formData);
     }
 
     // Refresh event list

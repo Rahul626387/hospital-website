@@ -1539,12 +1539,12 @@ const Awardspage = () => {
 
       if (selectedAward?.id) {
         response = await ApiService.put(
-          `/awards/${selectedAward.id}`,
+          `awards/${selectedAward.id}`,
           formData
         );
       } else {
         response = await ApiService.post(
-          "/awards",
+          "awards",
           formData
         );
       }
