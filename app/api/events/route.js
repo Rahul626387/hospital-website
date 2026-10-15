@@ -455,9 +455,6 @@ export async function GET() {
 // }
 
 
-
-
-
 export async function POST(request) {
   try {
     const formData = await request.formData();
@@ -469,8 +466,10 @@ export async function POST(request) {
     const category = formData.get("category")?.toString().trim();
 
     const eventDate = formData.get("event_date")?.toString();
-    const endDate = formData.get("end_date")?.toString() || null;
-    const eventTime = formData.get("event_time")?.toString() || null;
+    const endDate =
+      formData.get("end_date")?.toString() || null;
+    const eventTime =
+      formData.get("event_time")?.toString() || null;
 
     const location = formData.get("location")?.toString().trim();
 
@@ -486,16 +485,18 @@ export async function POST(request) {
     const contact =
       formData.get("contact")?.toString().trim() || null;
 
-    const statusValue = formData.get("status")?.toString() || "1";
-    const featuredValue = formData.get("featured")?.toString() || "0";
+    const statusValue =
+      formData.get("status")?.toString() ?? "1";
 
-    // Match frontend values: status 1/0, featured 1/0
+    const featuredValue =
+      formData.get("featured")?.toString() ?? "0";
+
     const status = statusValue === "1" ? 1 : 0;
     const featured = featuredValue === "1" ? 1 : 0;
 
     const image = formData.get("image");
 
-    // Required field validation
+    // Validate required fields
     if (
       !Number.isInteger(userId) ||
       userId < 1 ||
@@ -560,10 +561,14 @@ export async function POST(request) {
       );
     }
 
-    // Optional image upload to Vercel Blob
+    // Public Vercel Blob image upload
     let imagePath = null;
 
-    if (image && typeof image.arrayBuffer === "function" && image.size > 0) {
+    if (
+      image &&
+      typeof image.arrayBuffer === "function" &&
+      image.size > 0
+    ) {
       const allowedTypes = {
         "image/jpeg": ".jpg",
         "image/png": ".png",
@@ -593,12 +598,15 @@ export async function POST(request) {
         );
       }
 
-      // Upload to Vercel Blob
-      const fileName = `events/${crypto.randomUUID()}${allowedTypes[image.type]}`;
+      const fileName = `events/${crypto.randomUUID()}${
+        allowedTypes[image.type]
+      }`;
 
       const blob = await put(fileName, image, {
-        access: "private",
+        access: "public",
         token: process.env.BLOB_READ_WRITE_TOKEN,
+        contentType: image.type,
+        addRandomSuffix: false,
       });
 
       imagePath = blob.url;
