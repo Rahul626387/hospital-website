@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import db from "../../../lib/db";
 import fs from "fs/promises";
 import path from "path";
+import { uploadPublicFile } from "@/lib/blobUpload";
 
 export async function GET() {
   try {
@@ -50,6 +51,286 @@ export async function GET() {
 
 
 
+// export async function POST(request) {
+//   try {
+//     // ==========================================
+//     // GET FORM DATA
+//     // ==========================================
+
+//     const formData = await request.formData();
+
+//     const career_role_id = formData.get("career_role_id");
+//     const full_name = formData.get("full_name");
+//     const phone = formData.get("phone");
+//     const email = formData.get("email");
+//     const experience = formData.get("experience");
+//     const current_position = formData.get("current_position");
+//     const additional_information = formData.get(
+//       "additional_information"
+//     );
+
+//     // File
+//     const resume = formData.get("resume");
+
+//     // ==========================================
+//     // VALIDATION
+//     // ==========================================
+
+//     if (!career_role_id) {
+//       return Response.json(
+//         {
+//           status: 0,
+//           message: "Career role is required",
+//         },
+//         { status: 400 }
+//       );
+//     }
+
+//     if (!full_name?.trim()) {
+//       return Response.json(
+//         {
+//           status: 0,
+//           message: "Full name is required",
+//         },
+//         { status: 400 }
+//       );
+//     }
+
+//     if (!phone?.trim()) {
+//       return Response.json(
+//         {
+//           status: 0,
+//           message: "Phone number is required",
+//         },
+//         { status: 400 }
+//       );
+//     }
+
+//     if (!/^[6-9]\d{9}$/.test(phone.trim())) {
+//       return Response.json(
+//         {
+//           status: 0,
+//           message: "Please enter a valid 10 digit phone number",
+//         },
+//         { status: 400 }
+//       );
+//     }
+
+//     if (!email?.trim()) {
+//       return Response.json(
+//         {
+//           status: 0,
+//           message: "Email is required",
+//         },
+//         { status: 400 }
+//       );
+//     }
+
+//     // ==========================================
+//     // CHECK CAREER ROLE
+//     // ==========================================
+
+//     const [role] = await db.query(
+//       `
+//       SELECT
+//         id,
+//         department_id,
+//         title
+//       FROM career_roles
+//       WHERE id = ?
+//       LIMIT 1
+//       `,
+//       [career_role_id]
+//     );
+
+//     if (role.length === 0) {
+//       return Response.json(
+//         {
+//           status: 0,
+//           message: "Invalid career role",
+//         },
+//         { status: 400 }
+//       );
+//     }
+
+//     // ==========================================
+//     // FILE UPLOAD
+//     // ==========================================
+
+//     let resumeName = null;
+//     let resumePath = null;
+
+//     if (resume && typeof resume === "object" && resume.size > 0) {
+//       // Allowed file types
+//       const allowedTypes = [
+//         "application/pdf",
+//         "application/msword",
+//         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+//       ];
+
+//       if (!allowedTypes.includes(resume.type)) {
+//         return Response.json(
+//           {
+//             status: 0,
+//             message: "Only PDF, DOC and DOCX files are allowed",
+//           },
+//           { status: 400 }
+//         );
+//       }
+
+//       // Maximum 5 MB
+//       const maxSize = 5 * 1024 * 1024;
+
+//       if (resume.size > maxSize) {
+//         return Response.json(
+//           {
+//             status: 0,
+//             message: "Resume size must be less than 5 MB",
+//           },
+//           { status: 400 }
+//         );
+//       }
+
+//       // ==========================================
+//       // CREATE UPLOAD DIRECTORY
+//       // ==========================================
+
+//       const uploadDir = path.join(
+//         process.cwd(),
+//         "public",
+//         "uploads",
+//         "resumes"
+//       );
+
+//       await fs.mkdir(uploadDir, {
+//         recursive: true,
+//       });
+
+//       // ==========================================
+//       // UNIQUE FILE NAME
+//       // ==========================================
+
+//       const originalName = resume.name || "resume";
+
+//       const extension = path.extname(originalName);
+
+//       const safeName = path
+//         .basename(originalName, extension)
+//         .replace(/[^a-zA-Z0-9-_]/g, "_");
+
+//       const uniqueName = `${Date.now()}-${safeName}${extension}`;
+
+//       const filePath = path.join(
+//         uploadDir,
+//         uniqueName
+//       );
+
+//       // ==========================================
+//       // SAVE FILE
+//       // ==========================================
+
+//       const bytes = await resume.arrayBuffer();
+
+//       const buffer = Buffer.from(bytes);
+
+//       await fs.writeFile(filePath, buffer);
+
+//       // Database values
+//       resumeName = originalName;
+
+//       resumePath = `/uploads/resumes/${uniqueName}`;
+//     }
+
+//     // ==========================================
+//     // INSERT APPLICATION
+//     // ==========================================
+
+//     const [result] = await db.query(
+//       `
+//       INSERT INTO career_applications
+//       (
+//         career_role_id,
+//         full_name,
+//         phone,
+//         email,
+//         experience,
+//         current_position,
+//         additional_information,
+//         resume_name,
+//         resume_path,
+//         status
+//       )
+//       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+//       `,
+//       [
+//         career_role_id,
+//         full_name.trim(),
+//         phone.trim(),
+//         email.trim(),
+//         experience?.trim() || null,
+//         current_position?.trim() || null,
+//         additional_information?.trim() || null,
+//         resumeName,
+//         resumePath,
+//         "New",
+//       ]
+//     );
+
+//     // ==========================================
+//     // SUCCESS
+//     // ==========================================
+
+//     return Response.json(
+//       {
+//         status: 1,
+//         message: "Application submitted successfully",
+
+//         data: {
+//           id: result.insertId,
+//           career_role_id: Number(career_role_id),
+//           full_name: full_name.trim(),
+//           phone: phone.trim(),
+//           email: email.trim(),
+//           resume_name: resumeName,
+//           resume_path: resumePath,
+//           status: "New",
+//         },
+//       },
+//       { status: 201 }
+//     );
+//   } catch (error) {
+//     console.error(
+//       "Career Application Error:",
+//       error
+//     );
+
+//     return Response.json(
+//       {
+//         status: 0,
+//         message: "Something went wrong",
+//         error:
+//           process.env.NODE_ENV === "development"
+//             ? error.message
+//             : undefined,
+//       },
+//       { status: 500 }
+//     );
+//   }
+// }
+
+
+
+
+
+
+const ALLOWED_RESUME_TYPES = [
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+];
+
+const MAX_RESUME_SIZE = 5 * 1024 * 1024;
+
 export async function POST(request) {
   try {
     // ==========================================
@@ -68,15 +349,17 @@ export async function POST(request) {
       "additional_information"
     );
 
-    // File
     const resume = formData.get("resume");
 
     // ==========================================
-    // VALIDATION
+    // VALIDATE CAREER ROLE ID
     // ==========================================
 
-    if (!career_role_id) {
-      return Response.json(
+    if (
+      typeof career_role_id !== "string" ||
+      !/^[1-9]\d*$/.test(career_role_id)
+    ) {
+      return NextResponse.json(
         {
           status: 0,
           message: "Career role is required",
@@ -85,65 +368,10 @@ export async function POST(request) {
       );
     }
 
-    if (!full_name?.trim()) {
-      return Response.json(
-        {
-          status: 0,
-          message: "Full name is required",
-        },
-        { status: 400 }
-      );
-    }
+    const careerRoleId = Number(career_role_id);
 
-    if (!phone?.trim()) {
-      return Response.json(
-        {
-          status: 0,
-          message: "Phone number is required",
-        },
-        { status: 400 }
-      );
-    }
-
-    if (!/^[6-9]\d{9}$/.test(phone.trim())) {
-      return Response.json(
-        {
-          status: 0,
-          message: "Please enter a valid 10 digit phone number",
-        },
-        { status: 400 }
-      );
-    }
-
-    if (!email?.trim()) {
-      return Response.json(
-        {
-          status: 0,
-          message: "Email is required",
-        },
-        { status: 400 }
-      );
-    }
-
-    // ==========================================
-    // CHECK CAREER ROLE
-    // ==========================================
-
-    const [role] = await db.query(
-      `
-      SELECT
-        id,
-        department_id,
-        title
-      FROM career_roles
-      WHERE id = ?
-      LIMIT 1
-      `,
-      [career_role_id]
-    );
-
-    if (role.length === 0) {
-      return Response.json(
+    if (!Number.isSafeInteger(careerRoleId)) {
+      return NextResponse.json(
         {
           status: 0,
           message: "Invalid career role",
@@ -153,22 +381,113 @@ export async function POST(request) {
     }
 
     // ==========================================
-    // FILE UPLOAD
+    // VALIDATE FULL NAME
+    // ==========================================
+
+    if (
+      typeof full_name !== "string" ||
+      !full_name.trim()
+    ) {
+      return NextResponse.json(
+        {
+          status: 0,
+          message: "Full name is required",
+        },
+        { status: 400 }
+      );
+    }
+
+    // ==========================================
+    // VALIDATE PHONE
+    // ==========================================
+
+    if (
+      typeof phone !== "string" ||
+      !phone.trim()
+    ) {
+      return NextResponse.json(
+        {
+          status: 0,
+          message: "Phone number is required",
+        },
+        { status: 400 }
+      );
+    }
+
+    if (!/^[6-9]\d{9}$/.test(phone.trim())) {
+      return NextResponse.json(
+        {
+          status: 0,
+          message: "Please enter a valid 10 digit phone number",
+        },
+        { status: 400 }
+      );
+    }
+
+    // ==========================================
+    // VALIDATE EMAIL
+    // ==========================================
+
+    if (
+      typeof email !== "string" ||
+      !email.trim()
+    ) {
+      return NextResponse.json(
+        {
+          status: 0,
+          message: "Email is required",
+        },
+        { status: 400 }
+      );
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      return NextResponse.json(
+        {
+          status: 0,
+          message: "Please enter a valid email address",
+        },
+        { status: 400 }
+      );
+    }
+
+    // ==========================================
+    // CHECK CAREER ROLE IN DATABASE
+    // ==========================================
+
+    const [role] = await db.query(
+      `SELECT id, department_id, title
+       FROM career_roles
+       WHERE id = ?
+       LIMIT 1`,
+      [careerRoleId]
+    );
+
+    if (role.length === 0) {
+      return NextResponse.json(
+        {
+          status: 0,
+          message: "Invalid career role",
+        },
+        { status: 400 }
+      );
+    }
+
+    // ==========================================
+    // RESUME VALIDATION AND BLOB UPLOAD
     // ==========================================
 
     let resumeName = null;
     let resumePath = null;
 
-    if (resume && typeof resume === "object" && resume.size > 0) {
+    if (
+      resume &&
+      typeof resume.arrayBuffer === "function" &&
+      resume.size > 0
+    ) {
       // Allowed file types
-      const allowedTypes = [
-        "application/pdf",
-        "application/msword",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      ];
-
-      if (!allowedTypes.includes(resume.type)) {
-        return Response.json(
+      if (!ALLOWED_RESUME_TYPES.includes(resume.type)) {
+        return NextResponse.json(
           {
             status: 0,
             message: "Only PDF, DOC and DOCX files are allowed",
@@ -178,75 +497,35 @@ export async function POST(request) {
       }
 
       // Maximum 5 MB
-      const maxSize = 5 * 1024 * 1024;
-
-      if (resume.size > maxSize) {
-        return Response.json(
+      if (resume.size > MAX_RESUME_SIZE) {
+        return NextResponse.json(
           {
             status: 0,
-            message: "Resume size must be less than 5 MB",
+            message: "Resume size must be 5 MB or smaller",
           },
           { status: 400 }
         );
       }
 
-      // ==========================================
-      // CREATE UPLOAD DIRECTORY
-      // ==========================================
+      // Original filename for display
+      resumeName = (resume.name || "resume")
+        .replace(/[\\/]/g, "_")
+        .replace(/[\r\n]/g, "_")
+        .slice(0, 255);
 
-      const uploadDir = path.join(
-        process.cwd(),
-        "public",
-        "uploads",
+      // Upload resume using src/lib/blobUpload.js
+      resumePath = await uploadPublicFile(
+        resume,
         "resumes"
       );
-
-      await fs.mkdir(uploadDir, {
-        recursive: true,
-      });
-
-      // ==========================================
-      // UNIQUE FILE NAME
-      // ==========================================
-
-      const originalName = resume.name || "resume";
-
-      const extension = path.extname(originalName);
-
-      const safeName = path
-        .basename(originalName, extension)
-        .replace(/[^a-zA-Z0-9-_]/g, "_");
-
-      const uniqueName = `${Date.now()}-${safeName}${extension}`;
-
-      const filePath = path.join(
-        uploadDir,
-        uniqueName
-      );
-
-      // ==========================================
-      // SAVE FILE
-      // ==========================================
-
-      const bytes = await resume.arrayBuffer();
-
-      const buffer = Buffer.from(bytes);
-
-      await fs.writeFile(filePath, buffer);
-
-      // Database values
-      resumeName = originalName;
-
-      resumePath = `/uploads/resumes/${uniqueName}`;
     }
 
     // ==========================================
-    // INSERT APPLICATION
+    // INSERT APPLICATION INTO MYSQL
     // ==========================================
 
     const [result] = await db.query(
-      `
-      INSERT INTO career_applications
+      `INSERT INTO career_applications
       (
         career_role_id,
         full_name,
@@ -259,16 +538,21 @@ export async function POST(request) {
         resume_path,
         status
       )
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `,
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
-        career_role_id,
+        careerRoleId,
         full_name.trim(),
         phone.trim(),
         email.trim(),
-        experience?.trim() || null,
-        current_position?.trim() || null,
-        additional_information?.trim() || null,
+        typeof experience === "string"
+          ? experience.trim() || null
+          : null,
+        typeof current_position === "string"
+          ? current_position.trim() || null
+          : null,
+        typeof additional_information === "string"
+          ? additional_information.trim() || null
+          : null,
         resumeName,
         resumePath,
         "New",
@@ -276,17 +560,16 @@ export async function POST(request) {
     );
 
     // ==========================================
-    // SUCCESS
+    // SUCCESS RESPONSE
     // ==========================================
 
-    return Response.json(
+    return NextResponse.json(
       {
         status: 1,
         message: "Application submitted successfully",
-
         data: {
           id: result.insertId,
-          career_role_id: Number(career_role_id),
+          career_role_id: careerRoleId,
           full_name: full_name.trim(),
           phone: phone.trim(),
           email: email.trim(),
@@ -298,12 +581,40 @@ export async function POST(request) {
       { status: 201 }
     );
   } catch (error) {
-    console.error(
-      "Career Application Error:",
-      error
-    );
+    console.error("Career Application Error:", error);
 
-    return Response.json(
+    // ==========================================
+    // ERROR RESPONSE
+    // ==========================================
+
+    const validationMessages = [
+      "Please select a file",
+      "Invalid file type",
+      "Only PDF, DOC and DOCX files are allowed",
+      "File size must be 5 MB or smaller",
+      "Invalid upload folder",
+      "Unsupported file extension",
+      "BLOB_READ_WRITE_TOKEN is not configured",
+    ];
+
+    if (validationMessages.includes(error.message)) {
+      const status = error.message.includes("BLOB_READ_WRITE_TOKEN")
+        ? 500
+        : 400;
+
+      return NextResponse.json(
+        {
+          status: 0,
+          message:
+            status === 400
+              ? error.message
+              : "File storage is not configured",
+        },
+        { status }
+      );
+    }
+
+    return NextResponse.json(
       {
         status: 0,
         message: "Something went wrong",
