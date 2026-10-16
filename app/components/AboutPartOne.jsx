@@ -204,7 +204,6 @@ export default function AboutPartOne() {
         </motion.div>
 
         <div className="absolute inset-0 bg-gradient-to-r from-[#062d39]/95 via-[#073e4a]/28 to-[#fff]/20" />
-        {/* <div className="absolute inset-0 bg-gradient-to-r from-[#062d39]/95 via-[#073e4a]/28 to-[#fff]/20" /> */}
 
         <motion.div
           animate={{ y: [0, -12, 0], rotate: [0, 2, 0] }}

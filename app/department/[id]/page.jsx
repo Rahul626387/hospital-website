@@ -261,8 +261,8 @@ export default function DepartmentDetailPage() {
         description={department.short_description}
         breadcrumbs={[
           {
-            label: "Departments",
-            href: "/departments",
+            label: "Department",
+            href: "/department",
           },
           {
             label: department.name,
@@ -467,7 +467,7 @@ export default function DepartmentDetailPage() {
             >
               {appointmentAvailable && (
                 <Link
-                  href="/appointments"
+                  href="/appointment"
                   className="group inline-flex items-center gap-3 rounded-full bg-[#063b5c] px-7 py-4 font-bold text-white shadow-lg shadow-[#063b5c]/15 transition hover:-translate-y-1 hover:bg-[#07547f]"
                 >
                   <CalendarDays size={19} />
@@ -646,7 +646,7 @@ export default function DepartmentDetailPage() {
                 </p>
 
                 <Link
-                  href="/appointments"
+                  href="/appointment"
                   className="mt-9 inline-flex items-center gap-3 rounded-full bg-white px-6 py-3.5 font-bold text-[#063b5c] transition hover:-translate-y-1"
                 >
                   Talk to a Specialist
