@@ -835,7 +835,7 @@ export default function EventPopup() {
                 >
                   Got it
                   <MoveUpRight size={16} />
-                </button>
+                </button>  
               </div>
             </div>
           </div>
