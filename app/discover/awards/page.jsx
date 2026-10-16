@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import ApiService from "../../src/services/Apiservices";
 import useSWR from "swr";
+import AwardsHero01 from "./components/AwardsHero01";
 
 /* =========================================================
    ICON MAP (API returns icon name as string)
@@ -166,7 +167,7 @@ const AwardsHero = memo(function AwardsHero({
                   href="/"
                   className="font-medium text-slate-200 transition-colors duration-300 hover:text-white"
                 >
-                  Home
+                  Discover
                 </Link>
                 <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
                 <span className="font-semibold text-[#4DD4C6]">
@@ -781,7 +782,7 @@ export default function AwardsAchievements() {
 
   return (
     <>
-      <AwardsHero
+      {/* <AwardsHero
         slides={awardSlides}
         featuredAward={featuredAward}
         totalAwards={totalAwards}
@@ -790,7 +791,9 @@ export default function AwardsAchievements() {
         setActiveSlide={setActiveSlide}
         nextSlide={nextSlide}
         prevSlide={prevSlide}
-      />
+      /> */}
+
+      <AwardsHero01/>
 
       <section
         id="awards-achievements"

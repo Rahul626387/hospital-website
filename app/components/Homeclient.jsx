@@ -24,6 +24,7 @@ import facilities from './../data/facilities'
 import {useDepartments} from './../api/hooks/useDepartments'
 import {useDoctors} from './../api/hooks/useDoctors'
 import { hospitalStats } from "../data/stats";
+import  EventPopup from './../components/EventPopup'
 
 const iconMap = {
   HeartHandshake,
@@ -52,6 +53,9 @@ export default function Homeclient() {
   console.log(departments)
 
   return (
+
+    <>
+    <EventPopup/>
     <main className="overflow-hidden bg-white text-slate-700">
       {/* =========================================================
           HERO
@@ -662,5 +666,6 @@ export default function Homeclient() {
         </div>
       </section>
     </main>
+    </>
   );
 }

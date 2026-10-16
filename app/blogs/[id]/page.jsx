@@ -345,6 +345,43 @@ const Page = () => {
     }, 3500);
   };
 
+
+
+const {
+  data: blogpost,
+  error: latestBlogsError,
+  isLoading: latestBlogsLoading,
+} = useSWR("blog-post", ApiService.get);
+
+const latestBlogs = useMemo(() => {
+  const response = blogpost?.data;
+
+  const posts = Array.isArray(response)
+    ? response
+    : Array.isArray(response?.data)
+      ? response.data
+      : Array.isArray(response?.blogs)
+        ? response.blogs
+        : Array.isArray(blogpost?.blogs)
+          ? blogpost.blogs
+          : [];
+
+  return posts
+    .filter((post) => String(post.id) !== String(id))
+    .sort((a, b) => {
+      const dateA = new Date(
+        a.published_at || a.created_at || 0
+      ).getTime();
+
+      const dateB = new Date(
+        b.published_at || b.created_at || 0
+      ).getTime();
+
+      return dateB - dateA;
+    })
+    .slice(0, 5);
+}, [blogpost, id]);
+
   /* =========================================================
      LOADING
   ========================================================= */
@@ -1463,7 +1500,7 @@ const Page = () => {
                 </motion.div>
 
                 {/* Blog Information */}
-                <motion.div
+                {/* <motion.div
                   variants={fadeUp}
                   className="mt-5 rounded-[2rem] border border-slate-200 bg-white p-7 shadow-[0_15px_45px_rgba(8,59,73,0.03)]"
                 >
@@ -1514,7 +1551,114 @@ const Page = () => {
 
                   </div>
 
-                </motion.div>
+                </motion.div> */}
+
+          
+{/* Latest Blogs */}
+<motion.div
+  variants={fadeUp}
+  className="mt-5 rounded-[2rem] border border-slate-200 bg-white p-7 shadow-[0_15px_45px_rgba(8,59,73,0.03)]"
+>
+  <div className="flex items-center justify-between gap-3">
+    <div>
+      <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#087f7b]">
+        Explore More
+      </p>
+      <h3 className="mt-1 text-lg font-bold text-[#12343b]">
+        Latest Blogs
+      </h3>
+    </div>
+
+    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#087f7b]/10 text-[#087f7b]">
+      <MessageCircle size={20} />
+    </div>
+  </div>
+
+  <div className="mt-5 space-y-5">
+    {latestBlogsLoading ? (
+      [1, 2, 3].map((item) => (
+        <div key={item} className="flex animate-pulse gap-3">
+          <div className="h-[76px] w-[76px] shrink-0 rounded-xl bg-slate-200" />
+          <div className="flex-1 space-y-3 py-1">
+            <div className="h-3 rounded bg-slate-200" />
+            <div className="h-3 w-2/3 rounded bg-slate-200" />
+            <div className="h-2 w-1/2 rounded bg-slate-100" />
+          </div>
+        </div>
+      ))
+    ) : latestBlogsError ? (
+      <p className="text-sm leading-6 text-slate-500">
+        Latest blogs load nahi ho paaye.
+      </p>
+    ) : latestBlogs.length > 0 ? (
+      latestBlogs.map((post) => {
+        const thumbnail =
+          post.featured_image ||
+          post.banner_image ||
+          post.image ||
+          post.thumbnail;
+
+        const postDate =
+          post.published_at || post.created_at;
+
+        return (
+          <Link
+            key={post.id ?? post.slug}
+            href={`/blogs/${post.id ?? post.slug}`}
+            className="group flex items-start gap-3"
+          >
+            <div className="relative h-[76px] w-[76px] shrink-0 overflow-hidden rounded-xl bg-[#f3fbfa]">
+              {thumbnail ? (
+                <Image
+                  src={thumbnail}
+                  alt={post.title || "Blog image"}
+                  fill
+                  sizes="76px"
+                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+              ) : (
+                <div className="flex h-full items-center justify-center text-xs text-slate-400">
+                  No Image
+                </div>
+              )}
+            </div>
+
+            <div className="min-w-0 flex-1">
+              <h4 className="line-clamp-2 text-sm font-bold leading-5 text-[#12343b] transition-colors duration-300 group-hover:text-[#087f7b]">
+                {post.title || "Untitled Blog"}
+              </h4>
+
+              <p className="mt-2 flex items-center gap-1.5 text-xs text-slate-400">
+                <CalendarDays size={13} className="shrink-0" />
+                {postDate &&
+                !Number.isNaN(new Date(postDate).getTime())
+                  ? new Date(postDate).toLocaleDateString("en-IN", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    })
+                  : "Latest Article"}
+              </p>
+            </div>
+          </Link>
+        );
+      })
+    ) : (
+      <p className="text-sm leading-6 text-slate-500">
+        Abhi koi latest blog available nahi hai.
+      </p>
+    )}
+  </div>
+
+  {/* <Link
+    href="/blogs"
+    className="mt-6 flex items-center justify-center gap-2 rounded-xl border border-[#087f7b]/20 px-4 py-3 text-sm font-bold text-[#087f7b] transition-all duration-300 hover:bg-[#087f7b] hover:text-white"
+  >
+    View All Blogs
+    <ArrowRight size={16} />
+  </Link> */}
+</motion.div>
+
 
                 {/* Rating Sidebar */}
                 <motion.div

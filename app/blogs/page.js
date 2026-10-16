@@ -20,124 +20,12 @@ import useSWR from 'swr'
 import PageHero from "../components/Pagehero";
 import BlogGrid from "../components/BlogGrid";
 
-const blogs = [
-  {
-    id: 1,
-    category: "Health Tips",
-    title: "Simple Daily Habits for a Healthier Heart",
-    excerpt:
-      "Small lifestyle changes can make a meaningful difference to your heart health and overall well-being.",
-    date: "June 12, 2026",
-    readTime: "5 min read",
-    featured: true,
-    image:
-      "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&w=1200&q=85",
-  },
-  {
-    id: 2,
-    category: "Wellness",
-    title: "Why Regular Health Checkups Are Important",
-    excerpt:
-      "Routine health checkups can help identify potential concerns early and support better long-term health.",
-    date: "June 08, 2026",
-    readTime: "4 min read",
-    image:
-      "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800&q=85",
-  },
-  {
-    id: 3,
-    category: "Health Tips",
-    title: "Understanding the Importance of Quality Sleep",
-    excerpt:
-      "Good sleep plays an essential role in physical recovery, mental well-being and everyday performance.",
-    date: "June 03, 2026",
-    readTime: "6 min read",
-    image:
-      "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&w=800&q=85",
-  },
-  {
-    id: 4,
-    category: "Nutrition",
-    title: "Building a Balanced and Healthy Daily Diet",
-    excerpt:
-      "Learn how balanced food choices can support your energy, immunity and overall health.",
-    date: "May 28, 2026",
-    readTime: "5 min read",
-    image:
-      "https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=800&q=85",
-  },
-  {
-    id: 5,
-    category: "Medical Care",
-    title: "When Should You Consult a Specialist?",
-    excerpt:
-      "Knowing when to seek specialist care can help you get the right guidance for your health concerns.",
-    date: "May 21, 2026",
-    readTime: "4 min read",
-    image:
-      "https://images.unsplash.com/photo-1538108149393-fbbd81895907?auto=format&fit=crop&w=800&q=85",
-  },
-  {
-    id: 6,
-    category: "Wellness",
-    title: "Simple Ways to Manage Everyday Stress",
-    excerpt:
-      "Healthy routines and mindful habits can help you better manage stress in your daily life.",
-    date: "May 15, 2026",
-    readTime: "5 min read",
-    image:
-      "https://images.unsplash.com/photo-1516822003754-cca485356ecb?auto=format&fit=crop&w=800&q=85",
-  },
-  {
-    id: 7,
-    category: "Health Tips",
-    title: "How Regular Exercise Supports Better Health",
-    excerpt:
-      "Discover how consistent physical activity can contribute to improved energy and long-term wellness.",
-    date: "May 09, 2026",
-    readTime: "6 min read",
-    image:
-      "https://images.unsplash.com/photo-1538805060514-97d9cc17730c?auto=format&fit=crop&w=800&q=85",
-  },
-];
-
-const categories = [
-  "All Articles",
-  "Health Tips",
-  "Wellness",
-  "Nutrition",
-  "Medical Care",
-];
 
 export default function BlogsPage() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
 
-  // const filteredBlogs = useMemo(() => {
-  //   return blogs.filter((blog) => {
-  //     const matchesSearch =
-  //       blog.title.toLowerCase().includes(search.toLowerCase()) ||
-  //       blog.excerpt.toLowerCase().includes(search.toLowerCase()) ||
-  //       blog.category.toLowerCase().includes(search.toLowerCase());
-
-  //     const matchesCategory =
-  //       activeCategory === "All Articles" ||
-  //       blog.category === activeCategory;
-
-  //     return matchesSearch && matchesCategory;
-  //   });
-  // }, [search, activeCategory]);
-
-  // const featuredBlog = blogs.find((blog) => blog.featured);
-
-  // const {data:category,categoryerror,categoryisLoading} = useSWR('blog-categories',ApiService.get)
-  // const {data:blogpost,error,isLoading} = useSWR('blog-post',ApiService.get)
-  // const categories = category?.data || []
-  // const blogs = blogpost?.data || []
-
-
   // new code dynamic  
- 
 
 const { data: category, error: categoryerror, isLoading: categoryisLoading } =
   useSWR("blog-categories", ApiService.get);
@@ -148,32 +36,7 @@ const { data: blogpost, error, isLoading } =
 const categories = category?.data || [];
 const blogs = blogpost?.data || [];
 
-// Filter blogs
-// const filteredBlogs = useMemo(() => {
-//   return blogs.filter((blog) => {
-//     const title = blog.title?.toLowerCase() || "";
-//     const excerpt = blog.excerpt?.toLowerCase() || "";
-//     const categoryName = blog.category_name?.toLowerCase() || "";
 
-//     const searchText = search?.toLowerCase() || "";
-
-//     const matchesSearch =
-//       title.includes(searchText) ||
-//       excerpt.includes(searchText) ||
-//       categoryName.includes(searchText);
-
-//     const matchesCategory =
-//       activeCategory === "All Articles" ||
-//       blog.category_name === activeCategory;
-
-//     return matchesSearch && matchesCategory;
-//   });
-// }, [blogs, search, activeCategory]);
-
-// // Featured blog
-// const featuredBlog = blogs.find(
-//   (blog) => Number(blog.is_featured) === 1
-// );
 
 const filteredBlogs = useMemo(() => {
   return blogs.filter((blog) => {

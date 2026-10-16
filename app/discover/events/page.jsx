@@ -1352,6 +1352,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import EventsHero from "./components/EventsHero";
+import EventPopup from "../../components/EventPopup";
 
 /* =========================================================
    HELPERS
@@ -1620,7 +1621,7 @@ export default function EventsPage() {
     <main className="min-h-screen bg-[#F7FAFC] text-slate-800">
       {/* HERO SECTION */}
 
-      <section className="relative isolate overflow-hidden bg-gradient-to-br from-[#052F49] via-[#07566B] to-[#087D87] text-white">
+      {/* <section className="relative isolate overflow-hidden bg-gradient-to-br from-[#052F49] via-[#07566B] to-[#087D87] text-white">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 overflow-hidden"
@@ -1716,8 +1717,9 @@ export default function EventsPage() {
             </div>
           </motion.div>
         </div>
-      </section>
-       {/* <EventsHero /> */}
+      </section> */}
+       <EventsHero />
+      
 
       {/* EVENTS CONTENT */}
 
