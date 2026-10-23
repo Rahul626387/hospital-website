@@ -232,7 +232,7 @@ export async function DELETE(request, { params }) {
       `
       UPDATE blog_categories
       SET
-        status = 3,
+        status = 2,
         updated_at = NOW()
         WHERE id = ?
         `,

@@ -137,7 +137,7 @@ const menuItems = [
   {
     title: "Settings",
     icon: FiSettings,
-    path: "/admin/settings",
+    path: "/admin/setting",
   },
 ];
 

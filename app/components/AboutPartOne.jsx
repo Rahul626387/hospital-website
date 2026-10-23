@@ -201,7 +201,7 @@ export default function AboutPartOne() {
             priority
             className="object-cover object-center opacity-55"
           />
-        </motion.div>
+        </motion.div>  
 
         <div className="absolute inset-0 bg-gradient-to-r from-[#062d39]/95 via-[#073e4a]/28 to-[#fff]/20" />
 

@@ -50,7 +50,7 @@ export default function Homeclient() {
     isLoading: doctorsLoading,
   } = useDoctors();
 
-  console.log(departments)
+  // console.log(departments)
 
   return (
 

@@ -180,6 +180,8 @@ const [updating, setUpdating] = useState(false);
 
   
   const handleSave = async (data) => {
+    // console.log(data)
+    // return
   try {
     const res = await ApiService.post("blog-categories", data);
 

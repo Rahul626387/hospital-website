@@ -9,7 +9,7 @@ const CategoryForm = ({ onSubmit, onCancel,userId }) => {
     name: "",
     slug: "",
     description: "",
-    status: "active",
+    // status: "1",
     user_id:userId
   });
 
@@ -95,7 +95,7 @@ const CategoryForm = ({ onSubmit, onCancel,userId }) => {
       </div>
 
       {/* Status */}
-      <div>
+      {/* <div>
         <label className="mb-1.5 block text-xs font-semibold text-gray-700">
           Status
         </label>
@@ -109,7 +109,7 @@ const CategoryForm = ({ onSubmit, onCancel,userId }) => {
           <option value="active">Active</option>
           <option value="inactive">Inactive</option>
         </select>
-      </div>
+      </div> */}
 
       {/* Footer */}
       <div className="flex justify-end gap-2 border-t border-gray-100 pt-4">

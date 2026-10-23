@@ -1,834 +1,752 @@
 
-/* =========================
-   Floating AI Agent
-========================= */
+.hospital-ai-root {
+  --hai-blue: #205781;
+  --hai-dark: #174363;
+  --hai-teal: #16a6a1;
+  --hai-text: #203448;
+  --hai-muted: #718196;
+  --hai-border: #e3ebf2;
+  font-family: inherit;
+  color: var(--hai-text);
+}
 
-.bma-floating {
+/* Floating launcher */
+
+.hospital-ai-launcher {
   position: fixed;
-  right: 26px;
-  bottom: 26px;
-  z-index: 9999;
-
+  right: 22px;
+  bottom: 22px;
+  z-index: 9998;
   display: flex;
   align-items: center;
-  justify-content: center;
-
-  width: 66px;
-  height: 66px;
-
+  gap: 10px;
+  padding: 13px 18px;
+  border: 0;
+  border-radius: 50px;
+  background: linear-gradient(135deg, var(--hai-blue), var(--hai-dark));
   color: #fff;
-  background: linear-gradient(
-    145deg,
-    #12a5ad 0%,
-    #087d87 45%,
-    #063b55 100%
-  );
-
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  border-radius: 50%;
-
-  box-shadow:
-    0 8px 28px rgba(5, 86, 107, 0.32),
-    0 0 0 6px rgba(8, 125, 135, 0.08);
-
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 8px 28px #17436338;
   cursor: pointer;
-  isolation: isolate;
-
-  animation: bma-float 3s ease-in-out infinite;
-
-  transition:
-    box-shadow 0.3s ease,
-    background 0.3s ease;
 }
 
-.bma-floating:hover {
-  box-shadow:
-    0 12px 35px rgba(5, 86, 107, 0.4),
-    0 0 0 9px rgba(8, 125, 135, 0.1);
-}
-
-.bma-floating:focus-visible {
-  outline: 3px solid #43d8e7;
-  outline-offset: 5px;
-}
-
-.bma-floating-icon {
-  position: relative;
-  z-index: 2;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  color: #fff;
-
-  animation: bma-robot-animation 2.4s ease-in-out infinite;
-}
-
-.bma-floating-icon svg {
-  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.35));
-}
-
-/* Ripple */
-
-.bma-orbit {
-  position: absolute;
-  z-index: -1;
-  inset: -5px;
-
-  border: 1px solid rgba(8, 125, 135, 0.65);
+.hospital-ai-launcher-dot,
+.hospital-ai-status {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
   border-radius: 50%;
-
-  pointer-events: none;
-
-  animation: bma-ripple 2.8s ease-out infinite;
+  background: #4ce0a4;
 }
 
-.bma-orbit-two {
-  animation-delay: 1.4s;
-}
-
-/* Online status */
-
-.bma-online-dot {
-  position: absolute;
-  top: 3px;
-  right: 3px;
-  z-index: 3;
-
-  width: 13px;
-  height: 13px;
-
-  background: #22c55e;
-  border: 2px solid #fff;
-  border-radius: 50%;
-}
-
-/* =========================
-   Chat Window
-========================= */
-
-.bma-chat {
+.hospital-ai-window {
   position: fixed;
-  right: 25px;
-  bottom: 25px;
-  z-index: 10000;
-
+  right: 22px;
+  bottom: 22px;
+  z-index: 9999;
   display: flex;
   flex-direction: column;
-
-  width: 390px;
-  max-width: calc(100vw - 30px);
-
-  height: min(660px, calc(100dvh - 40px));
-  min-height: 350px;
-
+  width: 405px;
+  max-width: calc(100vw - 28px);
+  height: min(720px, calc(100dvh - 44px));
+  min-height: 420px;
   overflow: hidden;
-
-  color: #243448;
+  border: 1px solid var(--hai-border);
+  border-radius: 20px;
   background: #fff;
-
-  border: 1px solid #e2ebf1;
-  border-radius: 22px;
-
-  box-shadow:
-    0 24px 80px rgba(5, 47, 73, 0.18),
-    0 4px 16px rgba(5, 47, 73, 0.07);
-
-  transform-origin: bottom right;
-
-  animation: bma-chat-enter 0.32s
-    cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 20px 70px #1b395226;
 }
 
-/* =========================
-   Header
-========================= */
+/* Header */
 
-.bma-header {
+.hospital-ai-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-
-  padding: 18px;
-
-  color: #fff;
-
-  background: linear-gradient(
-    120deg,
-    #052f49,
-    #07566b 60%,
-    #087d87
-  );
-}
-
-.bma-header-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 0;
-}
-
-.bma-avatar {
-  position: relative;
-
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-
-  width: 46px;
-  height: 46px;
-
-  color: #fff;
-  background: rgba(255, 255, 255, 0.14);
-
-  border: 1px solid rgba(255, 255, 255, 0.24);
-  border-radius: 15px;
-}
-
-.bma-avatar-status {
-  position: absolute;
-  right: -3px;
-  bottom: -3px;
-
-  width: 12px;
-  height: 12px;
-
-  background: #4ade80;
-  border: 2px solid #07566b;
-  border-radius: 50%;
-}
-
-.bma-header-info {
-  min-width: 0;
-}
-
-.bma-title {
-  margin: 0 0 5px;
-
-  color: #fff;
-  font-size: 16px;
-  font-weight: 750;
-  letter-spacing: -0.3px;
-}
-
-.bma-status {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-
-  color: #d3edf1;
-  font-size: 11px;
-}
-
-.bma-status > span {
-  width: 7px;
-  height: 7px;
-
-  background: #4ade80;
-  border-radius: 50%;
-
-  box-shadow: 0 0 7px rgba(74, 222, 128, 0.6);
-}
-
-.bma-close {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-
-  width: 35px;
-  height: 35px;
-
-  color: #fff;
-  background: rgba(255, 255, 255, 0.12);
-
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 11px;
-
-  cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    transform 0.2s ease;
-}
-
-.bma-close:hover {
-  background: rgba(255, 255, 255, 0.24);
-  transform: rotate(90deg);
-}
-
-/* =========================
-   Hospital Name
-========================= */
-
-.bma-hospital {
-  display: flex;
-  align-items: center;
   gap: 8px;
-
-  padding: 11px 17px;
-
-  color: #07566b;
-  background: #f0fafb;
-
-  border-bottom: 1px solid #e4f1f3;
-
-  font-size: 10px;
-  font-weight: 650;
-  line-height: 1.5;
+  padding: 13px 14px;
+  background: linear-gradient(120deg, var(--hai-blue), var(--hai-dark));
+  color: #fff;
 }
 
-.bma-hospital svg {
-  flex-shrink: 0;
-}
-
-/* =========================
-   Welcome
-========================= */
-
-.bma-welcome-strip {
+.hospital-ai-header-brand {
   display: flex;
   align-items: center;
   gap: 10px;
-
-  padding: 14px 17px 7px;
+  min-width: 0;
 }
 
-.bma-welcome-icon {
-  display: flex;
+.hospital-ai-logo {
+  display: grid;
+  width: 41px;
+  height: 41px;
   flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-
-  width: 34px;
-  height: 34px;
-
-  color: #087d87;
-  background: #e9f8f8;
-
-  border-radius: 11px;
+  place-items: center;
+  border: 1px solid #ffffff32;
+  border-radius: 13px;
+  background: #ffffff19;
 }
 
-.bma-welcome-strip strong {
-  display: block;
-
-  color: #12374b;
-  font-size: 12px;
+.hospital-ai-header-brand h2 {
+  margin: 0;
+  font-size: 13px;
   font-weight: 750;
 }
 
-.bma-welcome-strip p {
-  margin: 3px 0 0;
-
-  color: #7b8b9b;
+.hospital-ai-header-brand p {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 0 0;
+  color: #ffffffce;
   font-size: 10px;
 }
 
-/* =========================
-   Message Container
-========================= */
+.hospital-ai-header-buttons {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
 
-.bma-messages {
+.hospital-ai-header-buttons button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: 30px;
+  height: 31px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #fff;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.hospital-ai-header-buttons button:hover {
+  background: #ffffff20;
+}
+
+/* Trust strip */
+
+.hospital-ai-trust {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--hai-border);
+  background: #f6fafe;
+  color: #516d83;
+  font-size: 10px;
+}
+
+.hospital-ai-trust svg {
+  flex-shrink: 0;
+  color: var(--hai-teal);
+}
+
+/* Chat messages */
+
+.hospital-ai-messages {
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 15px;
-
+  gap: 14px;
   min-height: 0;
   overflow-x: hidden;
   overflow-y: auto;
-
-  padding: 15px 15px 18px;
-
-  background:
-    radial-gradient(
-      circle at 100% 0%,
-      #f0fafb 0,
-      transparent 35%
-    ),
-    #f8fafc;
-
-  scrollbar-color: #cadbe1 transparent;
+  padding: 14px 11px 16px;
+  background: linear-gradient(180deg, #f8fbfe 0%, #fff 42%);
   scrollbar-width: thin;
+  scrollbar-color: #d3dee8 transparent;
 }
 
-.bma-message-row {
+.hospital-ai-date {
   display: flex;
-  align-items: flex-end;
-  gap: 8px;
-
-  animation: bma-message-enter 0.25s ease both;
+  justify-content: center;
 }
 
-.bma-user {
+.hospital-ai-date span {
+  padding: 4px 9px;
+  border: 1px solid #e9eef3;
+  border-radius: 20px;
+  background: #fff;
+  color: #8a98a8;
+  font-size: 9px;
+}
+
+.hospital-ai-message-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  max-width: 100%;
+}
+
+.hospital-ai-message-row.is-user {
   justify-content: flex-end;
 }
 
-.bma-small-avatar {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-
+.hospital-ai-message-avatar {
+  display: grid;
   width: 27px;
   height: 27px;
-
-  color: #fff;
-  background: linear-gradient(140deg, #087d87, #07566b);
-
+  flex-shrink: 0;
+  place-items: center;
+  border: 1px solid #d9e8f5;
   border-radius: 9px;
+  background: #eaf4fb;
+  color: var(--hai-blue);
 }
 
-.bma-message {
-  max-width: 84%;
+.hospital-ai-message-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  width: calc(100% - 34px);
+  min-width: 0;
+}
 
-  padding: 12px 14px;
+.hospital-ai-message-row.is-user .hospital-ai-message-content {
+  align-items: flex-end;
+  width: auto;
+  max-width: 85%;
+}
 
-  font-size: 12px;
-  line-height: 1.75;
+.hospital-ai-bubble {
+  max-width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e5ecf2;
+  border-radius: 4px 14px 14px;
+  background: #fff;
+}
 
+.hospital-ai-message-row.is-user .hospital-ai-bubble {
+  border-color: var(--hai-blue);
+  border-radius: 14px 4px 14px 14px;
+  background: var(--hai-blue);
+  color: #fff;
+}
+
+.hospital-ai-bubble p {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: 11.5px;
+  line-height: 1.7;
   white-space: pre-wrap;
+}
+
+/* Doctor image cards */
+
+.hospital-ai-doctor-list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  width: 100%;
+}
+
+.hospital-ai-doctor-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #e1eaf2;
+  border-radius: 13px;
+  background: #fff;
+  box-shadow: 0 2px 8px #163a5908;
+  box-sizing: border-box;
+}
+
+.hospital-ai-doctor-photo {
+  display: grid;
+  width: 78px;
+  height: 91px;
+  flex-shrink: 0;
+  overflow: hidden;
+  place-items: center;
+  border: 1px solid #e4edf4;
+  border-radius: 10px;
+  background: #edf5fa;
+  color: var(--hai-blue);
+}
+
+.hospital-ai-doctor-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.hospital-ai-doctor-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.hospital-ai-doctor-info h3 {
+  margin: 1px 0 4px;
+  color: #203a50;
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1.45;
   overflow-wrap: anywhere;
 }
 
-.bma-ai-message {
-  color: #405267;
-  background: #fff;
-
-  border: 1px solid #e7edf2;
-  border-radius: 5px 16px 16px 16px;
-
-  box-shadow: 0 3px 10px rgba(18, 55, 75, 0.035);
+.hospital-ai-doctor-info p {
+  margin: 3px 0;
+  color: #6c7f90;
+  font-size: 10px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
 }
 
-.bma-user-message {
+.hospital-ai-doctor-info .hospital-ai-doctor-specialty {
+  color: var(--hai-blue);
+  font-weight: 700;
+}
+
+.hospital-ai-doctor-info .hospital-ai-doctor-experience {
+  color: #18836e;
+  font-weight: 650;
+}
+
+.hospital-ai-doctor-qualification {
+  padding-top: 5px;
+  border-top: 1px solid #edf1f5;
+}
+
+.hospital-ai-doctor-details,
+.hospital-ai-doctor-book {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 28px;
+  margin: 5px 5px 0 0;
+  padding: 5px 8px;
+  border: 1px solid #dce8f2;
+  border-radius: 7px;
+  background: #f5f9fd;
+  color: var(--hai-blue);
+  font: inherit;
+  font-size: 9px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.hospital-ai-doctor-book {
+  border-color: var(--hai-blue);
+  background: var(--hai-blue);
   color: #fff;
-  background: linear-gradient(135deg, #087d87, #07566b);
-
-  border-radius: 16px 5px 16px 16px;
-
-  box-shadow: 0 4px 12px rgba(7, 86, 107, 0.12);
 }
 
-/* =========================
-   Quick Suggestions
-========================= */
+.hospital-ai-doctor-details:hover {
+  background: #eaf4fb;
+}
 
-.bma-suggestions {
+.hospital-ai-doctor-book:hover {
+  background: var(--hai-dark);
+}
+
+/* Department list: intentionally no images */
+
+.hospital-ai-department-list {
   display: flex;
   flex-direction: column;
-  gap: 7px;
-
-  margin-left: 35px;
-
-  animation: bma-message-enter 0.4s ease both;
+  gap: 6px;
+  width: 100%;
 }
 
-.bma-suggestions-title {
-  margin: 0 0 3px;
-
-  color: #91a0ae;
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 1.1px;
-}
-
-.bma-suggestions button {
+.hospital-ai-department-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-
+  gap: 9px;
   width: 100%;
-  min-height: 43px;
-
-  padding: 7px 10px;
-
-  text-align: left;
-
-  color: #34495e;
+  padding: 10px;
+  border: 1px solid #e2eaf1;
+  border-radius: 10px;
   background: #fff;
-
-  border: 1px solid #e5edf2;
-  border-radius: 11px;
-
-  font-size: 11px;
-  font-weight: 600;
-
+  color: var(--hai-text);
+  text-align: left;
   cursor: pointer;
-
-  transition:
-    border-color 0.2s ease,
-    background 0.2s ease,
-    transform 0.2s ease;
+  transition: background 0.18s ease, border-color 0.18s ease;
 }
 
-.bma-suggestions button:hover:not(:disabled) {
-  color: #07566b;
-  background: #f0fafb;
-  border-color: #8ad0d7;
-
-  transform: translateX(3px);
+.hospital-ai-department-item:hover {
+  border-color: #b7d3e8;
+  background: #f4f9fd;
 }
 
-.bma-suggestions button:disabled {
-  opacity: 0.55;
+.hospital-ai-department-icon {
+  display: grid;
+  width: 33px;
+  height: 33px;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: 9px;
+  background: #eaf4fb;
+  color: var(--hai-blue);
+}
+
+.hospital-ai-department-name {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.hospital-ai-department-name strong {
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.hospital-ai-department-name small {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--hai-muted);
+  font-size: 9px;
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.hospital-ai-department-item > svg {
+  flex-shrink: 0;
+  color: #8394a4;
+}
+
+/* Message action buttons */
+
+.hospital-ai-message-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  width: 100%;
+}
+
+.hospital-ai-message-actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  max-width: 100%;
+  padding: 7px 9px;
+  border: 1px solid #d8e6f2;
+  border-radius: 8px;
+  background: #f3f9fe;
+  color: var(--hai-blue);
+  font: inherit;
+  font-size: 9px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.hospital-ai-message-actions button:hover {
+  background: #e5f2fc;
+}
+
+.hospital-ai-listen {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 0;
+  border: 0;
+  background: transparent;
+  color: #8091a1;
+  font: inherit;
+  font-size: 9px;
+  cursor: pointer;
+}
+
+/* Quick actions */
+
+.hospital-ai-quick-section {
+  flex-shrink: 0;
+  padding: 10px 11px;
+  border-top: 1px solid #edf1f5;
+  background: #fff;
+}
+
+.hospital-ai-quick-section > p {
+  margin: 0 0 8px;
+  color: #78899a;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+}
+
+.hospital-ai-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.hospital-ai-quick-grid button {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 5px;
+  min-width: 0;
+  min-height: 34px;
+  padding: 6px;
+  border: 1px solid #e1eaf2;
+  border-radius: 8px;
+  background: #fff;
+  color: #456076;
+  text-align: left;
+  cursor: pointer;
+}
+
+.hospital-ai-quick-grid button svg {
+  flex-shrink: 0;
+  color: var(--hai-blue);
+}
+
+.hospital-ai-quick-grid button span {
+  overflow: hidden;
+  font-size: 9px;
+  font-weight: 650;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+}
+
+.hospital-ai-quick-grid button:hover:not(:disabled) {
+  border-color: #b5d1e6;
+  background: #f1f8fd;
+}
+
+.hospital-ai-quick-grid button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Composer */
+
+.hospital-ai-composer {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 9px 11px;
+  border-top: 1px solid var(--hai-border);
+  background: #fff;
+}
+
+.hospital-ai-composer input {
+  flex: 1;
+  width: 0;
+  min-width: 0;
+  height: 39px;
+  padding: 0 11px;
+  border: 1px solid #e0e8ef;
+  border-radius: 10px;
+  outline: none;
+  background: #f8fafc;
+  color: #203448;
+  font: inherit;
+  font-size: 11px;
+}
+
+.hospital-ai-composer input:focus {
+  border-color: #90b9d8;
+  background: #fff;
+  box-shadow: 0 0 0 3px #20578112;
+}
+
+.hospital-ai-composer input::placeholder {
+  color: #96a5b3;
+}
+
+.hospital-ai-mic,
+.hospital-ai-send {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  place-items: center;
+  border: 1px solid #e0e8ef;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #61788b;
+  cursor: pointer;
+}
+
+.hospital-ai-mic.is-listening {
+  border-color: #e7a2a2;
+  background: #fff0f0;
+  color: #c83232;
+}
+
+.hospital-ai-send {
+  border-color: var(--hai-blue);
+  background: var(--hai-blue);
+  color: #fff;
+}
+
+.hospital-ai-send:hover:not(:disabled) {
+  background: var(--hai-dark);
+}
+
+.hospital-ai-send:disabled {
+  border-color: #e4eaf0;
+  background: #e9eef3;
+  color: #9ba8b4;
   cursor: not-allowed;
 }
 
-.bma-suggestion-icon {
+/* Typing indicator */
+
+.hospital-ai-typing {
   display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-
-  width: 29px;
-  height: 29px;
-
-  color: #087d87;
-  background: #eaf8f8;
-
-  border-radius: 9px;
-}
-
-.bma-suggestion-arrow {
-  margin-left: auto;
-  color: #8ca3b2;
-}
-
-/* =========================
-   Typing Animation
-========================= */
-
-.bma-typing {
-  display: flex;
-  align-items: center;
   gap: 4px;
-
-  min-width: 56px;
-  padding: 15px;
-
+  padding: 13px;
+  border: 1px solid #e3ebf2;
+  border-radius: 4px 12px 12px;
   background: #fff;
-  border: 1px solid #e7edf2;
-  border-radius: 5px 14px 14px 14px;
 }
 
-.bma-typing span {
-  width: 6px;
-  height: 6px;
-
-  background: #087d87;
+.hospital-ai-typing span {
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
-
-  animation: bma-typing 0.9s ease-in-out infinite;
+  background: #6d8fa9;
+  animation: hai-bounce 1s infinite ease-in-out;
 }
 
-.bma-typing span:nth-child(2) {
+.hospital-ai-typing span:nth-child(2) {
   animation-delay: 0.15s;
 }
 
-.bma-typing span:nth-child(3) {
+.hospital-ai-typing span:nth-child(3) {
   animation-delay: 0.3s;
 }
 
-/* =========================
-   Emergency Notice
-========================= */
+@keyframes hai-bounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.55; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}
 
-.bma-emergency {
+/* Footer */
+
+.hospital-ai-footer {
   display: flex;
-  align-items: center;
-  gap: 9px;
-
-  padding: 10px 14px;
-
-  color: #9b4a1b;
-  background: #fff8ed;
-
-  border-top: 1px solid #f8e7cc;
-  border-bottom: 1px solid #f8e7cc;
-
-  font-size: 10px;
-  line-height: 1.5;
-}
-
-.bma-emergency-icon {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-
-  width: 18px;
-  height: 18px;
-
-  color: #fff;
-  background: #e99b38;
-  border-radius: 50%;
-
-  font-size: 12px;
-  font-weight: 800;
-}
-
-/* =========================
-   Input
-========================= */
-
-.bma-input-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-
-  padding: 12px 13px 9px;
-
-  background: #fff;
-}
-
-.bma-input-wrapper input {
-  flex: 1;
-
-  width: 0;
-  min-width: 0;
-  height: 43px;
-
-  padding: 0 13px;
-
-  color: #243448;
-  background: #f7fafc;
-
-  border: 1px solid #e6edf2;
-  border-radius: 12px;
-  outline: none;
-
-  font-size: 12px;
-
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.bma-input-wrapper input::placeholder {
-  color: #9aa8b6;
-}
-
-.bma-input-wrapper input:focus {
-  background: #fff;
-  border-color: #68bac5;
-
-  box-shadow: 0 0 0 3px rgba(8, 125, 135, 0.08);
-}
-
-.bma-mic,
-.bma-send {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-
-  width: 40px;
-  height: 40px;
-
-  border: none;
-  border-radius: 12px;
-
-  cursor: pointer;
-
-  transition:
-    transform 0.2s ease,
-    background 0.2s ease;
-}
-
-.bma-mic {
-  color: #64788b;
-  background: #f0f4f7;
-}
-
-.bma-mic:hover {
-  color: #07566b;
-  background: #e4f3f5;
-}
-
-.bma-mic.bma-listening {
-  color: #fff;
-  background: #dc4545;
-
-  animation: bma-listening 1s ease-in-out infinite;
-}
-
-.bma-send {
-  color: #fff;
-  background: linear-gradient(145deg, #087d87, #07566b);
-
-  box-shadow: 0 4px 10px rgba(7, 86, 107, 0.16);
-}
-
-.bma-send:hover:not(:disabled) {
-  transform: translateY(-2px);
-}
-
-.bma-send:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-/* =========================
-   Disclaimer
-========================= */
-
-.bma-disclaimer {
-  display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   gap: 5px;
-
-  padding: 3px 10px 12px;
-
-  color: #96a3b0;
+  flex-shrink: 0;
+  padding: 0 10px 9px;
   background: #fff;
+  color: #8593a1;
+}
 
+.hospital-ai-footer svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.hospital-ai-footer span {
   font-size: 9px;
+  line-height: 1.5;
   text-align: center;
 }
 
-/* =========================
-   Keyframes
-========================= */
-
-@keyframes bma-float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-5px);
-  }
+.hospital-ai-root button:focus-visible {
+  outline: 3px solid #16a6a180;
+  outline-offset: 2px;
 }
 
-@keyframes bma-robot-animation {
-  0%, 100% {
-    transform: scale(1) rotate(0deg);
+@media (max-width: 600px) {
+  .hospital-ai-launcher {
+    right: 14px;
+    bottom: 14px;
+    padding: 11px 14px;
   }
 
-  50% {
-    transform: scale(1.1) rotate(-5deg);
-  }
-}
-
-@keyframes bma-ripple {
-  0% {
-    transform: scale(0.92);
-    opacity: 0.8;
-  }
-
-  100% {
-    transform: scale(1.55);
-    opacity: 0;
-  }
-}
-
-@keyframes bma-chat-enter {
-  from {
-    opacity: 0;
-    transform: translateY(16px) scale(0.94);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes bma-message-enter {
-  from {
-    opacity: 0;
-    transform: translateY(7px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes bma-typing {
-  0%, 60%, 100% {
-    transform: translateY(0);
-    opacity: 0.45;
-  }
-
-  30% {
-    transform: translateY(-5px);
-    opacity: 1;
-  }
-}
-
-@keyframes bma-listening {
-  0%, 100% {
-    box-shadow: 0 0 0 0 rgba(220, 69, 69, 0.2);
-  }
-
-  50% {
-    box-shadow: 0 0 0 6px rgba(220, 69, 69, 0.12);
-  }
-}
-
-/* =========================
-   Responsive
-========================= */
-
-@media (max-width: 480px) {
-  .bma-floating {
-    right: 17px;
-    bottom: 18px;
-
-    width: 59px;
-    height: 59px;
-  }
-
-  .bma-chat {
-    right: 10px;
-    bottom: 10px;
-
-    width: calc(100vw - 20px);
+  .hospital-ai-window {
+    right: 7px;
+    bottom: 7px;
+    width: calc(100vw - 14px);
     max-width: none;
-
-    height: min(680px, calc(100dvh - 20px));
-
-    border-radius: 19px;
+    height: calc(100dvh - 14px);
+    min-height: 360px;
+    border-radius: 16px;
   }
 
-  .bma-header {
-    padding: 15px;
+  .hospital-ai-header {
+    padding: 11px;
   }
 
-  .bma-messages {
-    padding: 12px;
+  .hospital-ai-logo {
+    width: 36px;
+    height: 36px;
   }
 
-  .bma-suggestions {
-    margin-left: 29px;
+  .hospital-ai-header-brand h2 {
+    font-size: 12px;
+  }
+
+  .hospital-ai-messages {
+    padding: 12px 9px;
+  }
+
+  .hospital-ai-doctor-photo {
+    width: 70px;
+    height: 83px;
+  }
+
+  .hospital-ai-quick-section {
+    padding: 8px 9px;
+  }
+
+  .hospital-ai-quick-grid {
+    gap: 5px;
+  }
+
+  .hospital-ai-quick-grid button {
+    min-height: 32px;
+    gap: 4px;
+    padding: 5px;
+  }
+
+  .hospital-ai-quick-grid button span {
+    font-size: 8px;
+  }
+
+  .hospital-ai-composer {
+    padding: 8px 9px;
   }
 }
 
-/* Accessibility */
+@media (max-width: 360px) {
+  .hospital-ai-header-buttons button {
+    width: 26px;
+  }
+
+  .hospital-ai-quick-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hospital-ai-doctor-card {
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .hospital-ai-doctor-photo {
+    width: 62px;
+    height: 76px;
+  }
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .bma-floating,
-  .bma-floating-icon,
-  .bma-orbit,
-  .bma-chat,
-  .bma-message-row,
-  .bma-suggestions,
-  .bma-typing span,
-  .bma-mic.bma-listening {
-    animation: none !important;
-  }
-
-  .bma-floating,
-  .bma-close,
-  .bma-suggestions button,
-  .bma-send {
-    transition: none !important;
+  .hospital-ai-root *,
+  .hospital-ai-root *::before,
+  .hospital-ai-root *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }
