@@ -20,9 +20,75 @@
 
 // module.exports = nextConfig;
 
+// /** @type {import('next').NextConfig} */
+// const nextConfig = {
+//   allowedDevOrigins: ["10.10.34.67"],
+//   images: {
+//     remotePatterns: [
+//       {
+//         protocol: "https",
+//         hostname: "images.unsplash.com",
+//       },
+//       {
+//         protocol: "https",           // 👈 Ye add karo
+//         hostname: "images.pexels.com",
+//         port: "",
+//         pathname: "/**",
+//       },
+//     ],
+//   },
+// };
+
+// module.exports = nextConfig;
+
+
+// 04-11-2026
+
+  
+/** @type {import('next').NextConfig} */
+
+const securityHeaders = [
+  {
+    key: "Strict-Transport-Security",
+    value: "max-age=31536000",
+  },
+  {
+    key: "Content-Security-Policy",
+    value: [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https:",
+      "style-src 'self' 'unsafe-inline' https:",
+      "img-src 'self' data: blob: https:",
+      "font-src 'self' data: https:",
+      "connect-src 'self' https: wss:",
+      "frame-ancestors 'self'",
+      "object-src 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+    ].join("; "),
+  },
+  {
+    key: "X-Frame-Options",
+    value: "SAMEORIGIN",
+  },
+  {
+    key: "X-Content-Type-Options",
+    value: "nosniff",
+  },
+  {
+    key: "Referrer-Policy",
+    value: "strict-origin-when-cross-origin",
+  },
+  {
+    key: "Permissions-Policy",
+    value: "camera=(), microphone=(), geolocation=()",
+  },
+];
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   allowedDevOrigins: ["10.10.34.67"],
+
   images: {
     remotePatterns: [
       {
@@ -30,16 +96,28 @@ const nextConfig = {
         hostname: "images.unsplash.com",
       },
       {
-        protocol: "https",           // 👈 Ye add karo
+        protocol: "https",
         hostname: "images.pexels.com",
         port: "",
         pathname: "/**",
       },
     ],
   },
+
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: securityHeaders,
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;
+
+
+// 04-11-2026
 
 
 // /** @type {import('next').NextConfig} */
